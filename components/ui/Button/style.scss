@@ -16,20 +16,20 @@
     cursor: pointer;
 
     transition:
-        background-color 0.25s ease,
-        transform 0.25s ease;
-    
-    &:before { 
-      content: ''; 
-      position: absolute; 
-      left: 0; 
-      top: 0; 
-      width: 100%; 
-      height: 100%; 
-      background-color: rgba(255,255,255,0.2); 
+      background-color 0.25s ease,
+      transform 0.25s ease;
+
+    &:before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.2);
       opacity: 0;
-      -webkit-transition: .2s ease-out; 
-      transition:.2s ease-out;
+      -webkit-transition: 0.2s ease-out;
+      transition: 0.2s ease-out;
     }
 
     &:active {
@@ -37,7 +37,7 @@
     }
 
     &:disabled,
-    &[aria-disabled="true"] {
+    &[aria-disabled='true'] {
       color: #ccc !important;
       background: rgb(from var(--disabled-color) r g b / var(--btn-opacity, 1)) !important;
       border-color: rgb(from var(--disabled-color) r g b / var(--btn-opacity, 1)) !important;
@@ -112,14 +112,14 @@
     min-width: 50px;
     height: 50px;
     padding: 0.25rem 1.25rem;
-    font-size: clamp(12px,0.875rem,14px);
+    font-size: clamp(12px, 0.875rem, 14px);
   }
 
   &-size-medium {
     min-width: 60px;
     height: 60px;
     padding: 0.5rem 1.5rem;
-    font-size: clamp(14px,1rem,16px);
+    font-size: clamp(14px, 1rem, 16px);
   }
 
   &-size-large {
@@ -127,7 +127,7 @@
     height: 70px;
     padding: 0.75rem 2.5rem;
     font-size: 1.125rem;
-    font-size: clamp(16px,1.125rem,18px);
+    font-size: clamp(16px, 1.125rem, 18px);
   }
 
   &-icon {
@@ -144,7 +144,7 @@
       margin-right: -4px;
     }
     &.fill-icon {
-      font-variation-settings: "FILL" 1;
+      font-variation-settings: 'FILL' 1;
     }
   }
 

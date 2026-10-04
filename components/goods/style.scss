@@ -565,6 +565,18 @@
   .goods-grid {
     grid-template-columns: repeat(4, 1fr);
   }
+
+  .site-fnb {
+    .tracking_btn {
+      .icon {
+        margin-left: -4px;
+        margin-right: -4px;
+      }
+      .text {
+        display: none;
+      }
+    }
+  }
 }
 
 /* --------------------------------
@@ -644,18 +656,6 @@
 
   .goods-card__desc {
     font-size: 13px;
-  }
-
-  .site-fnb {
-    .tracking_btn {
-      .icon {
-        margin-left: -4px;
-        margin-right: -4px;
-      }
-      .text {
-        display: none;
-      }
-    }
   }
 
   .goods-option-modal {
