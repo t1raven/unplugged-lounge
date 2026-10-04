@@ -1,16 +1,15 @@
 'use client';
 
 import { useEffect, useRef, useCallback } from 'react';
-import { usePathname } from "next/navigation";
+import { usePathname } from 'next/navigation';
 import { useDevice } from '@/components/providers/DeviceProvider';
 import { useCart } from '@/components/providers/CartProvider';
 import Link from 'next/link';
 import gsap from 'gsap';
 
-import './style.scss'
+import './style.scss';
 
 export default function Gnb() {
-
   const pathname = usePathname();
 
   const gnbRef = useRef<HTMLElement>(null);
@@ -58,17 +57,20 @@ export default function Gnb() {
       ease: 'power3.out',
       overwrite: 'auto',
     });
-  },[]);
+  }, []);
 
   const collapseGNB = useCallback((animate = true) => {
     if (!gnbRef.current || !moveBgRef.current || isCollapsedRef.current) return;
-
     isCollapsedRef.current = true;
     menuTimelineRef.current?.kill();
+    gnbRef.current.parentElement?.classList.add('collapse');
 
     const menuLl = gnbRef.current.querySelectorAll<HTMLLIElement>('li > a');
     const menuBtn = gnbRef.current.querySelector<HTMLLIElement>('.menu-btn');
     const Fnb = document.querySelector<HTMLLIElement>('#site-fnb');
+
+    const gnbRect = gnbRef.current.getBoundingClientRect();
+    const width = gnbRect.height || 60;
 
     if (!animate) {
       gsap.set(menuLl, {
@@ -85,7 +87,12 @@ export default function Gnb() {
         visibility: 'visible',
       });
       gsap.set(gnbRef.current, {
-        width: 60,
+        width,
+        borderWidth: 1,
+      });
+      gsap.set(Fnb, {
+        opacity: 1,
+        visibility: 'visible',
       });
       return;
     }
@@ -97,50 +104,73 @@ export default function Gnb() {
       animation: 'none',
     });
 
-    tl.to(menuLl, {
-      scale: 0,
-      opacity: 0,
-      duration: 0.5,
-      visibility: 'hidden',
-      ease: 'power3.out',
-    }, '+=0.5')
-    tl.to(moveBgRef.current, {
-      opacity: 0,
-      visibility: 'hidden',
-      duration: 0.25,
-      ease: 'power3.out',
-    }, '-=0.5')
-    tl.to(gnbRef.current, {
-      width: 60,
-      duration: 0.5,
-      ease: 'power3.out',
-    }, '-=0.5')
-    tl.to(menuBtn, {
-      opacity: 1,
-      visibility: 'visible',
-      duration: 0.5,
-      ease: 'power3.out',
-    }, '-=0.5')
-    tl.fromTo(Fnb, {
-      opacity: 0,
-      visibility: 'hidden',
-    }, {
-      opacity: 1,
-      visibility: 'visible',
-      duration: 0.5,
-      ease: 'power3.out',
-    }, '-=0.25')
-  },[]);
+    tl.to(
+      menuLl,
+      {
+        scale: 0,
+        opacity: 0,
+        duration: 0.5,
+        visibility: 'hidden',
+        ease: 'power3.out',
+      },
+      '+=0.5',
+    );
+    tl.to(
+      moveBgRef.current,
+      {
+        opacity: 0,
+        visibility: 'hidden',
+        duration: 0.25,
+        ease: 'power3.out',
+      },
+      '-=0.5',
+    );
+    tl.to(
+      gnbRef.current,
+      {
+        width: width,
+        borderWidth: 1,
+        duration: 0.5,
+        ease: 'power3.out',
+      },
+      '-=0.5',
+    );
+    tl.to(
+      menuBtn,
+      {
+        opacity: 1,
+        visibility: 'visible',
+        duration: 0.5,
+        ease: 'power3.out',
+      },
+      '-=0.5',
+    );
+    tl.fromTo(
+      Fnb,
+      {
+        opacity: 0,
+        visibility: 'hidden',
+      },
+      {
+        opacity: 1,
+        visibility: 'visible',
+        duration: 0.5,
+        ease: 'power3.out',
+      },
+      '-=0.25',
+    );
+  }, []);
 
   const expandGNB = useCallback(() => {
     if (!gnbRef.current || !moveBgRef.current || !isCollapsedRef.current) return;
     isCollapsedRef.current = false;
     menuTimelineRef.current?.kill();
+    gnbRef.current.parentElement?.classList.remove('collapse');
 
     const menuLl = gnbRef.current.querySelectorAll<HTMLLIElement>('li > a');
     const menuBtn = gnbRef.current.querySelector<HTMLLIElement>('.menu-btn');
-    const Fnb = document.querySelector<HTMLLIElement>('#site-fnb')
-    const menuFnbopacity = (isReady && isDesktop) ? 1 : 0;
+    const Fnb = document.querySelector<HTMLLIElement>('#site-fnb');
+    const menuFnbopacity = isReady && isDesktop ? 1 : 0;
 
     const tl = gsap.timeline();
     menuTimelineRef.current = tl;
@@ -150,42 +180,58 @@ export default function Gnb() {
       visibility: 'hidden',
       duration: 0.5,
       ease: 'power3.in',
-    })
-    tl.to(gnbRef.current, {
-      width: `100%`,
-      duration: 0.5,
-      ease: 'power3.in',
-    }, '-=0.5')
-    tl.to(Fnb, {
-      opacity: menuFnbopacity,
-      duration: 0.5,
-      ease: 'power3.in',
-    }, '-=0.5')
-    menuLl.forEach((item) => {
-      tl.to(item, {
-        scale: 1,
-        opacity: 1,
-        visibility: 'visible',
+    });
+    tl.to(
+      gnbRef.current,
+      {
+        width: `100%`,
+        borderWidth: '',
         duration: 0.5,
         ease: 'power3.in',
-      }, '-=0.45')
-    })
+      },
+      '-=0.5',
+    );
+    tl.to(
+      Fnb,
+      {
+        opacity: menuFnbopacity,
+        duration: 0.5,
+        ease: 'power3.in',
+      },
+      '-=0.5',
+    );
+    menuLl.forEach((item) => {
+      tl.to(
+        item,
+        {
+          scale: 1,
+          opacity: 1,
+          visibility: 'visible',
+          duration: 0.5,
+          ease: 'power3.in',
+        },
+        '-=0.45',
+      );
+    });
     tl.to(moveBgRef.current, {
       opacity: 1,
       visibility: 'visible',
       duration: 0.25,
       ease: 'power3.in',
-    })
-  },[isReady, isDesktop]);
+    });
+  }, [isReady, isDesktop]);
 
-  const syncMenu = useCallback((animate = true) => {
-    if (!isReady) return false;
-    if (!isDesktop && document.querySelector('#site-fnb')) {
-      collapseGNB(animate);
-    } else {
-      expandGNB();
-    }
-  }, [collapseGNB, expandGNB, isReady, isDesktop]);
+  const syncMenu = useCallback(
+    (animate = true) => {
+      if (!isReady) return false;
+      if (!isDesktop && document.querySelector('#site-fnb')) {
+        collapseGNB(animate);
+      } else {
+        expandGNB();
+      }
+    },
+    [collapseGNB, expandGNB, isReady, isDesktop],
+  );
 
   useEffect(() => {
     const background = moveBgRef.current;
@@ -195,7 +241,6 @@ export default function Gnb() {
       // Safari 주소창 변화처럼 높이만 바뀌는 resize는 무시한다.
       if (width === lastWidth) return;
       lastWidth = width;
-      
 
       const frameId = requestAnimationFrame(() => {
         moveBackground(false);
@@ -251,10 +296,8 @@ export default function Gnb() {
   }, [syncMenu, pathname]);
 
   useEffect(() => {
-
     const frameId = requestAnimationFrame(() => {
       moveBackground(true);
-
     });
     const timeoutId = setTimeout(() => moveBackground(true), 400);
 
@@ -267,46 +310,65 @@ export default function Gnb() {
   return (
     <div id="site-gnb">
       <nav ref={gnbRef} aria-label="주 메뉴">
-        <button type="button" className="menu-btn" aria-label="메뉴 펼치기" onClick={() => expandGNB()}><span className="icon material-symbols-rounded" translate="no" aria-hidden="true">grid_view</span></button>
+        <button
+          type="button"
+          className="menu-btn"
+          aria-label="메뉴 펼치기"
+          onClick={() => expandGNB()}
+        >
+          <span className="icon material-symbols-rounded" translate="no" aria-hidden="true">
+            grid_view
+          </span>
+        </button>
         <ul>
-          <li className={pathname === '/' ? "active" : ""}>
+          <li className={pathname === '/' ? 'active' : ''}>
             <Link href="/" title="홈">
-              <span className="icon material-symbols-rounded" translate="no">home</span>
+              <span className="icon material-symbols-rounded" translate="no">
+                home
+              </span>
               <span className="text">홈</span>
             </Link>
           </li>
-          <li className={pathname.startsWith('/cafe') ? "active" : ""}>
+          <li className={pathname.startsWith('/cafe') ? 'active' : ''}>
             <Link href="/cafe" title="카페">
-              <span className="icon material-symbols-rounded" translate="no">local_cafe</span>
+              <span className="icon material-symbols-rounded" translate="no">
+                local_cafe
+              </span>
               <span className="text">카페</span>
             </Link>
           </li>
-          <li className={pathname.startsWith('/performances') ? "active" : ""}>
+          <li className={pathname.startsWith('/performances') ? 'active' : ''}>
             <Link href="/performances" title="공연예매">
-              <span className="icon material-symbols-rounded" translate="no">confirmation_number</span>
+              <span className="icon material-symbols-rounded" translate="no">
+                confirmation_number
+              </span>
               <span className="text">공연예매</span>
             </Link>
           </li>
-          <li className={pathname.startsWith('/rental') ? "active" : ""}>
+          <li className={pathname.startsWith('/rental') ? 'active' : ''}>
             <Link href="/rental" title="공연·대관신청">
-              <span className="icon material-symbols-rounded" translate="no">developer_guide</span>
+              <span className="icon material-symbols-rounded" translate="no">
+                developer_guide
+              </span>
               <span className="text">공연·대관신청</span>
             </Link>
           </li>
-          <li className={pathname.startsWith('/goods') ? "active" : ""}>
+          <li className={pathname.startsWith('/goods') ? 'active' : ''}>
             <Link href="/goods" title="굿즈·앨범">
               <span className="goods_icon">
-                <span className="icon material-symbols-rounded" translate="no">local_mall</span>
-                {cartCount > 0 && (
-                  <span className="cnt">{cartCount}</span>
-                )}
+                <span className="icon material-symbols-rounded" translate="no">
+                  local_mall
+                </span>
+                {cartCount > 0 && <span className="cnt">{cartCount}</span>}
               </span>
               <span className="text">굿즈·앨범</span>
             </Link>
           </li>
-          <li className={pathname.startsWith('/archives') ? "active" : ""}>
+          <li className={pathname.startsWith('/archives') ? 'active' : ''}>
             <Link href="/archives" title="아카이브">
-              <span className="icon material-symbols-rounded" translate="no">inventory_2</span>
+              <span className="icon material-symbols-rounded" translate="no">
+                inventory_2
+              </span>
               <span className="text">아카이브</span>
             </Link>
           </li>

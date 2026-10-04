@@ -1,90 +1,93 @@
+@use '@/styles/_functions' as *;
+
 #site-header {
-	width: 100%;
-	height: auto;
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: 100;
-	backdrop-filter: var(--backdrop-filter);
-	transition: top 0.25s ease;
+  width: 100%;
+  height: auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  backdrop-filter: var(--backdrop-filter);
+  transition: top 0.25s ease;
 
-	&:after {
-		content: '';
-		width: 100%;
-		height: 100%;
-		position: absolute;
-		top: 0;
-		left: 0;
-		background-color: var(--background-sec-color);
-		opacity: 0.8;
-	}
-	> .inner {
-		position: relative;
-		z-index: 1;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		width: 100%;
-		width: var(--inner-width);
-		max-width: var(--inner-max-width);
-		height: var(--header-height);
-		margin: 0 auto;
-		> * {
-			display: flex;
-			align-items: center;
-		}
-	}
-	.logo {
-		width: 100%;
-		display: flex;
-		align-items: center;
-		> a {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			font-size: 28px;
-			font-weight: 700;
-			color: var(--primary-color);
-			white-space: nowrap;
-			background-size: contain;
-			background-repeat: no-repeat;
-			background-position: center;
-			transition: all 0.35s ease;
+  &:after {
+    content: '';
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: var(--background-sec-color);
+    opacity: 0.8;
+  }
+  > .inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    width: var(--inner-width);
+    max-width: var(--inner-max-width);
+    height: var(--header-height);
+    margin: 0 auto;
+    > * {
+      display: flex;
+      align-items: center;
+    }
+  }
+  .logo {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    > a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--primary-color);
+      white-space: nowrap;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      transition: all 0.35s ease;
 
-			&:active {
-		  	transform: scale(1.1);
-		  }
-		}
-		img {
-			width: 140px;
-			height: auto;
-		}
-	}
-	.gnb-btn {
-		gap: 16px;
+      &:active {
+        transform: scale(1.1);
+      }
+    }
+    img {
+      width: fluid(90px, 140px);
+      height: auto;
+    }
+  }
+  .gnb-btn {
+    gap: fluid(8px, 16px);
 
-		> a, button {
-			display: inline-flex;
-			align-items: center;
-			justify-content: center;
-			width: 36px;
-			height: 36px;
-			color: var(--font-color);
-			border: 0;
-			background-color: transparent;
-			transition: 
-				opacity 0.35s ease,
-				transform 0.35s ease;
+    > a,
+    button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      color: var(--font-color);
+      border: 0;
+      background-color: transparent;
+      transition:
+        opacity 0.35s ease,
+        transform 0.35s ease;
 
-			> svg {
-				width: 100%;
-				height: 100%;
-				fill: var(--font-color);
-			}
+      > svg {
+        width: 100%;
+        height: 100%;
+        fill: var(--font-color);
+      }
 
-			> span {
-				font-size: 32px;
-			}
+      > span {
+        font-size: 32px;
+      }
 
       @media (hover: hover) and (pointer: fine) {
         &:hover {
@@ -92,23 +95,22 @@
         }
       }
 
-	    &:active {
-		  	transform: scale(1.1);
-		  }
-		}
-	}
+      &:active {
+        transform: scale(1.1);
+      }
+    }
+  }
 
-	.btn-back { 
-		button {
-			width: 28px;
-			height: 28px;
+  .btn-back {
+    button {
+      width: 28px;
+      height: 28px;
 
-			.icon {
-				font-size: 28px;
-			}
-		}
-		
-	}
+      .icon {
+        font-size: 28px;
+      }
+    }
+  }
 }
 
 html.scrollDown #site-header {
@@ -119,23 +121,10 @@ html.scrollUp #site-header {
   top: 0;
 }
 
-@media screen and (max-width: 1023px){
-	#site-header {
-		.logo {
-			> a {
-				font-size: 20px;
-			}
-			img {
-				width: 90px;
-			}
-		}
-
-		.gnb-btn {
-			gap: 8px;
-		}
-
-		.btn-back { 
-			display: flex;
-		}
-	}
+@media screen and (max-width: 1024px) {
+  #site-header {
+    .btn-back {
+      display: flex;
+    }
+  }
 }

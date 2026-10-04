@@ -7,13 +7,11 @@
   margin: 0 auto;
 }
 
-
 .menu-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 40px 24px;
 }
-
 
 /* --------------------------------
    MENU CARD
@@ -25,7 +23,6 @@
   flex-direction: column;
   gap: 20px;
 }
-
 
 .menu-card__image {
   position: relative;
@@ -48,8 +45,7 @@
 
     object-fit: cover;
 
-    transition:
-      transform 0.7s cubic-bezier(.22, 1, .36, 1);
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .menu-card__label {
@@ -135,10 +131,9 @@
   }
 
   small {
-      font-weight: 400;
-    }
+    font-weight: 400;
+  }
 }
-
 
 /* --------------------------------
    LOADING
@@ -159,7 +154,6 @@
   letter-spacing: 0.2em;
 }
 
-
 /* --------------------------------
    EMPTY
 -------------------------------- */
@@ -174,26 +168,21 @@
   text-align: center;
 }
 
-
 /* --------------------------------
    TABLET
 -------------------------------- */
 
-@media (max-width: 1023px) {
-
+@media (max-width: 1024px) {
   .menu-grid {
     grid-template-columns: repeat(4, 1fr);
   }
-
 }
-
 
 /* --------------------------------
    MOBILE
 -------------------------------- */
 
 @media (max-width: 768px) {
-
   .menu-grid {
     grid-template-columns: repeat(1, 1fr);
     gap: 0 16px;
@@ -233,5 +222,4 @@
       font-size: 9px;
     }
   }
-
 }
