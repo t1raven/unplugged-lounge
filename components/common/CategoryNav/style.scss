@@ -8,7 +8,7 @@
   z-index: 90;
 
   margin-top: 40px;
-  backdrop-filter: saturate(120%) blur(8px);
+  backdrop-filter: var(--backdrop-filter);
 
   transition: top 0.25s ease;
 
