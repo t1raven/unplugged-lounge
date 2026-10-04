@@ -10,22 +10,16 @@ interface Props {
   items: CartItem[];
 
   quantityByGoodsId: Map<string, number>;
-  
+
   originalTotalPrice: number;
   discountedTotalPrice: number;
   totalDiscountPrice: number;
 
-  removeItem: (
-    cartId: string
-  ) => void;
+  removeItem: (cartId: string) => void;
 
-  increaseQuantity: (
-    cartId: string
-  ) => void;
+  increaseQuantity: (cartId: string) => void;
 
-  decreaseQuantity: (
-    cartId: string
-  ) => void;
+  decreaseQuantity: (cartId: string) => void;
 
   clearCart: () => void;
 
@@ -43,82 +37,51 @@ export default function Cart({
   removeItem,
   increaseQuantity,
   decreaseQuantity,
-  clearCart,
+  //clearCart,
   closeCart,
   onOrder,
 }: Props) {
   return (
     <>
       <div className="cart-header">
-        <h2>
-          장바구니
-        </h2>
+        <h2>장바구니</h2>
 
-        <button
-          type="button"
-          className="cart-close"
-          onClick={closeCart}
-          aria-label="닫기"
-        >
-          <span className="material-symbols-rounded">
-            close
-          </span>
+        <button type="button" className="cart-close" onClick={closeCart} aria-label="닫기">
+          <span className="material-symbols-rounded">close</span>
         </button>
       </div>
 
       {items.length === 0 ? (
-        <div className="cart-empty">
-          장바구니가 비어 있습니다.
-        </div>
+        <div className="cart-empty">장바구니가 비어 있습니다.</div>
       ) : (
         <>
           <div className="cart-body">
             <div className="cart-list">
-
               {items.map((item) => {
-                const totalQuantity = quantityByGoodsId.get( item.goodsId ) ?? item.quantity;
-                const unitPrice = getGoodsUnitPrice( item, totalQuantity );
-                //const unitPrice = getGoodsUnitPrice( item, item.quantity );
+                const totalQuantity = quantityByGoodsId.get(item.goodsId) ?? item.quantity;
+                const unitPrice = getGoodsUnitPrice(item, totalQuantity);
                 const originalSubtotal = item.price * item.quantity;
                 const subtotal = unitPrice * item.quantity;
                 const discountPrice = originalSubtotal - subtotal;
 
                 return (
-                  <article
-                    key={item.cartId}
-                    className="cart-item"
-                  >
-                    
+                  <article key={item.cartId} className="cart-item">
                     <div className="cart-image">
-                      {item.image && (
-                        <Image
-                          src={item.image}
-                          alt={item.name}
-                          fill
-                          sizes="96px"
-                        />
-                      )}
+                      {item.image && <Image src={item.image} alt={item.name} fill sizes="96px" />}
                     </div>
 
                     <div className="cart-info">
-
                       <div className="cart-item-head">
                         <div>
-                          <h3>
-                            {item.name}
-                          </h3>
+                          <h3>{item.name}</h3>
 
                           {!!item.options.length && (
                             <div className="cart-options">
-                              {item.options.map(
-                                (option) => (
-                                  <span
-                                    key={`${option.name}-${option.value}`}
-                                  >
-                                    {option.name}: {option.value}
-                                  </span>
-                                )
-                              )}
+                              {item.options.map((option) => (
+                                <span key={`${option.name}-${option.value}`}>
+                                  {option.name}: {option.value}
+                                </span>
+                              ))}
                             </div>
                           )}
                         </div>
@@ -126,137 +89,84 @@ export default function Cart({
                         <button
                           type="button"
                           className="cart-remove"
-                          onClick={() =>
-                            removeItem(
-                              item.cartId
-                            )
-                          }
+                          onClick={() => removeItem(item.cartId)}
                           aria-label={`${item.name} 삭제`}
                         >
-                          <span className="material-symbols-rounded">
-                            delete
-                          </span>
+                          <span className="material-symbols-rounded">delete</span>
                         </button>
                       </div>
 
                       <div className="cart-item-bottom">
-
                         <div className="cart-item-quantity">
                           <button
                             type="button"
-                            onClick={() =>
-                              decreaseQuantity(
-                                item.cartId
-                              )
-                            }
-                            disabled={
-                              item.quantity <= 1
-                            }
+                            onClick={() => decreaseQuantity(item.cartId)}
+                            disabled={item.quantity <= 1}
                           >
                             −
                           </button>
 
-                          <span>
-                            {item.quantity}
-                          </span>
+                          <span>{item.quantity}</span>
 
                           <button
                             type="button"
-                            onClick={() =>
-                              increaseQuantity(
-                                item.cartId
-                              )
-                            }
-                            disabled={
-                              item.quantity >=
-                              item.stock
-                            }
+                            onClick={() => increaseQuantity(item.cartId)}
+                            disabled={item.quantity >= item.stock}
                           >
                             +
                           </button>
                         </div>
 
                         <div className="cart-item-price">
-                          {discountPrice > 0 && (
-                            <del>
-                              {originalSubtotal.toLocaleString()}
-                              원
-                            </del>
-                          )}
+                          {discountPrice > 0 && <del>{originalSubtotal.toLocaleString()}원</del>}
 
-                          <strong>
-                            {subtotal.toLocaleString()}
-                            원
-                          </strong>
-
-                          {/*{totalQuantity !== item.quantity && (
-                            <small>
-                              동일 상품 총{' '}
-                              {totalQuantity}개<br className="mo-view"/>
-                              수량할인 적용
-                            </small>
-                          )}*/}
+                          <strong>{subtotal.toLocaleString()}원</strong>
                         </div>
-
                       </div>
                     </div>
                   </article>
-                ) 
+                );
               })}
-
             </div>
 
-            <div className="cart-footer">
+            <div className="cart-summary">
+              <div className="cart-summary-row">
+                <span>상품금액</span>
 
-              <div className="cart-summary">
-                <div className="cart-summary-row">
-                  <span>상품금액</span>
-
-                  <span>
-                    {originalTotalPrice.toLocaleString()}
-                    원
-                  </span>
-                </div>
-
-                <div className="cart-summary-row discount">
-                  <span>할인금액</span>
-
-                  <span>
-                    -{totalDiscountPrice.toLocaleString()}
-                    원
-                  </span>
-                </div>
-
-                <div className="cart-summary-row total">
-                  <span>총 주문금액</span>
-
-                  <strong>
-                    {discountedTotalPrice.toLocaleString()}
-                    <small>원</small>
-                  </strong>
-                </div>
+                <span>{originalTotalPrice.toLocaleString()}원</span>
               </div>
 
-              <div className="cart-actions">
+              <div className="cart-summary-row discount">
+                <span>할인금액</span>
 
-                <Button
-                  className="cart-order"
-                  onClick={onOrder}
-                >
-                  주문하기
-                </Button>
-
-                {/* <button
-                  type="button"
-                  className="cart-clear"
-                  onClick={clearCart}
-                >
-                  비우기
-                </button> */}
-
+                <span>-{totalDiscountPrice.toLocaleString()}원</span>
               </div>
 
+              <div className="cart-summary-row total">
+                <span>총 주문금액</span>
+
+                <strong>
+                  {discountedTotalPrice.toLocaleString()}
+                  <small>원</small>
+                </strong>
+              </div>
             </div>
+
+            <div className="cart-actions">
+              <Button className="cart-order" onClick={onOrder} opacity={0.7}>
+                주문하기
+              </Button>
+
+              {/* <button
+                type="button"
+                className="cart-clear"
+                onClick={clearCart}
+              >
+                비우기
+              </button> */}
+            </div>
+
+            {/* <div className="cart-footer"></div> */}
           </div>
         </>
       )}

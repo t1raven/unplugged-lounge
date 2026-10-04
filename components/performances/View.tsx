@@ -312,26 +312,26 @@ export default function PerformanceViewPage({
 
       <Fnb className="site-fnb">
         {isEnd ? (
-          <Button opacity={0.8} shadow disabled className="reservation_btn">
+          <Button opacity={0.7} shadow disabled className="reservation_btn">
             <span>공연 종료</span>
           </Button>
         ) : performance.siteSalesOnly ? (
-          <Button opacity={0.8} shadow disabled className="reservation_btn">
+          <Button opacity={0.7} shadow disabled className="reservation_btn">
             <span>현장예매만 가능합니다.</span>
           </Button>
         ) : !performance.reservationOpen ? (
-          <Button opacity={0.8} shadow disabled className="reservation_btn">
+          <Button opacity={0.7} shadow disabled className="reservation_btn">
             <span>매진되었습니다.</span>
           </Button>
         ) : isSalesOpen ? (
-          <Button opacity={0.8} shadow disabled className="reservation_btn">
+          <Button opacity={0.7} shadow disabled className="reservation_btn">
             <span>
               사전 예매 오픈전
               {performance.salesOpen && <><br /><small>(오픈: {formatDateTime(performance.salesOpen)})</small></>}
             </span>
           </Button>
         ) : isSalesClose ? (
-          <Button opacity={0.8} shadow disabled className="reservation_btn">
+          <Button opacity={0.7} shadow disabled className="reservation_btn">
             <span>
               사전 예매 마감 
               <br/><small>(현장 예매만 가능합니다)</small>
@@ -342,14 +342,14 @@ export default function PerformanceViewPage({
             href={performance.reservationUrl ?? ""}
             target="_blank"
             className="reservation_btn"
-            opacity={0.8}
+            opacity={0.7}
             shadow
           >
             <span className="icon material-symbols-rounded" translate="no">confirmation_number</span>
             <span>예매하기</span>
           </Button>
         )}
-        <Button type="button" className="share_btn" color="secondary" opacity={0.8} shadow onClick={handleShare}>
+        <Button type="button" className="share_btn" color="secondary" opacity={0.7} shadow onClick={handleShare}>
           <span className="material-symbols-rounded icon" aria-label="공유하기">{ios ? "ios_share" : "share"}</span>
         </Button>
       </Fnb>

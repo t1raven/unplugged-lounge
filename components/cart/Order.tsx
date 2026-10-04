@@ -634,7 +634,7 @@ export default function Order({
           <Button
             type="submit"
             className="order-submit"
-            opacity={0.8}
+            opacity={0.7}
             disabled={
               loading ||
               !privacyAgreed

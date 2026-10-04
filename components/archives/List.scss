@@ -55,7 +55,7 @@
       line-height: 1;
 
       background-color: rgb(from var(--secondary-color) r g b / 0.8);
-      backdrop-filter: saturate(120%) blur(8px);
+      backdrop-filter: var(--backdrop-filter);
       color: #fff;
 
       min-width: 50px;

@@ -204,7 +204,7 @@ export default function GoodsList({
       />
 
       <Fnb className="site-fnb">
-        <Button className="cart_btn" opacity={0.8} shadow onClick={openCart}>
+        <Button className="cart_btn" opacity={0.7} shadow onClick={openCart}>
           <div className="cart_icon">
             <span className="material-symbols-rounded icon">local_mall</span>
             {cartCount > 0 && (
@@ -213,7 +213,7 @@ export default function GoodsList({
           </div>
           <div className="text">장바구니</div>
         </Button>
-        <Button className="tracking_btn" color="secondary" opacity={0.8} shadow onClick={() => setOrderOpen(true)}>
+        <Button className="tracking_btn" color="secondary" opacity={0.7} shadow onClick={() => setOrderOpen(true)}>
           <span className="material-symbols-rounded icon">quick_reference_all</span>
           <span className="text">주문조회</span>
         </Button>
