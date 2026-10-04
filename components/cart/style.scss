@@ -31,10 +31,10 @@
 
   background-color: var(--background-color);
   border: 1px solid var(--border-color);
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+  box-shadow: var(--box-shadow);
 
   border-radius: 16px 0 0 16px;
-  
+
   color: var(--font-color);
 }
 
@@ -367,7 +367,6 @@
   color: var(--font-sec-color);
 }
 
-
 // OrderView
 .order-form {
   display: flex;
@@ -648,7 +647,9 @@
 
     overflow: hidden;
 
-    transition: border-color 0.2s, background 0.2s;
+    transition:
+      border-color 0.2s,
+      background 0.2s;
 
     input {
       position: absolute;
@@ -675,7 +676,7 @@
     &.active {
       color: var(--primary-color);
       &::after {
-        content: "";
+        content: '';
         position: absolute;
         top: 0;
         left: 0;
@@ -694,7 +695,7 @@
 .delivery-guide {
   padding: 38px 20px 20px;
 
-  background-color: var(--background-sec-color); 
+  background-color: var(--background-sec-color);
   border: 1px solid var(--primary-color);
 
   border-radius: 8px;
@@ -729,7 +730,7 @@
 .privacy-section {
   padding: 18px;
 
-  background-color: var(--background-sec-color); 
+  background-color: var(--background-sec-color);
   border: 1px solid var(--primary-color);
 
   border-radius: 8px;
@@ -743,8 +744,8 @@
   cursor: pointer;
 
   input {
-    position: absolute; 
-    left: -9999px; 
+    position: absolute;
+    left: -9999px;
     opacity: 0;
   }
 
@@ -768,29 +769,29 @@
     align-items: center;
 
     &:before {
-      content: ''; 
-      width: 20px; 
-      height: 20px; 
-      z-index: 0; 
-      border: 1px solid var(--border-color); 
-      background-color: #fff; 
-      transition: .2s; 
-      margin: 0;  
-      box-sizing: border-box; 
+      content: '';
+      width: 20px;
+      height: 20px;
+      z-index: 0;
+      border: 1px solid var(--border-color);
+      background-color: #fff;
+      transition: 0.2s;
+      margin: 0;
+      box-sizing: border-box;
       border-radius: 5px;
       margin-right: 10px;
     }
 
     &:after {
       content: '';
-      opacity: 0;  
-      position: absolute; 
-      top: 0; 
-      left: 0; 
-      width: 20px; 
+      opacity: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 20px;
       height: 20px;
-      background-size: 46%; 
-      background-repeat: no-repeat; 
+      background-size: 46%;
+      background-repeat: no-repeat;
       background-position: center;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3C!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--%3E%3Cpath fill='%23ffffff' d='M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z'/%3E%3C/svg%3E");
     }
@@ -809,8 +810,7 @@
   margin-top: 14px;
   padding-top: 14px;
 
-  border-top:
-    1px solid var(--border-color);
+  border-top: 1px solid var(--border-color);
 
   p {
     margin: 0;
