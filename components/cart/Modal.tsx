@@ -1,9 +1,6 @@
 'use client';
 
-import {
-  useEffect,
-  useState,
-} from 'react';
+import { useEffect, useState } from 'react';
 
 import { useCart } from '@/components/providers/CartProvider';
 import { getGoodsUnitPrice } from '@/lib/goodsPrice';
@@ -31,78 +28,33 @@ export default function Modal({ orderDeliverySettings }: Props) {
     clearCart,
   } = useCart();
 
-  const [step, setStep] =
-    useState('cart');
+  const [step, setStep] = useState('cart');
 
-  const [orderNumber, setOrderNumber] =
-    useState<string | null>(null);
+  const [orderNumber, setOrderNumber] = useState<string | null>(null);
 
-  const originalTotalPrice =
-    items.reduce(
-      (total, item) =>
-        total +
-        item.price * item.quantity,
-      0
-    );
+  const originalTotalPrice = items.reduce((total, item) => total + item.price * item.quantity, 0);
 
-  const quantityByGoodsId =
-    items.reduce(
-      (map, item) => {
-        map.set(
-          item.goodsId,
-          (map.get(
-            item.goodsId
-          ) ?? 0) +
-            item.quantity
-        );
+  const quantityByGoodsId = items.reduce((map, item) => {
+    map.set(item.goodsId, (map.get(item.goodsId) ?? 0) + item.quantity);
 
-        return map;
-      },
-      new Map<string, number>()
-    );
+    return map;
+  }, new Map<string, number>());
 
-  const discountedTotalPrice =
-    items.reduce(
-      (total, item) => {
-        const totalQuantity =
-          quantityByGoodsId.get(
-            item.goodsId
-          ) ?? item.quantity;
+  const discountedTotalPrice = items.reduce((total, item) => {
+    const totalQuantity = quantityByGoodsId.get(item.goodsId) ?? item.quantity;
 
-        const unitPrice =
-          getGoodsUnitPrice(
-            item,
-            totalQuantity
-          );
+    const unitPrice = getGoodsUnitPrice(item, totalQuantity);
 
-        return (
-          total +
-          unitPrice *
-            item.quantity
-        );
-      },
-      0
-    );
+    return total + unitPrice * item.quantity;
+  }, 0);
 
   const totalDiscountPrice = originalTotalPrice - discountedTotalPrice;
 
-  const totalPrice = 
-    items.reduce(
-      (total, item) => {
-        const unitPrice =
-          getGoodsUnitPrice(
-            item,
-            item.quantity
-          );
+  const totalPrice = items.reduce((total, item) => {
+    const unitPrice = getGoodsUnitPrice(item, item.quantity);
 
-        return (
-          total +
-          unitPrice *
-            item.quantity
-        );
-      },
-      0
-    );
+    return total + unitPrice * item.quantity;
+  }, 0);
 
   useEffect(() => {
     if (!isCartOpen) return;
@@ -112,46 +64,30 @@ export default function Modal({ orderDeliverySettings }: Props) {
     setStep('cart');
     setOrderNumber(null);
 
-    const previousOverflow =
-      document.body.style.overflow;
+    const previousOverflow = document.body.style.overflow;
 
-    document.body.style.overflow =
-      'hidden';
+    document.body.style.overflow = 'hidden';
 
-    const handleKeydown = (
-      event: KeyboardEvent
-    ) => {
+    const handleKeydown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         closeCart();
       }
     };
 
-    window.addEventListener(
-      'keydown',
-      handleKeydown
-    );
+    window.addEventListener('keydown', handleKeydown);
 
     return () => {
-      document.body.style.overflow =
-        previousOverflow;
+      document.body.style.overflow = previousOverflow;
 
-      window.removeEventListener(
-        'keydown',
-        handleKeydown
-      );
+      window.removeEventListener('keydown', handleKeydown);
     };
-  }, [
-    isCartOpen,
-    closeCart,
-  ]);
+  }, [isCartOpen, closeCart]);
 
   if (!isCartOpen) {
     return null;
   }
 
-  const handleComplete = (
-    orderNumber: string
-  ) => {
+  const handleComplete = (orderNumber: string) => {
     setOrderNumber(orderNumber);
 
     clearCart();
@@ -160,20 +96,10 @@ export default function Modal({ orderDeliverySettings }: Props) {
   };
 
   return (
-    <div
-      className="cart-modal"
-      role="dialog"
-      aria-modal="true"
-    >
-      <button
-        type="button"
-        className="cart-backdrop"
-        onClick={closeCart}
-        aria-label="닫기"
-      />
+    <div className="cart-modal" role="dialog" aria-modal="true">
+      <button type="button" className="cart-backdrop" onClick={closeCart} aria-label="닫기" />
 
       <div className="cart-panel">
-
         {step === 'cart' && (
           <Cart
             items={items}
@@ -201,13 +127,7 @@ export default function Modal({ orderDeliverySettings }: Props) {
           />
         )}
 
-        {step === 'complete' && (
-          <Complete
-            orderNumber={orderNumber}
-            onClose={closeCart}
-          />
-        )}
-
+        {step === 'complete' && <Complete orderNumber={orderNumber} onClose={closeCart} />}
       </div>
     </div>
   );
