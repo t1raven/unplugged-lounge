@@ -40,9 +40,9 @@ export default function ModalScroll({ children, className = '' }: ModalScrollPro
    * Desktop Modal Lenis
    */
   useEffect(() => {
-    if (useNativeScroll) {
+    /* if (useNativeScroll) {
       return;
-    }
+    } */
 
     const wrapper = wrapperRef.current;
     const content = contentRef.current;
@@ -55,7 +55,7 @@ export default function ModalScroll({ children, className = '' }: ModalScrollPro
       wrapper,
       content,
 
-      duration: 1.5,
+      duration: 1,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
       wheelMultiplier: 1,

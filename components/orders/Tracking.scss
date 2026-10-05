@@ -127,7 +127,18 @@
     color: var(--font-color);
     text-align: left;
 
-    &:hover {
+    transition:
+      border-color 0.25s ease,
+      transform 0.25s ease;
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        border-color: var(--primary-color);
+      }
+    }
+
+    &:active {
+      transform: scale(1.05);
       border-color: var(--primary-color);
     }
     time {
