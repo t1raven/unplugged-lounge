@@ -22,6 +22,18 @@ export default function ParaSection({ className, children, delay }: Props) {
     let frameId: number | null = null;
     let lastTime = 0;
     let currentY = 0;
+    let baseY = 0;
+
+    const render = () => {
+      child.style.transform = `translateY(${baseY + currentY}px)`;
+    };
+
+    const updateBaseY = () => {
+      // Center oversized children, then apply the scroll offset from that position.
+      //baseY = Math.min(0, (app.clientHeight - child.offsetHeight) / 2);
+      baseY = 0;
+      render();
+    };
 
     const getTargetY = () => {
       const appRect = app.getBoundingClientRect(),
@@ -58,7 +70,7 @@ export default function ParaSection({ className, children, delay }: Props) {
 
       const settled = Math.abs(targetY - currentY) < 0.1;
       if (settled) currentY = targetY;
-      child.style.transform = `translateY(${currentY}px)`;
+      render();
 
       if (settled) {
         frameId = null;
@@ -73,16 +85,23 @@ export default function ParaSection({ className, children, delay }: Props) {
     };
 
     currentY = getTargetY();
-    child.style.transform = `translateY(${currentY}px)`;
+    updateBaseY();
+    const resizeObserver = new ResizeObserver(() => {
+      updateBaseY();
+      update();
+    });
+    resizeObserver.observe(app);
+    resizeObserver.observe(child);
     window.addEventListener('scroll', update, { passive: true });
     window.addEventListener('resize', update);
     return () => {
       window.removeEventListener('scroll', update);
       window.removeEventListener('resize', update);
+      resizeObserver.disconnect();
       if (frameId !== null) window.cancelAnimationFrame(frameId);
       child.style.transform = originalTransform;
     };
-  }, []);
+  }, [delay]);
 
   return (
     <div className={className} ref={ref} style={{ willChange: 'transform', overflow: 'hidden' }}>
