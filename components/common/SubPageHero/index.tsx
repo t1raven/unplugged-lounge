@@ -55,7 +55,7 @@ export default function SubPageHero({ label, title, description }: Props) {
 
   return (
     <section className="sub-page-hero" ref={rootRef}>
-      <ParaSection className="sub-page-hero-kv" delay={200}>
+      <ParaSection className="sub-page-hero-kv" delay={100}>
         <div>
           <Image
             src={heroKvImage}

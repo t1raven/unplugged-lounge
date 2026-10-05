@@ -6,9 +6,11 @@ interface Props {
   className?: string;
   children?: ReactNode;
   delay?: number;
+  /** Touch smoothing in milliseconds; defaults to at least 160ms. */
+  touchDelay?: number;
 }
 
-export default function ParaSection({ className, children, delay }: Props) {
+export default function ParaSection({ className, children, delay, touchDelay }: Props) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -18,54 +20,67 @@ export default function ParaSection({ className, children, delay }: Props) {
     if (!child) return;
 
     const originalTransform = child.style.transform;
+    const originalWillChange = child.style.willChange;
+    const originalOverflow = child.style.overflow;
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const touchDevice = window.matchMedia('(hover: none) and (pointer: coarse)');
     let frameId: number | null = null;
     let lastTime = 0;
     let currentY = 0;
-    let baseY = 0;
+    let sectionTop = 0;
+    let sectionHeight = 0;
+    let viewportHeight = 0;
+    let viewportWidth = 0;
+    let maxScrollY = 0;
+    let needsMeasure = true;
+
+    child.style.willChange = 'transform';
+    child.style.overflow = 'hidden';
 
     const render = () => {
-      child.style.transform = `translateY(${baseY + currentY}px)`;
+      child.style.transform = `translate3d(0, ${currentY}px, 0)`;
     };
 
-    const updateBaseY = () => {
-      // Center oversized children, then apply the scroll offset from that position.
-      //baseY = Math.min(0, (app.clientHeight - child.offsetHeight) / 2);
-      baseY = 0;
-      render();
+    const measure = () => {
+      const rect = app.getBoundingClientRect();
+      // Both the section and scroll positions must use document coordinates.
+      sectionTop = rect.top + window.scrollY;
+      sectionHeight = rect.height;
+      // Keep toolbar expansion/collapse from shifting the touch scroll baseline.
+      if (!touchDevice.matches || !viewportHeight || viewportWidth !== window.innerWidth) {
+        viewportHeight = window.innerHeight;
+      }
+      viewportWidth = window.innerWidth;
+      maxScrollY = Math.max(0, document.documentElement.scrollHeight - viewportHeight);
+      needsMeasure = false;
     };
 
     const getTargetY = () => {
-      const appRect = app.getBoundingClientRect(),
-        appHeight = appRect.height || 0,
-        appTop = appRect.top || 0,
-        appBot = appTop + appHeight,
-        sT =
-          (document.documentElement && document.documentElement.scrollTop) ||
-          document.body.scrollTop,
-        wH =
-          window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight,
-        sB = sT + wH;
-      let v = 0;
+      // Safari rubber-band scrolling can report positions outside the document.
+      const scrollY = Math.max(0, Math.min(window.scrollY, maxScrollY));
+      const distance =
+        viewportHeight >= sectionHeight
+          ? scrollY - sectionTop
+          : scrollY + viewportHeight - (sectionTop + sectionHeight);
 
-      if (wH >= appHeight) {
-        v = sT >= appTop ? (sT - appTop) / 2 : 0;
-      } else {
-        v = sB >= appBot ? (sB - appBot) / 2 : 0;
-      }
-
-      if (v >= appHeight / 2) v = appHeight / 2;
-
-      return v;
+      return Math.max(0, Math.min(distance / 2, sectionHeight / 2));
     };
 
     const animate = (time: number) => {
+      if (needsMeasure) measure();
       const targetY = getTargetY();
       const deltaTime = lastTime ? Math.min(time - lastTime, 64) : 1000 / 60;
       lastTime = time;
 
       // Use elapsed time so smoothing feels consistent across refresh rates.
-      const progress = reducedMotion.matches ? 1 : 1 - Math.exp(-deltaTime / (delay ?? 100));
+      const configuredDelay = delay ?? 100;
+      const smoothingDelay = touchDevice.matches
+        ? (touchDelay ?? (configuredDelay > 0 ? Math.max(configuredDelay, 160) : configuredDelay))
+        : configuredDelay;
+      const progress =
+        reducedMotion.matches || smoothingDelay <= 0
+          ? 1
+          : 1 - Math.exp(-deltaTime / smoothingDelay);
       currentY += (targetY - currentY) * progress;
 
       const settled = Math.abs(targetY - currentY) < 0.1;
@@ -81,30 +96,56 @@ export default function ParaSection({ className, children, delay }: Props) {
     };
 
     const update = () => {
-      if (frameId === null) frameId = window.requestAnimationFrame(animate);
+      if (frameId === null) {
+        // Refresh geometry when a new scroll starts, then reuse it in the loop.
+        needsMeasure = true;
+        lastTime = performance.now();
+        frameId = window.requestAnimationFrame(animate);
+      }
     };
 
-    currentY = getTargetY();
-    updateBaseY();
-    const resizeObserver = new ResizeObserver(() => {
-      updateBaseY();
+    const refresh = () => {
+      needsMeasure = true;
       update();
-    });
+    };
+
+    const onResize = () => {
+      // Element ResizeObservers still handle genuine layout changes.
+      if (touchDevice.matches && viewportWidth === window.innerWidth) return;
+      refresh();
+    };
+
+    const onInputChange = () => {
+      viewportHeight = 0;
+      refresh();
+    };
+
+    measure();
+    currentY = getTargetY();
+    render();
+    const resizeObserver = new ResizeObserver(refresh);
     resizeObserver.observe(app);
     resizeObserver.observe(child);
+    resizeObserver.observe(document.body);
     window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update);
+    reducedMotion.addEventListener('change', update);
+    touchDevice.addEventListener('change', onInputChange);
+    window.addEventListener('resize', onResize);
     return () => {
       window.removeEventListener('scroll', update);
-      window.removeEventListener('resize', update);
+      reducedMotion.removeEventListener('change', update);
+      touchDevice.removeEventListener('change', onInputChange);
+      window.removeEventListener('resize', onResize);
       resizeObserver.disconnect();
       if (frameId !== null) window.cancelAnimationFrame(frameId);
       child.style.transform = originalTransform;
+      child.style.willChange = originalWillChange;
+      child.style.overflow = originalOverflow;
     };
-  }, [delay]);
+  }, [delay, touchDelay]);
 
   return (
-    <div className={className} ref={ref} style={{ willChange: 'transform', overflow: 'hidden' }}>
+    <div className={className} ref={ref}>
       {children}
     </div>
   );

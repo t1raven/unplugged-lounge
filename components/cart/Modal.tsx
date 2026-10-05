@@ -96,7 +96,7 @@ export default function Modal({ orderDeliverySettings }: Props) {
   };
 
   return (
-    <div className="cart-modal" role="dialog" aria-modal="true">
+    <div className="cart-modal" role="dialog" aria-modal="true" data-lenis-prevent>
       <button type="button" className="cart-backdrop" onClick={closeCart} aria-label="닫기" />
 
       <div className="cart-panel">
