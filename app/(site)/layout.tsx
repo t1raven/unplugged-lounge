@@ -1,5 +1,5 @@
-import { Noto_Sans_KR } from "next/font/google";
-import "@/styles/globals.scss";
+import { Noto_Sans_KR } from 'next/font/google';
+import '@/styles/globals.scss';
 const notoSansKR = Noto_Sans_KR({
   subsets: ['latin'],
   weight: ['400', '500', '700'],
@@ -8,7 +8,7 @@ const notoSansKR = Noto_Sans_KR({
   variable: '--font-noto',
 });
 
-import type { Metadata, Viewport } from "next";
+import type { Metadata, Viewport } from 'next';
 import { getSiteSettings } from '@/lib/siteSettings';
 import { urlFor } from '@/sanity/lib/image';
 
@@ -20,16 +20,11 @@ export async function generateMetadata(): Promise<Metadata> {
   const description = settings?.seo?.description ?? '';
   const keywords = settings?.seo?.keywords ?? [];
   const ogImage = settings?.seo?.ogImage
-    ? urlFor(settings.seo.ogImage)
-        .width(400)
-        .height(400)
-        .url()
+    ? urlFor(settings.seo.ogImage).width(400).height(400).url()
     : undefined;
 
   return {
-    metadataBase: new URL(
-      process.env.NEXT_PUBLIC_SITE_URL ?? 'https://unplugged-lounge.com'
-    ),
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://unplugged-lounge.com'),
 
     title: {
       default: title,
@@ -52,7 +47,7 @@ export async function generateMetadata(): Promise<Metadata> {
               alt: title,
             },
           ]
-        : [{ url: "/images/common/og-image.png" }],
+        : [{ url: '/images/common/og-image.png' }],
     },
 
     robots: {
@@ -84,16 +79,15 @@ export default async function SiteLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   const siteInfo = await getSiteSettings();
 
   return (
-    <html lang="ko" suppressHydrationWarning>
+    <html lang="ko" data-scroll-behavior="smooth" suppressHydrationWarning>
       <body className={notoSansKR.variable} suppressHydrationWarning>
         <Providers>
-          <Header/>
+          <Header />
           {children}
-          <Gnb/>
+          <Gnb />
           <Footer data={siteInfo?.general ?? {}} />
         </Providers>
       </body>
