@@ -12,19 +12,40 @@
   // ==================================================
 
   .performance-detail-hero {
+    position: relative;
     padding-top: calc(80px + var(--header-height));
     padding-bottom: 120px;
-    background:
-      /*radial-gradient(
-        circle at 70% 30%,
-        rgba(201, 169, 110, 0.08),
-        transparent 35%
-      ),*/
-      var(--background-sec-color);
+    background: var(--background-sec-color);
+    overflow: hidden;
   }
 
-  .performance-detail-hero
-    .performance-detail-inner {
+  .performance-detail-kv {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    img {
+      object-fit: cover;
+      object-position: center 60%;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--background-sec-color);
+      opacity: 0.95;
+    }
+  }
+
+  .performance-detail-hero .performance-detail-inner {
+    position: relative;
+    z-index: 1;
     display: grid;
     grid-template-columns: 360px 1fr;
     gap: 100px;
@@ -99,7 +120,7 @@
     flex-direction: column;
     gap: 8px;
     padding: 20px 0;
-    border-bottom: 1px solid #999;
+    border-bottom: 1px solid var(--gray-color);
 
     span {
       letter-spacing: 0.14em;
@@ -123,7 +144,7 @@
         color: var(--primary-color);
         line-height: 1;
 
-        transition: 
+        transition:
           opacity 0.25s ease,
           transform 0.35s ease;
 
@@ -170,17 +191,17 @@
       background-color 0.25s ease,
       transform 0.25s ease;
 
-    &:before { 
-      content: ''; 
-      position: absolute; 
-      left: 0; 
-      top: 0; 
-      width: 100%; 
-      height: 100%; 
-      background-color: rgba(255,255,255,0.2); 
+    &:before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.2);
       opacity: 0;
-      -webkit-transition: .2s ease-out; 
-      transition:.2s ease-out;
+      -webkit-transition: 0.2s ease-out;
+      transition: 0.2s ease-out;
     }
 
     &:not(:disabled):hover {
@@ -192,8 +213,8 @@
     }
 
     &:disabled {
-      background-color: #A9A59D; 
-      color: #66635D;
+      background-color: #a9a59d;
+      color: #66635d;
       cursor: not-allowed;
     }
   }
@@ -291,7 +312,7 @@
       line-height: 1;
       color: var(--info-color);
 
-      transition: 
+      transition:
         opacity 0.25s ease,
         transform 0.35s ease;
 
@@ -300,7 +321,7 @@
       }
 
       @media (hover: hover) and (pointer: fine) {
-          &:hover {
+        &:hover {
           opacity: 0.7;
         }
       }
@@ -383,7 +404,6 @@
   }
 
   .site-fnb {
-
     .reservation_btn {
       width: 100%;
     }
@@ -400,8 +420,7 @@
   // ==================================================
 
   @media (max-width: 1024px) {
-    .performance-detail-hero
-      .performance-detail-inner {
+    .performance-detail-hero .performance-detail-inner {
       gap: 60px;
     }
   }
@@ -416,9 +435,17 @@
       padding-bottom: 60px;
     }
 
-    .performance-detail-hero
-      .performance-detail-inner {
+    .performance-detail-hero .performance-detail-inner {
       display: block;
+    }
+
+    .performance-detail-kv {
+      img {
+        object-fit: contain !important;
+      }
+      &::after {
+        opacity: 0.9;
+      }
     }
 
     .performance-poster {
@@ -433,7 +460,7 @@
     .meta-item {
       padding: 13px 0;
 
-      &:nth-child(-n+2) {
+      &:nth-child(-n + 2) {
         grid-column: 1 / 3;
       }
 
