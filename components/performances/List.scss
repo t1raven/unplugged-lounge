@@ -83,7 +83,7 @@
       }
 
       &:disabled {
-        background: #96928A;
+        background: #96928a;
         color: #45423d;
         cursor: not-allowed;
         opacity: 0.5;
@@ -298,6 +298,10 @@
     font-size: 16px;
     line-height: 1.4;
     color: var(--font-sec-color);
+
+    span {
+      color: var(--primary-color);
+    }
   }
 
   // ==================================================
@@ -598,7 +602,7 @@
     .performance-list-count {
       font-size: 13px;
     }
-    
+
     .performance-list {
       gap: 8px;
     }
@@ -666,6 +670,5 @@
     .upcoming-performances {
       margin-top: 64px;
     }
-
   }
 }

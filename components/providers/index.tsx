@@ -1,15 +1,18 @@
 'use client';
 
 import CartProvider from './CartProvider';
-import DeviceProvider  from './DeviceProvider';
+import DeviceProvider from './DeviceProvider';
 import ThemeProvider from './ThemeProvider';
+import LenisProvider from './LenisProvider';
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <DeviceProvider>
-      <ThemeProvider>
-        <CartProvider>{children}</CartProvider>
-      </ThemeProvider>
+      <LenisProvider>
+        <ThemeProvider>
+          <CartProvider>{children}</CartProvider>
+        </ThemeProvider>
+      </LenisProvider>
     </DeviceProvider>
   );
 }

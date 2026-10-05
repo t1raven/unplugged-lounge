@@ -7,7 +7,7 @@ import Image from 'next/image';
 
 import './style.scss';
 
-import ParaSection from '@/components/common/ParaSection';
+import ParaSection from '@/components/common/ParaSection/ScrollTrigger';
 import heroKvImage from '@/public/images/common/site-sub-hero-kv.png';
 
 interface Props {
@@ -55,7 +55,7 @@ export default function SubPageHero({ label, title, description }: Props) {
 
   return (
     <section className="sub-page-hero" ref={rootRef}>
-      <ParaSection className="sub-page-hero-kv" delay={200}>
+      <ParaSection className="sub-page-hero-kv" delay={100}>
         <div>
           <Image
             src={heroKvImage}

@@ -66,6 +66,9 @@ html {
   background-color: var(--background-color);
   scroll-behavior: smooth;
 }
+html.lenis {
+  scroll-behavior: auto;
+}
 html,
 body {
   font-family: var(--font-family);
