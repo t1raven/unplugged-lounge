@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import Modal from '@/components/common/Modal';
 import { useCart } from '@/components/providers/CartProvider';
@@ -19,6 +19,17 @@ interface Props {
 }
 
 export default function CartModal({ orderDeliverySettings }: Props) {
+  const { isCartOpen } = useCart();
+
+  // 열릴 때마다 새로 마운트되어 state가 초기화됨 (장바구니 화면부터 시작)
+  if (!isCartOpen) {
+    return null;
+  }
+
+  return <CartModalContent orderDeliverySettings={orderDeliverySettings} />;
+}
+
+function CartModalContent({ orderDeliverySettings }: Props) {
   const {
     items,
     isCartOpen,
@@ -56,37 +67,6 @@ export default function CartModal({ orderDeliverySettings }: Props) {
 
     return total + unitPrice * item.quantity;
   }, 0);
-
-  useEffect(() => {
-    if (!isCartOpen) return;
-
-    // 모달을 새로 열면 장바구니 화면부터
-
-    setStep('cart');
-    setOrderNumber(null);
-
-    const previousOverflow = document.body.style.overflow;
-
-    document.body.style.overflow = 'hidden';
-
-    const handleKeydown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        closeCart();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeydown);
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-
-      window.removeEventListener('keydown', handleKeydown);
-    };
-  }, [isCartOpen, closeCart]);
-
-  if (!isCartOpen) {
-    return null;
-  }
 
   const handleComplete = (orderNumber: string) => {
     setOrderNumber(orderNumber);

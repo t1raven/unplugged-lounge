@@ -4,8 +4,7 @@
   align-items: flex-start;
 
   .modal-panel {
-    width: min(520px, 100%);
-
+    min-height: auto;
     padding: 40px;
 
     border-top: 0;
