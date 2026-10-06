@@ -5,6 +5,7 @@ import Image from 'next/image';
 import type { CartItem } from '@/types/cart';
 import { getGoodsUnitPrice } from '@/lib/goodsPrice';
 import { Button } from '@/components/ui/Button';
+import ModalScroll from '@/components/common/ModalScroll';
 
 interface Props {
   items: CartItem[];
@@ -55,7 +56,7 @@ export default function Cart({
         <div className="cart-empty">장바구니가 비어 있습니다.</div>
       ) : (
         <>
-          <div className="cart-body">
+          <ModalScroll className="cart-body">
             <div className="cart-list">
               {items.map((item) => {
                 const totalQuantity = quantityByGoodsId.get(item.goodsId) ?? item.quantity;
@@ -167,7 +168,7 @@ export default function Cart({
             </div>
 
             {/* <div className="cart-footer"></div> */}
-          </div>
+          </ModalScroll>
         </>
       )}
     </>

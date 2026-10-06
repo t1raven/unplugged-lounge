@@ -1,49 +1,91 @@
+@use '@/styles/_functions' as *;
+
 .sub-page-hero {
-    min-height: clamp(260px, 40vh, 620px);
+  position: relative;
+  min-height: fluid(260px, 620px);
+  display: flex;
+  align-items: center;
+  padding-top: calc(var(--header-height) + 60px);
+  padding-bottom: 60px;
+  background-color: var(--background-sec-color);
+  overflow: hidden;
+
+  &-kv {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    div {
+      height: 100%;
+    }
+
+    img {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 100%;
+      height: auto;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--background-sec-color);
+      opacity: 0.8;
+    }
+  }
+
+  &-inner {
+    position: relative;
+    width: var(--inner-width);
+    max-width: var(--inner-max-width);
+    margin: 0 auto;
     display: flex;
-    align-items: center;
-    padding-top: calc(var(--header-height) + 60px);
-    padding-bottom: 60px;
-    background-color: var(--background-sec-color);
-    overflow: hidden;
+    flex-direction: column;
+    gap: 24px;
+  }
 
-    &-inner {
-        width: var(--inner-width); 
-        max-width: var(--inner-max-width); 
-        margin: 0 auto;
-        display: flex;
-        flex-direction: column;
-        gap: 24px;
-    }
+  &-label {
+    color: var(--primary-color);
+    font-size: 1em;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
 
-    &-label {
-        color: var(--primary-color);
-        font-size: 1em;
-        font-weight: 600;
-        letter-spacing: 0.2em;
-        text-transform: uppercase;
-    }
+  &-title {
+    margin: 0;
+    color: var(--font-color);
+    font-size: clamp(32px, 8vw, 62px);
+    line-height: 1;
+    font-weight: 500;
+    letter-spacing: -0.06em;
+  }
 
-    &-title {
-      margin: 0;
-      color: var(--font-color);
-      font-size: clamp(32px, 8vw, 62px);
-      line-height: 1;
-      font-weight: 500;
-      letter-spacing: -0.06em;
-    }
-
-    &-description {
-      color: #999;
-      font-size: 1em;
-      line-height: 1.7;
-    }
+  &-description {
+    color: var(--gray-color);
+    font-size: 1em;
+    line-height: 1.7;
+  }
 }
 
-@media screen and (max-width: 768px){
+@media screen and (max-width: 768px) {
   .sub-page-hero {
+    align-items: flex-start;
     padding-top: calc(var(--header-height) + 20px);
     padding-bottom: 20px;
+
+    &-kv img {
+      top: auto;
+      bottom: 5%;
+      transform: translateY(0);
+    }
 
     &-inner {
       gap: 16px;

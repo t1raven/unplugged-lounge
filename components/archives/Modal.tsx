@@ -33,10 +33,12 @@ function ArchiveImage({ item }: { item: Archive }) {
         duration: 0.4,
         ease: 'power2.out',
         clearProps: 'transform',
-      }
+      },
     );
 
-    return () => { animation.kill(); };
+    return () => {
+      animation.kill();
+    };
   }, [imageLoaded]);
 
   return (
@@ -52,13 +54,7 @@ function ArchiveImage({ item }: { item: Archive }) {
   );
 }
 
-export default function ArchiveModal({
-  items,
-  currentIndex,
-  onClose,
-  onPrev,
-  onNext,
-}: Props) {
+export default function ArchiveModal({ items, currentIndex, onClose, onPrev, onNext }: Props) {
   const modalRef = useRef<HTMLDivElement>(null);
   const item = items[currentIndex];
 
@@ -80,7 +76,7 @@ export default function ArchiveModal({
           opacity: 1,
           duration: 0.35,
           ease: 'power2.out',
-        }
+        },
       );
 
       gsap.fromTo(
@@ -96,7 +92,7 @@ export default function ArchiveModal({
           y: 0,
           duration: 0.5,
           ease: 'power3.out',
-        }
+        },
       );
     }, modal);
 
@@ -106,15 +102,9 @@ export default function ArchiveModal({
   useEffect(() => {
     if (items.length <= 1) return;
 
-    const nextIndex =
-      currentIndex === items.length - 1
-        ? 0
-        : currentIndex + 1;
+    const nextIndex = currentIndex === items.length - 1 ? 0 : currentIndex + 1;
 
-    const prevIndex =
-      currentIndex === 0
-        ? items.length - 1
-        : currentIndex - 1;
+    const prevIndex = currentIndex === 0 ? items.length - 1 : currentIndex - 1;
 
     const preload = (src?: string) => {
       if (!src) return;
@@ -188,13 +178,13 @@ export default function ArchiveModal({
     };
 
     // 모바일 터치 이벤트 리스너 등록
-    window.addEventListener("touchstart", handleTouchStart);
-    window.addEventListener("touchend", handleTouchEnd);
+    window.addEventListener('touchstart', handleTouchStart);
+    window.addEventListener('touchend', handleTouchEnd);
 
     // 컴포넌트 언마운트 시 이벤트 리스너 제거 (메모리 누수 방지)
     return () => {
-      window.removeEventListener("touchstart", handleTouchStart);
-      window.removeEventListener("touchend", handleTouchEnd);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchend', handleTouchEnd);
     };
   }, [onPrev, onNext]);
 
@@ -207,6 +197,7 @@ export default function ArchiveModal({
       role="dialog"
       aria-modal="true"
       aria-label={item.title}
+      data-lenis-prevent
     >
       <button
         type="button"
@@ -216,13 +207,10 @@ export default function ArchiveModal({
       />
 
       <div className="gallery-modal__content">
-        <button
-          type="button"
-          className="gallery-modal__close"
-          onClick={onClose}
-          aria-label="닫기"
-        >
-          <span className="icon material-symbols-rounded" translate="no">close</span>
+        <button type="button" className="gallery-modal__close" onClick={onClose} aria-label="닫기">
+          <span className="icon material-symbols-rounded" translate="no">
+            close
+          </span>
         </button>
 
         <div className="gallery-modal__image">
@@ -230,26 +218,25 @@ export default function ArchiveModal({
         </div>
 
         <div className="gallery-modal__info">
-
           {item.category?._id !== '3eb51abf-f89b-4350-a9fa-2f0eac2514c4' && (
             <>
               {item.performance ? (
                 <h2>
                   <Link href={`/performances/${item.performance.slug?.current ?? ''}`}>
                     {item.title}
-                    <i className="icon material-symbols-rounded" translate="no">arrow_forward_ios</i>
+                    <i className="icon material-symbols-rounded" translate="no">
+                      arrow_forward_ios
+                    </i>
                   </Link>
                 </h2>
               ) : (
                 <h2>{item.title}</h2>
               )}
 
-              {item.description && 
-                <p>{item.description}</p>
-              }
-            </>   
+              {item.description && <p>{item.description}</p>}
+            </>
           )}
-      
+
           <span>
             {currentIndex + 1} / {items.length}
           </span>
@@ -261,7 +248,9 @@ export default function ArchiveModal({
           onClick={onPrev}
           aria-label="이전 이미지"
         >
-          <span className="icon material-symbols-rounded" translate="no">keyboard_arrow_left</span>
+          <span className="icon material-symbols-rounded" translate="no">
+            keyboard_arrow_left
+          </span>
         </button>
 
         <button
@@ -270,7 +259,9 @@ export default function ArchiveModal({
           onClick={onNext}
           aria-label="다음 이미지"
         >
-          <span className="icon material-symbols-rounded" translate="no">keyboard_arrow_right</span>
+          <span className="icon material-symbols-rounded" translate="no">
+            keyboard_arrow_right
+          </span>
         </button>
       </div>
     </div>

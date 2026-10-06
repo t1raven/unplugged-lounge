@@ -1,3 +1,5 @@
+@use '@/styles/_functions' as *;
+
 #site-gnb {
   position: fixed;
   top: 0;
@@ -24,6 +26,7 @@
     background-color: rgba(238, 238, 238, 0.7);
     backdrop-filter: var(--backdrop-filter);
     box-shadow: var(--box-shadow);
+    border: 0px solid var(--border-color);
     transition: transform 0.35s ease;
     overflow: hidden;
 
@@ -55,9 +58,12 @@
           text-align: center;
 
           .text {
-            font-size: 12px;
+            font-size: fluid(10px, 12px);
             line-height: 1.25;
             white-space: nowrap;
+          }
+          .icon {
+            font-size: 24px;
           }
           .goods_icon {
             display: inline-block;
@@ -95,7 +101,7 @@
           //color: var(--primary-color);
           .icon {
             //color: var(--primary-color);
-            font-variation-settings: "FILL" 1;
+            font-variation-settings: 'FILL' 1;
           }
 
           @media (hover: hover) and (pointer: fine) {
@@ -126,7 +132,7 @@
     .menu-btn {
       position: absolute;
       left: 0;
-      top: 0;
+      top: 50%;
       z-index: 5;
       display: inline-flex;
       align-items: center;
@@ -137,8 +143,9 @@
       border: 0;
       .icon {
         color: var(--primary-color);
-        font-variation-settings: "FILL" 1;
+        font-variation-settings: 'FILL' 1;
       }
+      transform: translateY(-50%);
       opacity: 0;
       visibility: hidden;
     }
@@ -164,7 +171,7 @@ html.scrollUp #site-gnb {
   top: 0;
 }
 
-[data-theme="dark"] {
+[data-theme='dark'] {
   #site-gnb {
     > nav {
       background-color: rgba(34, 34, 34, 0.7);
@@ -191,7 +198,7 @@ html.scrollUp #site-gnb {
     height: 0;
     margin: 0 auto;
 
-    animation: site-gnb-show 0.5s ease 0.75s backwards;
+    animation: site-gnb-show 0.5s var(--liquid-ease) 0.5s backwards;
     @keyframes site-gnb-show {
       from {
         opacity: 0;
@@ -208,36 +215,18 @@ html.scrollUp #site-gnb {
       left: 0;
       bottom: 20px;
       > ul {
-        min-width: clamp(
-          calc(320px - 10px),
-          calc(90vw - 10px),
-          calc(520px - 10px)
-        );
-        > li {
-          > a {
-            .text {
-              font-size: 11px;
-            }
-            .icon {
-              font-size: 24px;
-            }
-            .goods_icon {
-              width: 24px;
-              height: 24px;
-            }
-          }
-        }
+        min-width: clamp(calc(320px - 10px), calc(90vw - 10px), calc(520px - 10px));
       }
     }
   }
 
-  /* html.scrollDown #site-gnb > nav {
-	  transform: scale(0.9);
-	}
+  html.scrollDown #site-gnb > nav {
+    transform: scale(0.9);
+  }
 
-	html.scrollUp #site-gnb > nav {
-	  transform: scale(1);
-	} */
+  html.scrollUp #site-gnb > nav {
+    transform: scale(1);
+  }
 }
 
 @media screen and (max-width: 768px) {
@@ -246,15 +235,11 @@ html.scrollUp #site-gnb {
       > ul {
         > li {
           > a {
-            height: 50px;
             .text {
               display: none;
             }
           }
         }
-      }
-      .move-bg {
-        height: 50px;
       }
     }
   }
