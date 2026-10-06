@@ -34,6 +34,7 @@
   --backdrop-filter: saturate(120%) blur(6px);
 
   --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --liquid-ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 [data-theme='dark'] {
@@ -84,6 +85,8 @@ body {
   background-color: var(--background-color);
   word-break: keep-all;
   word-wrap: break-word;
+  display: flex;
+  flex-direction: column;
 }
 button {
   padding: 0;
@@ -980,10 +983,12 @@ textarea.ipt {
 
 /* Common */
 #site-body {
-  display: block;
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  min-height: 100dvh;
+  flex: 1;
 }
+
 #site-body.secBg {
   background-color: var(--background-sec-color);
 }
@@ -1004,6 +1009,7 @@ textarea.ipt {
   position: relative;
   padding: 40px 0;
   background-color: var(--background-color);
+  flex: 1;
 
   &:first-child {
     padding-top: 120px;
