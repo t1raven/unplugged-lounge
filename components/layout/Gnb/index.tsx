@@ -43,7 +43,6 @@ export default function Gnb() {
       gsap.set(moveBgRef.current, {
         x,
         y: '-50%',
-        scale: 0,
         width,
       });
     }
