@@ -1,11 +1,12 @@
 'use client';
 
-import { FormEvent, useEffect, useRef, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 
 import ModalScroll from '@/components/common/ModalScroll';
 import { TextField } from '@/components/ui/TextField';
 import { Button } from '@/components/ui/Button';
 import { formatPhone } from '@/utils/formatPhone';
+import Modal from '@/components/common/Modal';
 import type { OrderTrackingResult, OrderStatus } from '@/types/order';
 
 import './Tracking.scss';
@@ -27,7 +28,6 @@ const STATUS_LABELS: Record<OrderStatus, string> = {
 const CANCELLABLE_STATUSES: OrderStatus[] = ['pending', 'confirmed', 'paid'];
 
 export default function OrderTrackingModal({ open, onClose }: Props) {
-  const panelRef = useRef<HTMLDivElement>(null);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [orders, setOrders] = useState<OrderTrackingResult[]>([]);
@@ -50,12 +50,11 @@ export default function OrderTrackingModal({ open, onClose }: Props) {
     setHasSearched(false);
   };
 
-  useEffect(() => {
+  /* useEffect(() => {
     if (!open) return;
 
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
-    requestAnimationFrame(() => panelRef.current?.focus());
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -71,7 +70,7 @@ export default function OrderTrackingModal({ open, onClose }: Props) {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [hasSearched, open, onClose, selectedOrderNumber]);
+  }, [hasSearched, open, onClose, selectedOrderNumber]); */
 
   if (!open) return null;
 
@@ -148,101 +147,87 @@ export default function OrderTrackingModal({ open, onClose }: Props) {
   };
 
   return (
-    <div
-      className="order-tracking-modal"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="order-tracking-title"
-      data-lenis-prevent
-    >
-      <button
-        className="order-tracking-backdrop"
-        type="button"
-        onClick={onClose}
-        aria-label="주문조회 닫기"
-      />
-      <div className="order-tracking-panel" ref={panelRef} tabIndex={-1}>
-        <header className="order-tracking-header">
-          {selectedOrder || hasSearched ? (
-            <button
-              type="button"
-              className="order-tracking-icon"
-              onClick={handleBack}
-              aria-label={selectedOrder ? '주문 목록으로 돌아가기' : '주문 조회로 돌아가기'}
-            >
-              <span className="material-symbols-rounded">arrow_back_ios</span>
-            </button>
-          ) : (
-            <span />
-          )}
-          <h2 id="order-tracking-title">
-            {selectedOrder ? '주문 상세' : hasSearched ? '주문 목록' : '주문 조회'}
-          </h2>
+    <Modal className="order-tracking-modal" open={open} onClose={onClose}>
+      <header className="order-tracking-header">
+        {selectedOrder || hasSearched ? (
           <button
             type="button"
             className="order-tracking-icon"
-            onClick={onClose}
-            aria-label="주문조회 닫기"
+            onClick={handleBack}
+            aria-label={selectedOrder ? '주문 목록으로 돌아가기' : '주문 조회로 돌아가기'}
           >
-            <span className="material-symbols-rounded">close</span>
+            <span className="material-symbols-rounded">arrow_back_ios</span>
           </button>
-        </header>
-
-        {selectedOrder ? (
-          <OrderDetail
-            order={selectedOrder}
-            cancelling={cancelling}
-            error={error}
-            onCancel={handleCancel}
-          />
-        ) : hasSearched ? (
-          <OrderList
-            orders={orders}
-            onSelect={(orderNumber) => {
-              setSelectedOrderNumber(orderNumber);
-              setError(null);
-            }}
-          />
         ) : (
-          <div className="order-tracking-body">
-            <form className="order-tracking-form" onSubmit={handleSearch}>
-              <p>주문 시 입력한 이름과 연락처를 입력해주세요.</p>
-
-              <TextField
-                id="order-tracking-name"
-                type="text"
-                label="이름"
-                value={name}
-                onChange={(event) => setName(event.target.value)}
-                autoComplete="name"
-                required={true}
-              />
-              <TextField
-                id="order-tracking-phone"
-                type="tel"
-                inputMode="numeric"
-                label="연락처"
-                value={phone}
-                onChange={(event) => setPhone(formatPhone(event.target.value))}
-                autoComplete="tel"
-                maxLength={13}
-                required={true}
-              />
-
-              <Button className="order-tracking-submit" type="submit" disabled={loading}>
-                {loading ? '조회 중...' : '조회하기'}
-              </Button>
-            </form>
-
-            {error && (
-              <p className="order-tracking-error" role="alert">
-                {error}
-              </p>
-            )}
-          </div>
+          <span />
         )}
-      </div>
-    </div>
+        <h2 id="order-tracking-title">
+          {selectedOrder ? '주문 상세' : hasSearched ? '주문 목록' : '주문 조회'}
+        </h2>
+        <button
+          type="button"
+          className="order-tracking-icon"
+          onClick={onClose}
+          aria-label="주문조회 닫기"
+        >
+          <span className="material-symbols-rounded">close</span>
+        </button>
+      </header>
+
+      {selectedOrder ? (
+        <OrderDetail
+          order={selectedOrder}
+          cancelling={cancelling}
+          error={error}
+          onCancel={handleCancel}
+        />
+      ) : hasSearched ? (
+        <OrderList
+          orders={orders}
+          onSelect={(orderNumber) => {
+            setSelectedOrderNumber(orderNumber);
+            setError(null);
+          }}
+        />
+      ) : (
+        <div className="order-tracking-body">
+          <form className="order-tracking-form" onSubmit={handleSearch}>
+            <p>주문 시 입력한 이름과 연락처를 입력해주세요.</p>
+
+            <TextField
+              id="order-tracking-name"
+              type="text"
+              label="이름"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              autoComplete="name"
+              required={true}
+            />
+            <TextField
+              id="order-tracking-phone"
+              type="tel"
+              inputMode="numeric"
+              label="연락처"
+              value={phone}
+              onChange={(event) => setPhone(formatPhone(event.target.value))}
+              autoComplete="tel"
+              maxLength={13}
+              required={true}
+            />
+
+            <Button className="order-tracking-submit" type="submit" disabled={loading}>
+              {loading ? '조회 중...' : '조회하기'}
+            </Button>
+          </form>
+
+          {error && (
+            <p className="order-tracking-error" role="alert">
+              {error}
+            </p>
+          )}
+        </div>
+      )}
+    </Modal>
   );
 }
 

@@ -6,15 +6,13 @@ import { useDevice } from '@/components/providers/DeviceProvider';
 import { useCart } from '@/components/providers/CartProvider';
 import Link from 'next/link';
 import gsap from 'gsap';
-import { CustomEase } from 'gsap/CustomEase';
+import useLiquidEase from '@/hooks/useLiquidEase';
 
 import './style.scss';
 
-gsap.registerPlugin(CustomEase);
-
-CustomEase.create('liquidEase', 'M0,0 C0.22,1 0.36,1 1,1');
-
 export default function Gnb() {
+  useLiquidEase();
+
   const pathname = usePathname();
 
   const gnbRef = useRef<HTMLElement>(null);

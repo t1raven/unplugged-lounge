@@ -1,37 +1,9 @@
 .order-tracking-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-
-.order-tracking-backdrop {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
-  backdrop-filter: var(--backdrop-filter);
-  background-color: rgba(0, 0, 0, 0.65);
-  cursor: default;
-}
-
-.order-tracking-panel {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: min(520px, 100%);
-  max-height: min(820px, calc(100dvh - 48px));
-  border: 1px solid var(--border-color);
-  border-radius: 16px;
-  color: var(--font-color);
-  background-color: var(--background-color);
-  box-shadow: var(--box-shadow);
-  overflow: hidden;
-  outline: none;
+  .modal-panel {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+  }
 }
 
 .order-tracking-header {

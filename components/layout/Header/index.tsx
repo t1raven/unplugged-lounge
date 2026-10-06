@@ -109,7 +109,7 @@ export default function Header() {
 
   return (
     <>
-      <SnsModal open={activeSnsModal} onClose={handleSnsModal} />
+      <SnsModal open={activeSnsModal} onClose={() => setActiveSnsModal(false)} />
       <header id="site-header">
         <div className="inner">
           {backBtn && (

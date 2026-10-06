@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
+import Modal from '@/components/common/Modal';
 import { useCart } from '@/components/providers/CartProvider';
 import { getGoodsUnitPrice } from '@/lib/goodsPrice';
 
@@ -17,7 +18,7 @@ interface Props {
   orderDeliverySettings: OrderDelivery;
 }
 
-export default function Modal({ orderDeliverySettings }: Props) {
+export default function CartModal({ orderDeliverySettings }: Props) {
   const {
     items,
     isCartOpen,
@@ -60,7 +61,7 @@ export default function Modal({ orderDeliverySettings }: Props) {
     if (!isCartOpen) return;
 
     // 모달을 새로 열면 장바구니 화면부터
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+
     setStep('cart');
     setOrderNumber(null);
 
@@ -96,39 +97,35 @@ export default function Modal({ orderDeliverySettings }: Props) {
   };
 
   return (
-    <div className="cart-modal" role="dialog" aria-modal="true" data-lenis-prevent>
-      <button type="button" className="cart-backdrop" onClick={closeCart} aria-label="닫기" />
+    <Modal className="cart-modal" open={isCartOpen} onClose={closeCart}>
+      {step === 'cart' && (
+        <Cart
+          items={items}
+          quantityByGoodsId={quantityByGoodsId}
+          originalTotalPrice={originalTotalPrice}
+          discountedTotalPrice={discountedTotalPrice}
+          totalDiscountPrice={totalDiscountPrice}
+          removeItem={removeItem}
+          increaseQuantity={increaseQuantity}
+          decreaseQuantity={decreaseQuantity}
+          clearCart={clearCart}
+          closeCart={closeCart}
+          onOrder={() => setStep('order')}
+        />
+      )}
 
-      <div className="cart-panel">
-        {step === 'cart' && (
-          <Cart
-            items={items}
-            quantityByGoodsId={quantityByGoodsId}
-            originalTotalPrice={originalTotalPrice}
-            discountedTotalPrice={discountedTotalPrice}
-            totalDiscountPrice={totalDiscountPrice}
-            removeItem={removeItem}
-            increaseQuantity={increaseQuantity}
-            decreaseQuantity={decreaseQuantity}
-            clearCart={clearCart}
-            closeCart={closeCart}
-            onOrder={() => setStep('order')}
-          />
-        )}
+      {step === 'order' && (
+        <Order
+          items={items}
+          totalPrice={totalPrice}
+          orderDeliverySettings={orderDeliverySettings}
+          onBack={() => setStep('cart')}
+          closeCart={closeCart}
+          onComplete={handleComplete}
+        />
+      )}
 
-        {step === 'order' && (
-          <Order
-            items={items}
-            totalPrice={totalPrice}
-            orderDeliverySettings={orderDeliverySettings}
-            onBack={() => setStep('cart')}
-            closeCart={closeCart}
-            onComplete={handleComplete}
-          />
-        )}
-
-        {step === 'complete' && <Complete orderNumber={orderNumber} onClose={closeCart} />}
-      </div>
-    </div>
+      {step === 'complete' && <Complete orderNumber={orderNumber} onClose={closeCart} />}
+    </Modal>
   );
 }
