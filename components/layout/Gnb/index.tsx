@@ -6,8 +6,13 @@ import { useDevice } from '@/components/providers/DeviceProvider';
 import { useCart } from '@/components/providers/CartProvider';
 import Link from 'next/link';
 import gsap from 'gsap';
+import { CustomEase } from 'gsap/CustomEase';
 
 import './style.scss';
+
+gsap.registerPlugin(CustomEase);
+
+CustomEase.create('liquidEase', 'M0,0 C0.22,1 0.36,1 1,1');
 
 export default function Gnb() {
   const pathname = usePathname();
@@ -31,11 +36,6 @@ export default function Gnb() {
     const menuRect = activeMenu.getBoundingClientRect();
     const scale = navRect.width / gnbRef.current.offsetWidth || 1;
 
-    /* const navRect = gnbRef.current.getBoundingClientRect();
-    const menuRect = activeMenu.getBoundingClientRect();
-    let scale = document.documentElement.classList.contains('scrollDown') ? 0.9 : 1;
-    if(getDeviceType() === "desktop") scale = 1; */
-
     const x = (menuRect.left - navRect.left) / scale;
     const width = menuRect.width / scale;
 
@@ -48,16 +48,32 @@ export default function Gnb() {
       });
     }
 
+    if (!document.querySelector('#site-fnb')) {
+      gsap.set(gnbRef.current, {
+        clearProps: 'scale',
+      });
+    }
+
     gsap.to(moveBgRef.current, {
       x,
       y: '-50%',
       scale: 1,
       width,
-      duration: 0.35,
-      ease: 'power3.out',
+      duration: 0.45,
+      ease: 'liquidEase',
       overwrite: 'auto',
     });
   }, []);
+
+  useEffect(() => {
+    const frameId = requestAnimationFrame(() => {
+      moveBackground(true);
+    });
+
+    return () => {
+      cancelAnimationFrame(frameId);
+    };
+  }, [moveBackground, pathname]);
 
   const collapseGNB = useCallback((animate = true) => {
     if (!gnbRef.current || !moveBgRef.current || isCollapsedRef.current) return;
@@ -65,15 +81,14 @@ export default function Gnb() {
     menuTimelineRef.current?.kill();
     gnbRef.current.parentElement?.classList.add('collapse');
 
-    const menuLl = gnbRef.current.querySelectorAll<HTMLLIElement>('li > a');
+    const menuLi = gnbRef.current.querySelectorAll<HTMLLIElement>('li > a');
     const menuBtn = gnbRef.current.querySelector<HTMLLIElement>('.menu-btn');
     const Fnb = document.querySelector<HTMLLIElement>('#site-fnb');
 
-    const gnbRect = gnbRef.current.getBoundingClientRect();
-    const width = gnbRect.height || 60;
+    const width = gnbRef.current.offsetHeight || 60;
 
     if (!animate) {
-      gsap.set(menuLl, {
+      gsap.set(menuLi, {
         scale: 0,
         opacity: 0,
         visibility: 'hidden',
@@ -88,6 +103,7 @@ export default function Gnb() {
       });
       gsap.set(gnbRef.current, {
         width,
+        scale: 1,
         borderWidth: 1,
       });
       gsap.set(Fnb, {
@@ -97,6 +113,13 @@ export default function Gnb() {
       return;
     }
 
+    gsap.to(gnbRef.current, {
+      scale: 1,
+      duration: 0.15,
+      ease: 'liquidEase',
+      overwrite: 'auto',
+    });
+
     const tl = gsap.timeline();
     menuTimelineRef.current = tl;
 
@@ -105,13 +128,13 @@ export default function Gnb() {
     });
 
     tl.to(
-      menuLl,
+      menuLi,
       {
         scale: 0,
         opacity: 0,
         duration: 0.5,
         visibility: 'hidden',
-        ease: 'power3.out',
+        ease: 'liquidEase',
       },
       '+=0.5',
     );
@@ -121,7 +144,7 @@ export default function Gnb() {
         opacity: 0,
         visibility: 'hidden',
         duration: 0.25,
-        ease: 'power3.out',
+        ease: 'liquidEase',
       },
       '-=0.5',
     );
@@ -131,9 +154,9 @@ export default function Gnb() {
         width: width,
         borderWidth: 1,
         duration: 0.5,
-        ease: 'power3.out',
+        ease: 'liquidEase',
       },
-      '-=0.5',
+      '-=0.25',
     );
     tl.to(
       menuBtn,
@@ -141,7 +164,7 @@ export default function Gnb() {
         opacity: 1,
         visibility: 'visible',
         duration: 0.5,
-        ease: 'power3.out',
+        ease: 'liquidEase',
       },
       '-=0.5',
     );
@@ -155,7 +178,7 @@ export default function Gnb() {
         opacity: 1,
         visibility: 'visible',
         duration: 0.5,
-        ease: 'power3.out',
+        ease: 'liquidEase',
       },
       '-=0.25',
     );
@@ -167,7 +190,7 @@ export default function Gnb() {
     menuTimelineRef.current?.kill();
     gnbRef.current.parentElement?.classList.remove('collapse');
 
-    const menuLl = gnbRef.current.querySelectorAll<HTMLLIElement>('li > a');
+    const menuLi = gnbRef.current.querySelectorAll<HTMLLIElement>('li > a');
     const menuBtn = gnbRef.current.querySelector<HTMLLIElement>('.menu-btn');
     const Fnb = document.querySelector<HTMLLIElement>('#site-fnb');
     const menuFnbopacity = isReady && isDesktop ? 1 : 0;
@@ -179,7 +202,7 @@ export default function Gnb() {
       opacity: 0,
       visibility: 'hidden',
       duration: 0.5,
-      ease: 'power3.in',
+      ease: 'liquidEase',
     });
     tl.to(
       gnbRef.current,
@@ -187,7 +210,7 @@ export default function Gnb() {
         width: `100%`,
         borderWidth: '',
         duration: 0.5,
-        ease: 'power3.in',
+        ease: 'liquidEase',
       },
       '-=0.5',
     );
@@ -196,11 +219,11 @@ export default function Gnb() {
       {
         opacity: menuFnbopacity,
         duration: 0.5,
-        ease: 'power3.in',
+        ease: 'liquidEase',
       },
       '-=0.5',
     );
-    menuLl.forEach((item) => {
+    menuLi.forEach((item) => {
       tl.to(
         item,
         {
@@ -208,17 +231,21 @@ export default function Gnb() {
           opacity: 1,
           visibility: 'visible',
           duration: 0.5,
-          ease: 'power3.in',
+          ease: 'liquidEase',
         },
         '-=0.45',
       );
     });
-    tl.to(moveBgRef.current, {
-      opacity: 1,
-      visibility: 'visible',
-      duration: 0.25,
-      ease: 'power3.in',
-    });
+    tl.to(
+      moveBgRef.current,
+      {
+        opacity: 1,
+        visibility: 'visible',
+        duration: 0.5,
+        ease: 'liquidEase',
+      },
+      '-=0.25',
+    );
   }, [isReady, isDesktop]);
 
   const syncMenu = useCallback(
@@ -234,6 +261,14 @@ export default function Gnb() {
   );
 
   useEffect(() => {
+    const frameId = requestAnimationFrame(() => {
+      syncMenu();
+    });
+
+    return () => cancelAnimationFrame(frameId);
+  }, [syncMenu, pathname]);
+
+  useEffect(() => {
     const background = moveBgRef.current;
     let lastWidth = window.innerWidth;
     const handleResize = () => {
@@ -246,7 +281,7 @@ export default function Gnb() {
         moveBackground(false);
         syncMenu(false);
       });
-      const timeoutId = setTimeout(() => moveBackground(false), 750);
+      const timeoutId = setTimeout(() => moveBackground(false), 500);
 
       return () => {
         cancelAnimationFrame(frameId);
@@ -259,8 +294,10 @@ export default function Gnb() {
       const currentScrollY = window.scrollY;
       const scrollDiff = currentScrollY - lastScrollY;
 
-      if (Math.abs(scrollDiff) >= 30) {
-        syncMenu();
+      if (Math.abs(scrollDiff) >= 50) {
+        if (scrollDiff > 0) {
+          syncMenu();
+        }
         lastScrollY = currentScrollY;
       }
     };
@@ -276,36 +313,16 @@ export default function Gnb() {
 
     window.addEventListener('resize', handleResize);
     window.addEventListener('scroll', handleScroll, { passive: true });
-    document.addEventListener('pointerdown', handleOutsideClick);
+    document.addEventListener('click', handleOutsideClick);
 
     return () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('scroll', handleScroll);
-      document.removeEventListener('pointerdown', handleOutsideClick);
+      document.removeEventListener('click', handleOutsideClick);
       menuTimelineRef.current?.kill();
       gsap.killTweensOf(background);
     };
   }, [moveBackground, syncMenu]);
-
-  useEffect(() => {
-    const frameId = requestAnimationFrame(() => {
-      syncMenu();
-    });
-
-    return () => cancelAnimationFrame(frameId);
-  }, [syncMenu, pathname]);
-
-  useEffect(() => {
-    const frameId = requestAnimationFrame(() => {
-      moveBackground(true);
-    });
-    const timeoutId = setTimeout(() => moveBackground(true), 400);
-
-    return () => {
-      cancelAnimationFrame(frameId);
-      clearTimeout(timeoutId);
-    };
-  }, [moveBackground, pathname]);
 
   return (
     <div id="site-gnb">

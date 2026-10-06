@@ -198,7 +198,7 @@ html.scrollUp #site-gnb {
     height: 0;
     margin: 0 auto;
 
-    animation: site-gnb-show 0.5s ease 0.75s backwards;
+    animation: site-gnb-show 0.5s var(--liquid-ease) 0.5s backwards;
     @keyframes site-gnb-show {
       from {
         opacity: 0;
@@ -220,13 +220,13 @@ html.scrollUp #site-gnb {
     }
   }
 
-  /* html.scrollDown #site-gnb > nav {
-	  transform: scale(0.9);
-	}
+  html.scrollDown #site-gnb > nav {
+    transform: scale(0.9);
+  }
 
-	html.scrollUp #site-gnb > nav {
-	  transform: scale(1);
-	} */
+  html.scrollUp #site-gnb > nav {
+    transform: scale(1);
+  }
 }
 
 @media screen and (max-width: 768px) {

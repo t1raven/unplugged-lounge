@@ -7,7 +7,7 @@ import Image from 'next/image';
 
 import './style.scss';
 
-import ParaSection from '@/components/common/ParaSection/ScrollTrigger';
+import ParaSection from '@/components/common/ParaSection';
 import heroKvImage from '@/public/images/common/site-sub-hero-kv.png';
 
 interface Props {

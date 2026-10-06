@@ -4,10 +4,10 @@
   bottom: 0;
   z-index: 110;
   width: clamp(320px, 90vw, 520px);
-	height: 0;
-	margin: 0 auto;
+  height: 0;
+  margin: 0 auto;
 
-  animation: site-fnb-show 0.5s ease 0.75s backwards;
+  animation: site-fnb-show 0.5s var(--liquid-ease) 0.5s backwards;
   @keyframes site-fnb-show {
     from {
       opacity: 0;
@@ -36,13 +36,11 @@
 -------------------------------- */
 
 @media (max-width: 1024px) {
-
   #site-fnb {
     nav {
       padding-left: calc(60px + 8px);
     }
   }
-
 }
 
 /* --------------------------------
@@ -50,7 +48,6 @@
 -------------------------------- */
 
 @media (max-width: 768px) {
-
   #site-fnb {
     //animation: none;
     nav {
@@ -58,5 +55,4 @@
       gap: 4px;
     }
   }
-
 }
