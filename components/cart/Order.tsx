@@ -11,7 +11,6 @@ import type { CartItem } from '@/types/cart';
 import { TextField, TextareaField } from '@/components/ui/TextField';
 import { Button } from '@/components/ui/Button';
 import { formatPhone } from '@/utils/formatPhone';
-import ModalScroll from '@/components/common/ModalScroll';
 
 import type { OrderDelivery } from '@/types/siteSettings';
 
@@ -22,9 +21,9 @@ interface Props {
 
   totalPrice: number;
 
-  closeCart: () => void;
+  //closeCart: () => void;
 
-  onBack: () => void;
+  //onBack: () => void;
 
   onComplete: (orderNumber: string) => void;
 }
@@ -35,8 +34,8 @@ export default function Order({
   orderDeliverySettings,
   items,
   totalPrice,
-  onBack,
-  closeCart,
+  //onBack,
+  //closeCart,
   onComplete,
 }: Props) {
   const [deliveryMethod, setDeliveryMethod] = useState<DeliveryMethod>('delivery');
@@ -169,7 +168,7 @@ export default function Order({
 
   return (
     <>
-      <div className="cart-header">
+      {/* <div className="cart-header">
         <button
           type="button"
           className="cart-back"
@@ -184,10 +183,10 @@ export default function Order({
         <button type="button" className="cart-close" onClick={closeCart} aria-label="닫기">
           <span className="material-symbols-rounded">close</span>
         </button>
-      </div>
+      </div> */}
 
       <form className="order-form" onSubmit={handleSubmit}>
-        <ModalScroll className="order-form-body">
+        <div className="order-form-body">
           {/* 배송방법 */}
           <section className="order-section">
             <h3>배송방법</h3>
@@ -412,7 +411,7 @@ export default function Order({
           >
             {loading ? '신청 중...' : '주문 신청하기'}
           </Button>
-        </ModalScroll>
+        </div>
 
         {/*<div className="order-footer">
 

@@ -4,8 +4,8 @@
   align-items: flex-start;
 
   .modal-panel {
+    max-width: 460px;
     min-height: auto;
-    padding: 40px;
 
     border-top: 0;
     border-radius: 0 0 fluid(16px, 20px) fluid(16px, 20px);
@@ -21,6 +21,10 @@
         opacity: 1;
       }
     }
+  }
+
+  .modal-body {
+    padding: 40px;
   }
 }
 
@@ -66,7 +70,7 @@
 
 @media screen and (max-width: 768px) {
   .sns-modal {
-    .modal-panel {
+    .modal-body {
       padding: 40px 28px;
     }
   }

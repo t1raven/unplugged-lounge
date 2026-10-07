@@ -3,9 +3,8 @@
   justify-content: center;
 
   .modal-panel {
-    width: min(100vw, 1200px);
+    width: min(100vw, 1024px);
     height: 100vh;
-    padding: 60px 20px 0 20px;
 
     align-items: center;
     justify-content: center;
@@ -14,6 +13,10 @@
     border: 0;
     border-radius: 0;
     box-shadow: none;
+  }
+
+  .modal-body {
+    padding: 60px 20px 20px 20px;
   }
 
   &__image {
@@ -143,9 +146,9 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .gallery-modal {
-    .modal-panel {
+    .modal-body {
       padding-top: 40px;
     }
 

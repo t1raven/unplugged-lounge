@@ -22,9 +22,7 @@ export default function CartModal({ orderDeliverySettings }: Props) {
   const { isCartOpen } = useCart();
 
   // 열릴 때마다 새로 마운트되어 state가 초기화됨 (장바구니 화면부터 시작)
-  if (!isCartOpen) {
-    return null;
-  }
+  if (!isCartOpen) return null;
 
   return <CartModalContent orderDeliverySettings={orderDeliverySettings} />;
 }
@@ -77,7 +75,14 @@ function CartModalContent({ orderDeliverySettings }: Props) {
   };
 
   return (
-    <Modal className="cart-modal" open={isCartOpen} onClose={closeCart}>
+    <Modal
+      className="cart-modal"
+      header={
+        step !== 'complete' && <ModalHeader step={step} setStep={setStep} closeCart={closeCart} />
+      }
+      open={isCartOpen}
+      onClose={closeCart}
+    >
       {step === 'cart' && (
         <Cart
           items={items}
@@ -88,8 +93,8 @@ function CartModalContent({ orderDeliverySettings }: Props) {
           removeItem={removeItem}
           increaseQuantity={increaseQuantity}
           decreaseQuantity={decreaseQuantity}
-          clearCart={clearCart}
-          closeCart={closeCart}
+          //clearCart={clearCart}
+          //closeCart={closeCart}
           onOrder={() => setStep('order')}
         />
       )}
@@ -99,13 +104,44 @@ function CartModalContent({ orderDeliverySettings }: Props) {
           items={items}
           totalPrice={totalPrice}
           orderDeliverySettings={orderDeliverySettings}
-          onBack={() => setStep('cart')}
-          closeCart={closeCart}
+          //onBack={() => setStep('cart')}
+          //closeCart={closeCart}
           onComplete={handleComplete}
         />
       )}
 
       {step === 'complete' && <Complete orderNumber={orderNumber} onClose={closeCart} />}
     </Modal>
+  );
+}
+
+function ModalHeader({
+  step,
+  setStep,
+  closeCart,
+}: {
+  step: string;
+  setStep: (step: string) => void;
+  closeCart: () => void;
+}) {
+  return (
+    <>
+      {step === 'order' ? (
+        <button
+          type="button"
+          className="modal-header-btn"
+          onClick={() => setStep('cart')}
+          aria-label="장바구니로 돌아가기"
+        >
+          <span className="material-symbols-rounded">arrow_back_ios</span>
+        </button>
+      ) : (
+        <span />
+      )}
+      <h2 className="modal-header-title">{step === 'order' ? '주문 신청' : '장바구니'}</h2>
+      <button type="button" className="modal-header-btn" onClick={closeCart} aria-label="닫기">
+        <span className="material-symbols-rounded">close</span>
+      </button>
+    </>
   );
 }
