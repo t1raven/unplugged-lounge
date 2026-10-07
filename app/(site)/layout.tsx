@@ -1,12 +1,11 @@
-import { Noto_Sans_KR } from 'next/font/google';
-import '@/styles/globals.scss';
-const notoSansKR = Noto_Sans_KR({
-  subsets: ['latin'],
-  weight: ['400', '500', '700'],
+import localFont from 'next/font/local';
+const pretendard = localFont({
+  src: '../../public/fonts/PretendardVariable.woff2',
+  variable: '--font-pretendard',
+  weight: '45 920',
   display: 'swap',
-  preload: false,
-  variable: '--font-noto',
 });
+import '@/styles/globals.scss';
 
 import type { Metadata, Viewport } from 'next';
 import { getSiteSettings } from '@/lib/siteSettings';
@@ -83,7 +82,7 @@ export default async function SiteLayout({
 
   return (
     <html lang="ko" data-scroll-behavior="smooth" suppressHydrationWarning>
-      <body className={notoSansKR.variable} suppressHydrationWarning>
+      <body className={pretendard.variable} suppressHydrationWarning>
         <Providers>
           <Header />
           {children}
