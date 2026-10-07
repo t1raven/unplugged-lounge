@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
+import Modal from '@/components/ui/Modal';
 import { useCart } from '@/components/providers/CartProvider';
 import { getGoodsUnitPrice } from '@/lib/goodsPrice';
 
@@ -17,7 +18,16 @@ interface Props {
   orderDeliverySettings: OrderDelivery;
 }
 
-export default function Modal({ orderDeliverySettings }: Props) {
+export default function CartModal({ orderDeliverySettings }: Props) {
+  const { isCartOpen } = useCart();
+
+  // 열릴 때마다 새로 마운트되어 state가 초기화됨 (장바구니 화면부터 시작)
+  if (!isCartOpen) return null;
+
+  return <CartModalContent orderDeliverySettings={orderDeliverySettings} />;
+}
+
+function CartModalContent({ orderDeliverySettings }: Props) {
   const {
     items,
     isCartOpen,
@@ -56,37 +66,6 @@ export default function Modal({ orderDeliverySettings }: Props) {
     return total + unitPrice * item.quantity;
   }, 0);
 
-  useEffect(() => {
-    if (!isCartOpen) return;
-
-    // 모달을 새로 열면 장바구니 화면부터
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setStep('cart');
-    setOrderNumber(null);
-
-    const previousOverflow = document.body.style.overflow;
-
-    document.body.style.overflow = 'hidden';
-
-    const handleKeydown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        closeCart();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeydown);
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-
-      window.removeEventListener('keydown', handleKeydown);
-    };
-  }, [isCartOpen, closeCart]);
-
-  if (!isCartOpen) {
-    return null;
-  }
-
   const handleComplete = (orderNumber: string) => {
     setOrderNumber(orderNumber);
 
@@ -96,39 +75,73 @@ export default function Modal({ orderDeliverySettings }: Props) {
   };
 
   return (
-    <div className="cart-modal" role="dialog" aria-modal="true" data-lenis-prevent>
-      <button type="button" className="cart-backdrop" onClick={closeCart} aria-label="닫기" />
+    <Modal
+      className="cart-modal"
+      header={
+        step !== 'complete' && <ModalHeader step={step} setStep={setStep} closeCart={closeCart} />
+      }
+      open={isCartOpen}
+      onClose={closeCart}
+    >
+      {step === 'cart' && (
+        <Cart
+          items={items}
+          quantityByGoodsId={quantityByGoodsId}
+          originalTotalPrice={originalTotalPrice}
+          discountedTotalPrice={discountedTotalPrice}
+          totalDiscountPrice={totalDiscountPrice}
+          removeItem={removeItem}
+          increaseQuantity={increaseQuantity}
+          decreaseQuantity={decreaseQuantity}
+          //clearCart={clearCart}
+          //closeCart={closeCart}
+          onOrder={() => setStep('order')}
+        />
+      )}
 
-      <div className="cart-panel">
-        {step === 'cart' && (
-          <Cart
-            items={items}
-            quantityByGoodsId={quantityByGoodsId}
-            originalTotalPrice={originalTotalPrice}
-            discountedTotalPrice={discountedTotalPrice}
-            totalDiscountPrice={totalDiscountPrice}
-            removeItem={removeItem}
-            increaseQuantity={increaseQuantity}
-            decreaseQuantity={decreaseQuantity}
-            clearCart={clearCart}
-            closeCart={closeCart}
-            onOrder={() => setStep('order')}
-          />
-        )}
+      {step === 'order' && (
+        <Order
+          items={items}
+          totalPrice={totalPrice}
+          orderDeliverySettings={orderDeliverySettings}
+          //onBack={() => setStep('cart')}
+          //closeCart={closeCart}
+          onComplete={handleComplete}
+        />
+      )}
 
-        {step === 'order' && (
-          <Order
-            items={items}
-            totalPrice={totalPrice}
-            orderDeliverySettings={orderDeliverySettings}
-            onBack={() => setStep('cart')}
-            closeCart={closeCart}
-            onComplete={handleComplete}
-          />
-        )}
+      {step === 'complete' && <Complete orderNumber={orderNumber} onClose={closeCart} />}
+    </Modal>
+  );
+}
 
-        {step === 'complete' && <Complete orderNumber={orderNumber} onClose={closeCart} />}
-      </div>
-    </div>
+function ModalHeader({
+  step,
+  setStep,
+  closeCart,
+}: {
+  step: string;
+  setStep: (step: string) => void;
+  closeCart: () => void;
+}) {
+  return (
+    <>
+      {step === 'order' ? (
+        <button
+          type="button"
+          className="modal-header-btn"
+          onClick={() => setStep('cart')}
+          aria-label="장바구니로 돌아가기"
+        >
+          <span className="material-symbols-rounded">arrow_back_ios</span>
+        </button>
+      ) : (
+        <span />
+      )}
+      <h2 className="modal-header-title">{step === 'order' ? '주문 신청' : '장바구니'}</h2>
+      <button type="button" className="modal-header-btn" onClick={closeCart} aria-label="닫기">
+        <span className="material-symbols-rounded">close</span>
+      </button>
+    </>
   );
 }

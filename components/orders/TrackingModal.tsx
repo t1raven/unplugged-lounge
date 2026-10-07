@@ -1,8 +1,8 @@
 'use client';
 
-import { FormEvent, useEffect, useRef, useState } from 'react';
+import { FormEvent, useState } from 'react';
 
-import ModalScroll from '@/components/common/ModalScroll';
+import Modal from '@/components/ui/Modal';
 import { TextField } from '@/components/ui/TextField';
 import { Button } from '@/components/ui/Button';
 import { formatPhone } from '@/utils/formatPhone';
@@ -27,7 +27,6 @@ const STATUS_LABELS: Record<OrderStatus, string> = {
 const CANCELLABLE_STATUSES: OrderStatus[] = ['pending', 'confirmed', 'paid'];
 
 export default function OrderTrackingModal({ open, onClose }: Props) {
-  const panelRef = useRef<HTMLDivElement>(null);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [orders, setOrders] = useState<OrderTrackingResult[]>([]);
@@ -49,29 +48,6 @@ export default function OrderTrackingModal({ open, onClose }: Props) {
 
     setHasSearched(false);
   };
-
-  useEffect(() => {
-    if (!open) return;
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    requestAnimationFrame(() => panelRef.current?.focus());
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        if (selectedOrderNumber) setSelectedOrderNumber(null);
-        else if (hasSearched) setHasSearched(false);
-        else onClose();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [hasSearched, open, onClose, selectedOrderNumber]);
 
   if (!open) return null;
 
@@ -148,101 +124,141 @@ export default function OrderTrackingModal({ open, onClose }: Props) {
   };
 
   return (
-    <div
+    <Modal
       className="order-tracking-modal"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="order-tracking-title"
-      data-lenis-prevent
+      header={
+        <ModalHeader
+          hasSearched={hasSearched}
+          selectedOrder={selectedOrder}
+          handleBack={handleBack}
+          onClose={onClose}
+        />
+      }
+      open={open}
+      onClose={onClose}
     >
+      {selectedOrder ? (
+        <OrderDetail
+          order={selectedOrder}
+          cancelling={cancelling}
+          error={error}
+          onCancel={handleCancel}
+        />
+      ) : hasSearched ? (
+        <OrderList
+          orders={orders}
+          onSelect={(orderNumber) => {
+            setSelectedOrderNumber(orderNumber);
+            setError(null);
+          }}
+        />
+      ) : (
+        <OrderSearch
+          name={name}
+          setName={setName}
+          phone={phone}
+          setPhone={setPhone}
+          error={error}
+          loading={loading}
+          handleSearch={handleSearch}
+        />
+      )}
+    </Modal>
+  );
+}
+
+function ModalHeader({
+  hasSearched,
+  selectedOrder,
+  handleBack,
+  onClose,
+}: {
+  hasSearched: boolean;
+  selectedOrder: OrderTrackingResult | null;
+  handleBack: () => void;
+  onClose: () => void;
+}) {
+  return (
+    <>
+      {selectedOrder || hasSearched ? (
+        <button
+          type="button"
+          className="modal-header-btn"
+          onClick={handleBack}
+          aria-label={selectedOrder ? '주문 목록으로 돌아가기' : '주문 조회로 돌아가기'}
+        >
+          <span className="material-symbols-rounded">arrow_back_ios</span>
+        </button>
+      ) : (
+        <span />
+      )}
+      <h2 className="modal-header-title">
+        {selectedOrder ? '주문 상세' : hasSearched ? '주문 목록' : '주문 조회'}
+      </h2>
       <button
-        className="order-tracking-backdrop"
         type="button"
+        className="modal-header-btn"
         onClick={onClose}
         aria-label="주문조회 닫기"
+      >
+        <span className="material-symbols-rounded">close</span>
+      </button>
+    </>
+  );
+}
+
+function OrderSearch({
+  name,
+  setName,
+  phone,
+  setPhone,
+  error,
+  loading,
+  handleSearch,
+}: {
+  name: string;
+  setName: (name: string) => void;
+  phone: string;
+  setPhone: (phone: string) => void;
+  error: string | null;
+  loading: boolean;
+  handleSearch: (event: React.FormEvent<HTMLFormElement>) => void;
+}) {
+  return (
+    <form className="order-tracking-form" onSubmit={handleSearch}>
+      <p className="order-tracking-instruction">주문 시 입력한 이름과 연락처를 입력해주세요.</p>
+
+      <TextField
+        id="order-tracking-name"
+        type="text"
+        label="이름"
+        value={name}
+        onChange={(event) => setName(event.target.value)}
+        autoComplete="name"
+        required={true}
       />
-      <div className="order-tracking-panel" ref={panelRef} tabIndex={-1}>
-        <header className="order-tracking-header">
-          {selectedOrder || hasSearched ? (
-            <button
-              type="button"
-              className="order-tracking-icon"
-              onClick={handleBack}
-              aria-label={selectedOrder ? '주문 목록으로 돌아가기' : '주문 조회로 돌아가기'}
-            >
-              <span className="material-symbols-rounded">arrow_back_ios</span>
-            </button>
-          ) : (
-            <span />
-          )}
-          <h2 id="order-tracking-title">
-            {selectedOrder ? '주문 상세' : hasSearched ? '주문 목록' : '주문 조회'}
-          </h2>
-          <button
-            type="button"
-            className="order-tracking-icon"
-            onClick={onClose}
-            aria-label="주문조회 닫기"
-          >
-            <span className="material-symbols-rounded">close</span>
-          </button>
-        </header>
+      <TextField
+        id="order-tracking-phone"
+        type="tel"
+        inputMode="numeric"
+        label="연락처"
+        value={phone}
+        onChange={(event) => setPhone(formatPhone(event.target.value))}
+        autoComplete="tel"
+        maxLength={13}
+        required={true}
+      />
 
-        {selectedOrder ? (
-          <OrderDetail
-            order={selectedOrder}
-            cancelling={cancelling}
-            error={error}
-            onCancel={handleCancel}
-          />
-        ) : hasSearched ? (
-          <OrderList
-            orders={orders}
-            onSelect={(orderNumber) => {
-              setSelectedOrderNumber(orderNumber);
-              setError(null);
-            }}
-          />
-        ) : (
-          <div className="order-tracking-body">
-            <form className="order-tracking-form" onSubmit={handleSearch}>
-              <p>주문 시 입력한 이름과 연락처를 입력해주세요.</p>
+      {error && (
+        <p className="order-tracking-error" role="alert">
+          {error}
+        </p>
+      )}
 
-              <TextField
-                id="order-tracking-name"
-                type="text"
-                label="이름"
-                value={name}
-                onChange={(event) => setName(event.target.value)}
-                autoComplete="name"
-                required={true}
-              />
-              <TextField
-                id="order-tracking-phone"
-                type="tel"
-                inputMode="numeric"
-                label="연락처"
-                value={phone}
-                onChange={(event) => setPhone(formatPhone(event.target.value))}
-                autoComplete="tel"
-                maxLength={13}
-                required={true}
-              />
-
-              <Button className="order-tracking-submit" type="submit" disabled={loading}>
-                {loading ? '조회 중...' : '조회하기'}
-              </Button>
-            </form>
-
-            {error && (
-              <p className="order-tracking-error" role="alert">
-                {error}
-              </p>
-            )}
-          </div>
-        )}
-      </div>
-    </div>
+      <Button className="order-tracking-submit" type="submit" disabled={loading}>
+        {loading ? '조회 중...' : '조회하기'}
+      </Button>
+    </form>
   );
 }
 
@@ -254,36 +270,32 @@ function OrderList({
   onSelect: (orderNumber: string) => void;
 }) {
   return (
-    <ModalScroll>
-      <div className="order-tracking-body">
-        <section className="order-tracking-results" aria-live="polite">
-          <h3>
-            조회 결과 <span>{orders.length}</span>
-          </h3>
-          {orders.length === 0 ? (
-            <p className="order-tracking-empty">일치하는 주문 내역이 없습니다.</p>
-          ) : (
-            <ul>
-              {orders.map((order) => (
-                <li key={order.orderNumber}>
-                  <button type="button" onClick={() => onSelect(order.orderNumber)}>
-                    <div className="order-result-top">
-                      <strong>{order.orderNumber}</strong>
-                      <span className={`order-status ${order.status}`}>
-                        {STATUS_LABELS[order.status] ?? order.status}
-                      </span>
-                    </div>
-                    <time>{formatDate(order.createdAt)}</time>
-                    <p>{getItemSummary(order)}</p>
-                    <b>{order.totalPrice.toLocaleString()}원</b>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-      </div>
-    </ModalScroll>
+    <section className="order-tracking-results" aria-live="polite">
+      <h3>
+        조회 결과 <span>{orders.length}</span>
+      </h3>
+      {orders.length === 0 ? (
+        <p className="order-tracking-empty">일치하는 주문 내역이 없습니다.</p>
+      ) : (
+        <ul>
+          {orders.map((order) => (
+            <li key={order.orderNumber}>
+              <button type="button" onClick={() => onSelect(order.orderNumber)}>
+                <div className="order-result-top">
+                  <strong>{order.orderNumber}</strong>
+                  <span className={`order-status ${order.status}`}>
+                    {STATUS_LABELS[order.status] ?? order.status}
+                  </span>
+                </div>
+                <time>{formatDate(order.createdAt)}</time>
+                <p>{getItemSummary(order)}</p>
+                <b>{order.totalPrice.toLocaleString()}원</b>
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
   );
 }
 
@@ -302,115 +314,113 @@ function OrderDetail({
   const canCancel = CANCELLABLE_STATUSES.includes(order.status);
 
   return (
-    <ModalScroll>
-      <div className="order-detail">
-        <div className="order-detail-summary">
-          <div>
-            <span>주문번호</span>
-            <strong>{order.orderNumber}</strong>
-          </div>
-          <div>
-            <span>주문일</span>
-            <strong>{formatDate(order.createdAt)}</strong>
-          </div>
-          <div>
-            <span>상태</span>
-            <strong className={`order-status ${order.status}`}>
-              {STATUS_LABELS[order.status] ?? order.status}
-            </strong>
-          </div>
+    <div className="order-detail">
+      <div className="order-detail-summary">
+        <div>
+          <span>주문번호</span>
+          <strong>{order.orderNumber}</strong>
         </div>
-
-        <section>
-          <h3>주문 상품</h3>
-          {order.items.map((item, index) => (
-            <article className="order-detail-item" key={`${item.name}-${index}`}>
-              <div>
-                <strong>{item.name}</strong>
-                {item.options?.length > 0 && (
-                  <small>
-                    {item.options.map((option) => `${option.name}: ${option.value}`).join(' / ')}
-                  </small>
-                )}
-                <span>
-                  {item.quantity}개 × {item.price.toLocaleString()}원
-                </span>
-              </div>
-              <b>{item.subtotal.toLocaleString()}원</b>
-            </article>
-          ))}
-        </section>
-
-        <section>
-          <h3>배송 및 연락처</h3>
-          <dl>
-            <div>
-              <dt>수령 방법</dt>
-              <dd>{order.deliveryMethod === 'delivery' ? '배송' : '픽업'}</dd>
-            </div>
-            <div>
-              <dt>주문자</dt>
-              <dd>{order.customer.name}</dd>
-            </div>
-            <div>
-              <dt>연락처</dt>
-              <dd>{order.customer.phone}</dd>
-            </div>
-            {order.deliveryMethod === 'delivery' && address && (
-              <div>
-                <dt>배송지</dt>
-                <dd>
-                  [{address.postcode}] {address.address} {address.detailAddress}
-                </dd>
-              </div>
-            )}
-            {order.memo && (
-              <div>
-                <dt>요청사항</dt>
-                <dd>{order.memo}</dd>
-              </div>
-            )}
-          </dl>
-        </section>
-
-        <section className="order-detail-price">
-          <div>
-            <span>상품금액</span>
-            <span>{order.productPrice.toLocaleString()}원</span>
-          </div>
-          <div>
-            <span>배송비</span>
-            <span>{order.deliveryFee.toLocaleString()}원</span>
-          </div>
-          <div className="total">
-            <span>총 주문금액</span>
-            <strong>
-              {order.totalPrice.toLocaleString()}
-              <small>원</small>
-            </strong>
-          </div>
-        </section>
-
-        {error && (
-          <p className="order-tracking-error" role="alert">
-            {error}
-          </p>
-        )}
-        {canCancel && (
-          <Button
-            className="order-cancel-button"
-            color="error"
-            onClick={onCancel}
-            disabled={cancelling}
-          >
-            {cancelling ? '취소 처리 중...' : '주문 취소'}
-          </Button>
-        )}
-        {!canCancel && order.status !== 'cancelled' && (
-          <p className="order-cancel-guide">배송중 후에는 주문을 취소할 수 없습니다.</p>
-        )}
+        <div>
+          <span>주문일</span>
+          <strong>{formatDate(order.createdAt)}</strong>
+        </div>
+        <div>
+          <span>상태</span>
+          <strong className={`order-status ${order.status}`}>
+            {STATUS_LABELS[order.status] ?? order.status}
+          </strong>
+        </div>
       </div>
-    </ModalScroll>
+
+      <section>
+        <h3>주문 상품</h3>
+        {order.items.map((item, index) => (
+          <article className="order-detail-item" key={`${item.name}-${index}`}>
+            <div>
+              <strong>{item.name}</strong>
+              {item.options?.length > 0 && (
+                <small>
+                  {item.options.map((option) => `${option.name}: ${option.value}`).join(' / ')}
+                </small>
+              )}
+              <span>
+                {item.quantity}개 × {item.price.toLocaleString()}원
+              </span>
+            </div>
+            <b>{item.subtotal.toLocaleString()}원</b>
+          </article>
+        ))}
+      </section>
+
+      <section>
+        <h3>배송 및 연락처</h3>
+        <dl>
+          <div>
+            <dt>수령 방법</dt>
+            <dd>{order.deliveryMethod === 'delivery' ? '배송' : '픽업'}</dd>
+          </div>
+          <div>
+            <dt>주문자</dt>
+            <dd>{order.customer.name}</dd>
+          </div>
+          <div>
+            <dt>연락처</dt>
+            <dd>{order.customer.phone}</dd>
+          </div>
+          {order.deliveryMethod === 'delivery' && address && (
+            <div>
+              <dt>배송지</dt>
+              <dd>
+                [{address.postcode}] {address.address} {address.detailAddress}
+              </dd>
+            </div>
+          )}
+          {order.memo && (
+            <div>
+              <dt>요청사항</dt>
+              <dd>{order.memo}</dd>
+            </div>
+          )}
+        </dl>
+      </section>
+
+      <section className="order-detail-price">
+        <div>
+          <span>상품금액</span>
+          <span>{order.productPrice.toLocaleString()}원</span>
+        </div>
+        <div>
+          <span>배송비</span>
+          <span>{order.deliveryFee.toLocaleString()}원</span>
+        </div>
+        <div className="total">
+          <span>총 주문금액</span>
+          <strong>
+            {order.totalPrice.toLocaleString()}
+            <small>원</small>
+          </strong>
+        </div>
+      </section>
+
+      {error && (
+        <p className="order-tracking-error" role="alert">
+          {error}
+        </p>
+      )}
+      {canCancel && (
+        <Button
+          className="order-cancel-button"
+          color="error"
+          onClick={onCancel}
+          disabled={cancelling}
+        >
+          {cancelling ? '취소 처리 중...' : '주문 취소'}
+        </Button>
+      )}
+      {!canCancel && order.status !== 'cancelled' && (
+        <p className="order-cancel-guide">배송중 후에는 주문을 취소할 수 없습니다.</p>
+      )}
+    </div>
   );
 }
 
