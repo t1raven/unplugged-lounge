@@ -5,7 +5,7 @@ import Image from 'next/image';
 import gsap from 'gsap';
 import Link from 'next/link';
 
-import Modal from '@/components/common/Modal';
+import Modal from '@/components/ui/Modal';
 
 import type { Archive } from '@/types/archive';
 

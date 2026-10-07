@@ -5,7 +5,7 @@ import { useCart } from '@/components/providers/CartProvider';
 import { getGoodsUnitPrice } from '@/lib/goodsPrice';
 import type { Goods } from '@/types/goods';
 import type { CartOption } from '@/types/cart';
-import Modal from '@/components/common/Modal';
+import Modal from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
 
 interface Props {

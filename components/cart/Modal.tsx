@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import Modal from '@/components/common/Modal';
+import Modal from '@/components/ui/Modal';
 import { useCart } from '@/components/providers/CartProvider';
 import { getGoodsUnitPrice } from '@/lib/goodsPrice';
 

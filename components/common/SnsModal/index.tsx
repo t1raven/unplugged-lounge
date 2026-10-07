@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 
-import Modal from '../Modal';
+import Modal from '@/components/ui/Modal';
 
 import './style.scss';
 

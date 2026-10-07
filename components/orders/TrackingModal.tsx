@@ -2,11 +2,11 @@
 
 import { FormEvent, useState } from 'react';
 
+import Modal from '@/components/ui/Modal';
 import ModalScroll from '@/components/common/ModalScroll';
 import { TextField } from '@/components/ui/TextField';
 import { Button } from '@/components/ui/Button';
 import { formatPhone } from '@/utils/formatPhone';
-import Modal from '@/components/common/Modal';
 import type { OrderTrackingResult, OrderStatus } from '@/types/order';
 
 import './Tracking.scss';
