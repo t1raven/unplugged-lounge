@@ -40,7 +40,7 @@
 
   width: min(520px, 100%);
   min-height: 320px;
-  max-height: calc(100vh - 40px);
+  max-height: calc(100dvh - 40px);
 
   background-color: var(--background-color);
   border: 1px solid var(--border-color);
