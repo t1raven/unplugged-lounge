@@ -50,13 +50,28 @@ export default function GoodsList({
 }: Props) {
   const gridRef = useRef<HTMLDivElement>(null);
   const categoryRef = useRef<HTMLElement>(null);
-
   const animationContextRef = useRef<gsap.Context | null>(null);
   const previousLengthRef = useRef(0);
 
   const [activeCategory, setActiveCategory] = useState(categories[0]?.slug ?? '');
 
   const [items, setItems] = useState<Goods[]>(initialItems);
+
+  const [orderOpen, setOrderOpen] = useState(false);
+
+  const { cartCount } = useCart();
+
+  const openCart = useCart((state) => state.openCart);
+
+  const [selectedGoods, setSelectedGoods] = useState<Goods | null>(null);
+
+  const handleOpenOptionModal = (goods: Goods) => {
+    setSelectedGoods(goods);
+  };
+
+  const handleCloseOptionModal = () => {
+    setSelectedGoods(null);
+  };
 
   /*
    * 카테고리 변경
@@ -134,22 +149,6 @@ export default function GoodsList({
     previousLengthRef.current = items.length;
   }, [items]);
 
-  const [selectedGoods, setSelectedGoods] = useState<Goods | null>(null);
-
-  const handleOpenOptionModal = (goods: Goods) => {
-    setSelectedGoods(goods);
-  };
-
-  const handleCloseOptionModal = () => {
-    setSelectedGoods(null);
-  };
-
-  const [orderOpen, setOrderOpen] = useState(false);
-
-  const { cartCount } = useCart();
-
-  const openCart = useCart((state) => state.openCart);
-
   return (
     <>
       <div className="category_search_nav">
@@ -177,11 +176,11 @@ export default function GoodsList({
         </div>
       </section>
 
-      <GoodsOptionModal
-        goods={selectedGoods}
-        open={selectedGoods !== null}
-        onClose={handleCloseOptionModal}
-      />
+      <GoodsOptionModal goods={selectedGoods} onClose={handleCloseOptionModal} />
+
+      <CartModal orderDeliverySettings={orderDeliverySettings} />
+
+      <OrderTrackingModal open={orderOpen} onClose={() => setOrderOpen(false)} />
 
       <Fnb className="site-fnb">
         <Button className="cart_btn" opacity={0.7} shadow onClick={openCart}>
@@ -202,9 +201,6 @@ export default function GoodsList({
           <span className="text">주문조회</span>
         </Button>
       </Fnb>
-
-      <CartModal orderDeliverySettings={orderDeliverySettings} />
-      <OrderTrackingModal open={orderOpen} onClose={() => setOrderOpen(false)} />
     </>
   );
 }

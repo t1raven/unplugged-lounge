@@ -10,13 +10,12 @@ import { Button } from '@/components/ui/Button';
 
 interface Props {
   goods: Goods | null;
-  open: boolean;
   onClose: () => void;
 }
 
 type SelectedOptions = Record<string, string>;
 
-export default function GoodsOptionModal({ goods, open, onClose }: Props) {
+export default function GoodsOptionModal({ goods, onClose }: Props) {
   const addItem = useCart((state) => state.addItem);
 
   const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>({});
@@ -49,7 +48,7 @@ export default function GoodsOptionModal({ goods, open, onClose }: Props) {
    * 옵션 / 수량 초기화
    */
   useEffect(() => {
-    if (!open || !goods) return;
+    if (!goods) return;
 
     const resetState = () => {
       setSelectedOptions({});
@@ -61,9 +60,9 @@ export default function GoodsOptionModal({ goods, open, onClose }: Props) {
     return () => {
       window.cancelAnimationFrame(frameId);
     };
-  }, [open, goods]);
+  }, [goods]);
 
-  if (!open || !goods) {
+  if (!goods) {
     return null;
   }
 
@@ -117,7 +116,7 @@ export default function GoodsOptionModal({ goods, open, onClose }: Props) {
   };
 
   return (
-    <Modal className="goods-option-modal" open={open} onClose={onClose}>
+    <Modal className="goods-option-modal" open={goods !== null} onClose={onClose}>
       <button
         type="button"
         className="option-modal-close"

@@ -140,7 +140,7 @@ export default function ArchiveModal({ items, currentIndex, onClose, onPrev, onN
       className="gallery-modal"
       ariaLabel={item.title}
       bdOpacity={0.9}
-      open={true}
+      open={currentIndex !== null}
       onClose={onClose}
     >
       <button type="button" className="gallery-modal__close" onClick={onClose} aria-label="닫기">

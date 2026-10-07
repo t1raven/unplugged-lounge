@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { urlFor } from '@/sanity/lib/image';
 
 import CategoryNav from '@/components/common/CategoryNav';
-import ArchiveModal from './Modal';
+import Modal from './Modal';
 
 import type { Category } from '@/types/category';
 import type { Archive } from '@/types/archive';
@@ -432,7 +432,7 @@ export default function ArchiveList({ categories, items: initialItems }: Props) 
       </section>
 
       {selectedIndex !== null && (
-        <ArchiveModal
+        <Modal
           items={items}
           currentIndex={selectedIndex}
           onClose={handleCloseModal}
