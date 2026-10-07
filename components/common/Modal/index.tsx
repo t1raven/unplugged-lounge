@@ -7,11 +7,12 @@ import './style.scss';
 interface Props {
   children: ReactNode;
   className?: string;
+  ariaLabel?: string;
   bdOpacity?: number;
   open: boolean;
   onClose: () => void;
 }
-export default function Modal({ children, className, bdOpacity, open, onClose }: Props) {
+export default function Modal({ children, className, ariaLabel, bdOpacity, open, onClose }: Props) {
   /*
    * ESC + body scroll lock
    */
@@ -42,7 +43,13 @@ export default function Modal({ children, className, bdOpacity, open, onClose }:
   }
 
   return (
-    <div className={`modal ${className}`} role="dialog" aria-modal="true" data-lenis-prevent>
+    <div
+      className={`modal ${className}`}
+      role="dialog"
+      aria-modal="true"
+      aria-label={ariaLabel}
+      data-lenis-prevent
+    >
       <button
         type="button"
         className="modal-backdrop"

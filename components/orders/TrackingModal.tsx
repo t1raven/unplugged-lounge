@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useState } from 'react';
 
 import ModalScroll from '@/components/common/ModalScroll';
 import { TextField } from '@/components/ui/TextField';
@@ -148,7 +148,7 @@ export default function OrderTrackingModal({ open, onClose }: Props) {
 
   return (
     <Modal className="order-tracking-modal" open={open} onClose={onClose}>
-      <header className="order-tracking-header">
+      <div className="order-tracking-header">
         {selectedOrder || hasSearched ? (
           <button
             type="button"
@@ -172,7 +172,7 @@ export default function OrderTrackingModal({ open, onClose }: Props) {
         >
           <span className="material-symbols-rounded">close</span>
         </button>
-      </header>
+      </div>
 
       {selectedOrder ? (
         <OrderDetail
