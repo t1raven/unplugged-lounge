@@ -7,7 +7,7 @@ import { urlFor } from '@/sanity/lib/image';
 import { PortableText } from '@portabletext/react';
 
 import { useDevice } from '@/components/providers/DeviceProvider';
-import { formatDateTime } from '@/utils/formatDateTime';
+import { formatDateTime } from '@/utils/date';
 
 import type { Performance } from '@/types/performance';
 
