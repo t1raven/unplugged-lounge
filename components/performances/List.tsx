@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import { urlFor } from '@/sanity/lib/image';
 import Image from 'next/image';
 import Link from 'next/link';
+import useFadeUpEffect from '@/hooks/useFadeUpEffect';
 
 import type { Performance } from '@/types/performance';
 
@@ -282,126 +283,130 @@ export default function PerformanceCalendar({ performances }: Props) {
     })
     .slice(0, 12);
 
+  useFadeUpEffect('.calendar-container, .selected-date-performance, .upcoming-performances');
+
   return (
     <div className="sub-page-section performance-calendar">
       <div className="inner">
-        {/* ==================================================
-            Calendar Header
-        ================================================== */}
+        <div className="calendar-container">
+          {/* ==================================================
+              Calendar Header
+          ================================================== */}
 
-        <div className="calendar-header">
-          <div className="calendar-title">
-            <h2>{monthTitle}</h2>
-          </div>
-
-          <div className="calendar-controls">
-            {!(
-              currentDate.getFullYear() === today.getFullYear() &&
-              currentDate.getMonth() === today.getMonth()
-            ) && (
-              <button
-                type="button"
-                onClick={handlePreviousMonth}
-                disabled={
-                  currentDate.getFullYear() === today.getFullYear() &&
-                  currentDate.getMonth() === today.getMonth()
-                }
-                aria-label="이전 달"
-              >
-                <span className="material-symbols-rounded">keyboard_arrow_left</span>
-              </button>
-            )}
-            <button type="button" className="today-button" onClick={handleToday}>
-              오늘
-            </button>
-
-            <button type="button" onClick={handleNextMonth} aria-label="다음 달">
-              <span className="material-symbols-rounded">keyboard_arrow_right</span>
-            </button>
-          </div>
-        </div>
-
-        {/* ==================================================
-            Weekdays
-        ================================================== */}
-
-        <div className="calendar-weekdays">
-          {WEEKDAYS.map((weekday) => (
-            <div key={weekday} className="calendar-weekday">
-              {weekday}
+          <div className="calendar-header">
+            <div className="calendar-title">
+              <h2>{monthTitle}</h2>
             </div>
-          ))}
-        </div>
 
-        {/* ==================================================
-            Calendar
-        ================================================== */}
-
-        <div className="calendar-grid">
-          {calendarDays.map((date, index) => {
-            if (!date) {
-              return <div key={`empty-${index}`} className="calendar-day is-empty" />;
-            }
-
-            const dateKey = formatDateKey(date);
-
-            const dayPerformances = performancesByDate[dateKey] ?? [];
-            /* const dayPerformances =
-                getAvailablePerformances(
-                  dateKey,
-                  performancesByDate[
-                    dateKey
-                  ] ?? []
-                ); */
-
-            const isToday = dateKey === todayKey;
-
-            const isSelected = dateKey === selectedDate;
-
-            const isPast = dateKey < todayKey;
-
-            return (
-              <button
-                key={dateKey}
-                type="button"
-                disabled={isPast}
-                className={[
-                  'calendar-day',
-                  isToday ? 'is-today' : '',
-                  isSelected ? 'is-selected' : '',
-                  isPast ? 'is-past' : '',
-                ]
-                  .filter(Boolean)
-                  .join(' ')}
-                onClick={() => handleSelectDate(date)}
-              >
-                <div className="calendar-date">
-                  <span>{date.getDate()}</span>
-                </div>
-
-                {/* 
-                    오늘은 지난 공연을 제외한
-                    실제 예정 공연이 있을 때만 표시
-                  */}
-                {!isPast && dayPerformances.length > 0 && (
-                  <div className="calendar-performance-indicator">
-                    {dayPerformances.map((item, index) => (
-                      <span key={index} />
-                    ))}
-
-                    {/*{dayPerformances.length >
-                          1 && (
-                          <small>
-                            {
-                              dayPerformances.length
-                            }
-                          </small>
-                        )}*/}
-                  </div>
-                )}
+            <div className="calendar-controls">
+              {!(
+                currentDate.getFullYear() === today.getFullYear() &&
+                currentDate.getMonth() === today.getMonth()
+              ) && (
+                <button
+                  type="button"
+                  onClick={handlePreviousMonth}
+                  disabled={
+                    currentDate.getFullYear() === today.getFullYear() &&
+                    currentDate.getMonth() === today.getMonth()
+                  }
+                  aria-label="이전 달"
+                >
+                  <span className="material-symbols-rounded">keyboard_arrow_left</span>
+                </button>
+              )}
+              <button type="button" className="today-button" onClick={handleToday}>
+                오늘
               </button>
-            );
-          })}
+
+              <button type="button" onClick={handleNextMonth} aria-label="다음 달">
+                <span className="material-symbols-rounded">keyboard_arrow_right</span>
+              </button>
+            </div>
+          </div>
+
+          {/* ==================================================
+              Weekdays
+          ================================================== */}
+
+          <div className="calendar-weekdays">
+            {WEEKDAYS.map((weekday) => (
+              <div key={weekday} className="calendar-weekday">
+                {weekday}
+              </div>
+            ))}
+          </div>
+
+          {/* ==================================================
+              Calendar
+          ================================================== */}
+
+          <div className="calendar-grid">
+            {calendarDays.map((date, index) => {
+              if (!date) {
+                return <div key={`empty-${index}`} className="calendar-day is-empty" />;
+              }
+
+              const dateKey = formatDateKey(date);
+
+              const dayPerformances = performancesByDate[dateKey] ?? [];
+              /* const dayPerformances =
+                  getAvailablePerformances(
+                    dateKey,
+                    performancesByDate[
+                      dateKey
+                    ] ?? []
+                  ); */
+
+              const isToday = dateKey === todayKey;
+
+              const isSelected = dateKey === selectedDate;
+
+              const isPast = dateKey < todayKey;
+
+              return (
+                <button
+                  key={dateKey}
+                  type="button"
+                  disabled={isPast}
+                  className={[
+                    'calendar-day',
+                    isToday ? 'is-today' : '',
+                    isSelected ? 'is-selected' : '',
+                    isPast ? 'is-past' : '',
+                  ]
+                    .filter(Boolean)
+                    .join(' ')}
+                  onClick={() => handleSelectDate(date)}
+                >
+                  <div className="calendar-date">
+                    <span>{date.getDate()}</span>
+                  </div>
+
+                  {/* 
+                      오늘은 지난 공연을 제외한
+                      실제 예정 공연이 있을 때만 표시
+                    */}
+                  {!isPast && dayPerformances.length > 0 && (
+                    <div className="calendar-performance-indicator">
+                      {dayPerformances.map((item, index) => (
+                        <span key={index} />
+                      ))}
+
+                      {/*{dayPerformances.length >
+                            1 && (
+                            <small>
+                              {
+                                dayPerformances.length
+                              }
+                            </small>
+                          )}*/}
+                    </div>
+                  )}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {/* ==================================================

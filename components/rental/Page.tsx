@@ -1,54 +1,17 @@
 'use client';
 
-import { useLayoutEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Button } from '@/components/ui/Button';
+import useFadeUpEffect from '@/hooks/useFadeUpEffect';
 
 import RentalEquipment from './Equipment';
 
 import './style.scss';
 
-gsap.registerPlugin(ScrollTrigger);
-
 export default function RentalPage() {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useLayoutEffect(() => {
-    const container = containerRef.current;
-
-    if (!container) return;
-
-    const ctx = gsap.context(() => {
-      const sections = gsap.utils.toArray<HTMLElement>('.rental-section');
-
-      sections.forEach((section) => {
-        gsap.fromTo(
-          section,
-          {
-            y: 50,
-            opacity: 0,
-          },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.9,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: section,
-              start: 'top 85%',
-              once: true,
-            },
-          },
-        );
-      });
-    }, container);
-
-    return () => ctx.revert();
-  }, []);
+  useFadeUpEffect('.rental-section');
 
   return (
-    <div className="rental-container" ref={containerRef}>
+    <div className="rental-container">
       {/* USSOM */}
       <section className="rental-section rental-ussom-application">
         <div className="rental-section__heading">
