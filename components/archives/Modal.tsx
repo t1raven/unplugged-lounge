@@ -138,6 +138,7 @@ export default function ArchiveModal({ items, currentIndex, onClose, onPrev, onN
   return (
     <Modal
       className="gallery-modal"
+      contentKey={item._id}
       ariaLabel={item.title}
       bdOpacity={0.9}
       open={currentIndex !== null}
