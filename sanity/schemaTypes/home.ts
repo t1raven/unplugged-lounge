@@ -1,16 +1,15 @@
-import { defineField, defineType } from "sanity";
+import { defineField, defineType } from 'sanity';
 
 export const home = defineType({
-  name: "home",
-  title: "홈",
-  type: "document",
+  name: 'home',
+  title: '홈',
+  type: 'document',
 
   fields: [
-
     defineField({
-      name: "hero",
-      title: "Hero",
-      type: "object",
+      name: 'hero',
+      title: 'Hero',
+      type: 'object',
 
       fields: [
         defineField({
@@ -23,51 +22,51 @@ export const home = defineType({
         }),
 
         defineField({
-          name: "label",
-          title: "라벨",
-          type: "string",
+          name: 'label',
+          title: '라벨',
+          type: 'string',
         }),
 
         defineField({
-          name: "title",
-          title: "타이틀",
-          type: "text",
+          name: 'title',
+          title: '타이틀',
+          type: 'text',
           rows: 2,
         }),
 
         defineField({
-          name: "location",
-          title: "위치",
-          type: "string",
+          name: 'location',
+          title: '위치',
+          type: 'string',
         }),
-      ]
+      ],
     }),
 
     defineField({
-      name: "about",
-      title: "About",
-      type: "object",
+      name: 'about',
+      title: 'About',
+      type: 'object',
 
       fields: [
         defineField({
-          name: "title",
-          title: "타이틀",
-          type: "text",
+          name: 'title',
+          title: '타이틀',
+          type: 'text',
           rows: 3,
         }),
 
         defineField({
-          name: "images",
-          title: "이미지",
-          type: "array",
+          name: 'images',
+          title: '이미지',
+          type: 'array',
           of: [
             {
-              type: "object",
+              type: 'object',
               fields: [
                 defineField({
-                  name: "image",
-                  title: "이미지",
-                  type: "image",
+                  name: 'image',
+                  title: '이미지',
+                  type: 'image',
                   options: {
                     hotspot: true,
                   },
@@ -75,45 +74,46 @@ export const home = defineType({
                 }),
 
                 defineField({
-                  name: "alt",
-                  title: "대체 텍스트",
-                  type: "string",
+                  name: 'alt',
+                  title: '대체 텍스트',
+                  type: 'string',
                 }),
               ],
 
               preview: {
                 select: {
-                  title: "alt",
-                  media: "image",
+                  title: 'alt',
+                  media: 'image',
                 },
               },
             },
           ],
-          validation: Rule => Rule.min(1).max(4).error('이미지는 최소 1개, 최대 4개까지만 등록 가능합니다.')
+          validation: (Rule) =>
+            Rule.min(1).max(4).error('이미지는 최소 1개, 최대 4개까지만 등록 가능합니다.'),
         }),
 
         defineField({
-          name: "description",
-          title: "설명",
-          type: "object",
+          name: 'description',
+          title: '설명',
+          type: 'object',
 
           fields: [
             defineField({
-              name: "text",
-              title: "텍스트",
-              type: "text",
+              name: 'text',
+              title: '텍스트',
+              type: 'text',
               rows: 5,
             }),
 
             defineField({
-              name: "align",
-              title: "정렬",
-              type: "string",
+              name: 'align',
+              title: '정렬',
+              type: 'string',
               options: {
                 list: [
-                  { title: "Left", value: "left" },
-                  { title: "Center", value: "center" },
-                  { title: "Right", value: "right" },
+                  { title: 'Left', value: 'left' },
+                  { title: 'Center', value: 'center' },
+                  { title: 'Right', value: 'right' },
                 ],
               },
             }),
@@ -121,70 +121,55 @@ export const home = defineType({
         }),
 
         defineField({
-          name: "faq",
-          title: "자주 하는 질문",
-          type: "array",
+          name: 'faq',
+          title: '자주 하는 질문',
+          type: 'array',
           of: [
-                {
-                  type: "object",
-                  fields: [
-                    defineField({
-                      name: "title",
-                      title: "타이틀",
-                      type: "string",
-                    }),
-                    defineField({
-                      name: "content",
-                      title: "내용",
-                      type: "text",
-                      rows: 12,
-                    }),
-                  ],
-
-                  preview: {
-                    select: {
-                      title: "title",
-                    },
-                  },
-                },
+            {
+              type: 'object',
+              fields: [
+                defineField({
+                  name: 'title',
+                  title: '타이틀',
+                  type: 'string',
+                }),
+                defineField({
+                  name: 'content',
+                  title: '내용',
+                  type: 'text',
+                  rows: 12,
+                }),
               ],
+
+              preview: {
+                select: {
+                  title: 'title',
+                },
+              },
+            },
+          ],
         }),
 
         defineField({
-          name: "caution",
-          title: "주의사항",
-          type: "object",
+          name: 'caution',
+          title: '주의사항',
+          type: 'object',
 
           fields: [
             defineField({
-              name: "title",
-              title: "타이틀",
-              type: "string",
+              name: 'title',
+              title: '타이틀',
+              type: 'string',
             }),
 
             defineField({
-              name: "texts",
-              title: "텍스트",
-              type: "array",
-              of: [
-                {
-                  type: "object",
-                  fields: [
-                    defineField({
-                      name: "text",
-                      title: "텍스트",
-                      type: "text",
-                      rows: 2,
-                    }),
-                  ],
-
-                  preview: {
-                    select: {
-                      title: "text",
-                    },
-                  },
-                },
-              ],
+              name: 'texts',
+              title: '텍스트',
+              type: 'array',
+              of: [{ type: 'text', rows: 2 }],
+              options: {
+                layout: 'list',
+              },
             }),
           ],
         }),
@@ -195,7 +180,7 @@ export const home = defineType({
   preview: {
     prepare() {
       return {
-        title: "홈",
+        title: '홈',
       };
     },
   },

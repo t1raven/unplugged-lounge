@@ -1,14 +1,30 @@
 'use client';
 
+import { useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import useFadeUpEffect from '@/hooks/useFadeUpEffect';
 
-import RentalEquipment from './Equipment';
-
 import './style.scss';
 
-export default function RentalPage() {
+interface Props {
+  equipment: {
+    list?: {
+      label?: string;
+      title?: string;
+      items: string[];
+    }[];
+    cautions?: string[];
+  };
+}
+
+export default function RentalPage({ equipment: item }: Props) {
   useFadeUpEffect('.rental-section');
+
+  const [active, setActive] = useState<number | null>(0);
+
+  const toggle = (index: number) => {
+    setActive((current) => (current === index ? null : index));
+  };
 
   return (
     <div className="rental-container">
@@ -218,7 +234,56 @@ export default function RentalPage() {
           <h2>공연 장비</h2>
         </div>
 
-        <RentalEquipment />
+        {/* <RentalEquipment /> */}
+        <div className="rental-equipment">
+          {(item.list ?? []).map((item, index) => {
+            const isActive = active === index;
+
+            return (
+              <div key={index} className={`equipment-item ${isActive ? 'is-active' : ''}`}>
+                <button
+                  type="button"
+                  className="equipment-item__header"
+                  onClick={() => toggle(index)}
+                  aria-expanded={isActive}
+                >
+                  <span className="equipment-item__number">0{index + 1}</span>
+
+                  <span className="equipment-item__category">{item.label}</span>
+
+                  <strong>{item.title}</strong>
+
+                  <span className="equipment-item__icon">+</span>
+                </button>
+
+                <div
+                  className="equipment-item__content"
+                  style={{
+                    gridTemplateRows: isActive ? '1fr' : '0fr',
+                  }}
+                >
+                  <div>
+                    <ul>
+                      {item.items.map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+
+          <div className="equipment-warning">
+            <strong>사용 시 주의사항</strong>
+
+            <ul>
+              {(item.cautions ?? []).map((text, index) => {
+                return <li key={index}>{text}</li>;
+              })}
+            </ul>
+          </div>
+        </div>
       </section>
 
       {/* APPLICATION */}
