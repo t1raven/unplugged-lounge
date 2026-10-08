@@ -5,11 +5,23 @@ export const home = defineType({
   title: '홈',
   type: 'document',
 
+  groups: [
+    {
+      name: 'hero',
+      title: 'Hero',
+    },
+    {
+      name: 'about',
+      title: 'About',
+    },
+  ],
+
   fields: [
     defineField({
       name: 'hero',
       title: 'Hero',
       type: 'object',
+      group: 'hero',
 
       fields: [
         defineField({
@@ -46,6 +58,7 @@ export const home = defineType({
       name: 'about',
       title: 'About',
       type: 'object',
+      group: 'about',
 
       fields: [
         defineField({
@@ -102,7 +115,7 @@ export const home = defineType({
               name: 'text',
               title: '텍스트',
               type: 'text',
-              rows: 5,
+              rows: 3,
             }),
 
             defineField({
@@ -116,6 +129,7 @@ export const home = defineType({
                   { title: 'Right', value: 'right' },
                 ],
               },
+              initialValue: 'left',
             }),
           ],
         }),

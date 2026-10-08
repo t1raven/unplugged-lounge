@@ -1,7 +1,3 @@
-
-import { Analytics } from "@vercel/analytics/next"
-import { SpeedInsights } from "@vercel/speed-insights/next"
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -10,13 +6,14 @@ export default function RootLayout({
   return (
     <html lang="ko" suppressHydrationWarning>
       <head>
-        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block" rel="stylesheet" />
+        {/* App Router layouts apply this font globally; Next's pages-only rule does not apply here. */}
+        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
+        <link
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
+          rel="stylesheet"
+        />
       </head>
-      <body suppressHydrationWarning>
-        {children}
-        <Analytics />
-        <SpeedInsights/>
-      </body>
+      <body suppressHydrationWarning>{children}</body>
     </html>
   );
 }

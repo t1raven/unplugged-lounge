@@ -18,6 +18,10 @@ export const siteSettings = defineType({
       name: 'seo',
       title: 'SEO 설정',
     },
+    {
+      name: 'search',
+      title: '검색 설정',
+    },
   ],
 
   fields: [
@@ -35,6 +39,13 @@ export const siteSettings = defineType({
         defineField({
           name: 'siteName',
           title: '사이트명',
+          type: 'string',
+          validation: (Rule) => Rule.required(),
+        }),
+
+        defineField({
+          name: 'siteUrl',
+          title: '사이트 URL',
           type: 'string',
           validation: (Rule) => Rule.required(),
         }),
@@ -122,7 +133,7 @@ export const siteSettings = defineType({
           name: 'title',
           title: '기본 SEO 제목',
           type: 'string',
-          description: '예: UNPLUGGED LOUNGE | 홍대 라이브 카페',
+          description: '예: UNPLUGGED LOUNGE | 홍대 라이브 카페·인디 공연',
           validation: (Rule) =>
             Rule.max(60).warning('검색 노출을 고려하면 60자 이하를 권장합니다.'),
         }),
@@ -155,6 +166,43 @@ export const siteSettings = defineType({
           options: {
             hotspot: true,
           },
+        }),
+      ],
+    }),
+
+    // ==================================================
+    // 검색 설정
+    // ==================================================
+
+    defineField({
+      name: 'search',
+      title: '검색 설정',
+      type: 'object',
+      group: 'search',
+
+      fields: [
+        defineField({
+          name: 'siteVerifications',
+          title: '사이트 확인 코드',
+          description: '검색등록 확인을 위한 코드 (예: Google, Naver 등)',
+          type: 'array',
+          of: [
+            {
+              type: 'object',
+              fields: [
+                defineField({
+                  name: 'key',
+                  title: '키',
+                  type: 'string',
+                }),
+                defineField({
+                  name: 'value',
+                  title: '값',
+                  type: 'string',
+                }),
+              ],
+            },
+          ],
         }),
       ],
     }),

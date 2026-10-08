@@ -1,3 +1,6 @@
+import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
+
 import localFont from 'next/font/local';
 const pretendard = localFont({
   src: '../../public/fonts/PretendardVariable.woff2',
@@ -12,18 +15,19 @@ import { getSiteSettings } from '@/lib/siteSettings';
 import { urlFor } from '@/sanity/lib/image';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const settings = await getSiteSettings();
+  const siteSettings = await getSiteSettings();
 
-  const siteName = settings?.general?.siteName ?? 'UNPLUGGED LOUNGE';
-  const title = settings?.seo?.title ?? siteName;
-  const description = settings?.seo?.description ?? '';
-  const keywords = settings?.seo?.keywords ?? [];
-  const ogImage = settings?.seo?.ogImage
-    ? urlFor(settings.seo.ogImage).width(400).height(400).url()
+  const siteName = siteSettings?.general?.siteName ?? 'UNPLUGGED LOUNGE';
+  const title = siteSettings?.seo?.title ?? siteName;
+  const description = siteSettings?.seo?.description ?? '';
+  const keywords = siteSettings?.seo?.keywords ?? [];
+  const ogImage = siteSettings?.seo?.ogImage
+    ? urlFor(siteSettings.seo.ogImage).width(400).height(400).url()
     : undefined;
+  const SITE_URL = siteSettings?.general?.siteUrl ?? 'https://unplugged-lounge.com';
 
   return {
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://unplugged-lounge.com'),
+    metadataBase: new URL(SITE_URL),
 
     title: {
       default: title,
@@ -33,10 +37,16 @@ export async function generateMetadata(): Promise<Metadata> {
     description,
     keywords,
 
+    alternates: {
+      canonical: '/',
+    },
+
     openGraph: {
       type: 'website',
       locale: 'ko_KR',
-
+      siteName,
+      title,
+      description,
       images: ogImage
         ? [
             {
@@ -47,6 +57,7 @@ export async function generateMetadata(): Promise<Metadata> {
             },
           ]
         : [{ url: '/images/common/og-image.png' }],
+      url: SITE_URL,
     },
 
     robots: {
@@ -58,6 +69,14 @@ export async function generateMetadata(): Promise<Metadata> {
       telephone: false,
       address: false,
       email: false,
+    },
+
+    verification: {
+      other: {
+        ...Object.fromEntries(
+          siteSettings?.search?.siteVerifications?.map(({ key, value }) => [key, value]) ?? [],
+        ),
+      },
     },
   };
 }
@@ -94,6 +113,8 @@ export default async function SiteLayout({
           <Gnb />
           <Footer data={siteInfo?.general ?? {}} />
         </Providers>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
