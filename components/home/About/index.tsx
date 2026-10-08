@@ -31,9 +31,7 @@ interface Props {
     }[];
     caution?: {
       title?: string;
-      texts?: {
-        text?: string;
-      }[];
+      texts?: string[];
     };
   };
 }
@@ -51,7 +49,6 @@ export default function About({ data }: Props) {
     if (!rootRef.current) return;
 
     const ctx = gsap.context(() => {
-
       /*
        * ABOUT 타이틀
        */
@@ -68,7 +65,6 @@ export default function About({ data }: Props) {
           once: true,
         },
       });
-
 
       /*
        * 이미지 등장
@@ -89,33 +85,27 @@ export default function About({ data }: Props) {
         },
       });
 
-
       /*
        * 이미지 Parallax
        */
       const speedDate = [-8, 12, -15, 8];
 
-      gsap.utils
-        .toArray<HTMLElement>('.about__image')
-        .forEach((image,index) => {
+      gsap.utils.toArray<HTMLElement>('.about__image').forEach((image, index) => {
+        const speed = speedDate[index] || 10;
 
-          const speed = speedDate[index] || 10;
+        gsap.to(image, {
+          yPercent: speed,
 
-          gsap.to(image, {
-            yPercent: speed,
+          ease: 'none',
 
-            ease: 'none',
-
-            scrollTrigger: {
-              trigger: image,
-              start: 'top bottom',
-              end: 'bottom top',
-              scrub: true,
-            },
-          });
-
+          scrollTrigger: {
+            trigger: image,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true,
+          },
         });
-
+      });
 
       /*
        * 설명 텍스트
@@ -148,7 +138,6 @@ export default function About({ data }: Props) {
         },
       });
 
-
       /*
        * Equipment
        */
@@ -165,43 +154,30 @@ export default function About({ data }: Props) {
           once: true,
         },
       });*/
-
     }, rootRef);
 
     ScrollTrigger.refresh();
 
     return () => ctx.revert();
-
   }, []);
 
   return (
-    <section
-      ref={rootRef}
-      className="about"
-    >
-
+    <section ref={rootRef} className="about">
       <div className="about__inner">
-
         {/* 제목 */}
         <div className="about__heading">
-
           <p>ABOUT</p>
 
           <h2>{data.title}</h2>
-
         </div>
-
 
         {/* 이미지 갤러리 */}
         <div className="about__gallery">
           {(data.images ?? []).map((item, index) => (
-            <div
-              key={index}
-              className={`about__image about__image--${index+1}`}
-            >
+            <div key={index} className={`about__image about__image--${index + 1}`}>
               <Image
                 src={urlFor(item.image).width(800).url()}
-                alt={item.alt || ""}
+                alt={item.alt || ''}
                 fill
                 priority
                 sizes="(max-width: 768px) 100vw, 800px"
@@ -210,13 +186,10 @@ export default function About({ data }: Props) {
           ))}
         </div>
 
-
         {/* 소개 */}
         {data.description?.text && (
           <div className="about__text">
-            <p style={{ textAlign: data.description.align || 'right' }}>
-              {data.description.text}
-            </p>
+            <p style={{ textAlign: data.description.align || 'right' }}>{data.description.text}</p>
           </div>
         )}
 
@@ -226,27 +199,18 @@ export default function About({ data }: Props) {
               const isActive = active === index;
 
               return (
-                <div
-                  key={index}
-                  className={`faq-item ${
-                    isActive ? 'is-active' : ''
-                  }`}
-                >
+                <div key={index} className={`faq-item ${isActive ? 'is-active' : ''}`}>
                   <button
                     type="button"
                     className="faq-item__header"
                     onClick={() => toggle(index)}
                     aria-expanded={isActive}
                   >
-                    <span className="faq-item__number">
-                      0{index + 1}
-                    </span>
+                    <span className="faq-item__number">0{index + 1}</span>
 
                     <strong>{item.title}</strong>
 
-                    <span className="faq-item__icon">
-                      +
-                    </span>
+                    <span className="faq-item__icon">+</span>
                   </button>
 
                   <div
@@ -256,9 +220,7 @@ export default function About({ data }: Props) {
                     }}
                   >
                     <div>
-                      <p>
-                        {item.content}
-                      </p>
+                      <p>{item.content}</p>
                     </div>
                   </div>
                 </div>
@@ -267,166 +229,18 @@ export default function About({ data }: Props) {
           </div>
         )}
 
-        {false/*data.caution?.title*/ && (
+        {false /*data.caution?.title*/ && (
           <div className="about__notice">
-
-            <h4>
-              {data.caution?.title || 'ETIQUETTE'}
-            </h4>
+            <h4>{data.caution?.title || 'ETIQUETTE'}</h4>
 
             <ul>
-              {data.caution?.texts?.map((item, index) => (
-                <li key={index}>
-                  {item.text}
-                </li>
+              {data.caution?.texts?.map((text, index) => (
+                <li key={index}>{text}</li>
               ))}
             </ul>
-
           </div>
         )}
-          
-        {/* Equipment */}
-        {/*<div className="about__equipment">
-
-          <div className="about__equipment-header">
-
-            <h3>
-              SOUND
-              <br />
-              EQUIPMENT
-            </h3>
-
-          </div>
-
-          <div className="about__equipment-list">
-
-            <div className="about__equipment-item">
-
-              <h4>MICROPHONES</h4>
-
-              <ul>
-                <li>
-                  유선 ×2
-                  <span>SM 58</span>
-                </li>
-
-                <li>
-                  무선 ×2
-                  <span>BETA 58A</span>
-                </li>
-              </ul>
-
-            </div>
-
-
-            <div className="about__equipment-item">
-
-              <h4>INSTRUMENTS</h4>
-
-              <ul>
-                <li>
-                  건반
-                  <span>Yamaha MX88</span>
-                </li>
-
-                <li>
-                  드럼
-                  <span>Pearl export 시리즈 (5기통)</span>
-                </li>
-              </ul>
-
-            </div>
-
-
-            <div className="about__equipment-item">
-
-              <h4>AMPLIFIERS</h4>
-
-              <ul>
-                <li>
-                  어쿠스틱 기타
-                  <span>DI 연결</span>
-                </li>
-
-                <li>
-                  일렉기타 앰프 ×2
-                  <span>
-                    Fender Blues Jr / VOX ac10c1
-                  </span>
-                </li>
-
-                <li>
-                  베이스 앰프 ×1
-                  <span>
-                    Fender Rumble 25
-                  </span>
-                </li>
-              </ul>
-
-            </div>
-
-
-            <div className="about__equipment-item">
-
-              <h4>ACCESSORIES</h4>
-
-              <ul>
-                <li>
-                  케이블
-                  <span>5.5잭, XLR잭 등</span>
-                </li>
-
-                <li>
-                  마이크스탠드
-                  <span>x6</span>
-                </li>
-
-                <li>
-                  보면대
-                  <span>
-                    일반 ×3 / 핸드폰·태블릿 거치대 ×2
-                  </span>
-                </li>
-
-                <li>
-                  DI
-                  <span>액티브 DI</span>
-                </li>
-              </ul>
-
-            </div>
-
-          </div>
-
-
-          <div className="about__notice">
-
-            <h4>NOTICE</h4>
-
-            <ul>
-              <li>
-                공연공간 여건 상 어쿠스틱 기타 마이킹 불가
-              </li>
-
-              <li>
-                개인 앰프 지참 시, 마이킹 가능
-              </li>
-
-              <li>
-                개인 마이크 지참 시 사용가능 (5개 이상 필요 시 or 본인 장비 사용 시)
-              </li>
-
-              <li>
-                인어어팩 없음 (이어폰+팩 지참시 2개까지 사용가능)
-              </li>
-            </ul>
-
-          </div>
-
-        </div>*/}
-
       </div>
-
     </section>
   );
 }

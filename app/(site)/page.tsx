@@ -52,9 +52,7 @@ export const homeQuery = `
       },
       caution{
         title,
-        texts[]{
-          text
-        }
+        texts[]
       },
     }
   }
@@ -70,10 +68,9 @@ export default async function Home() {
     day: '2-digit',
   }).format(new Date());
 
-  const performances: Performance[] =
-    await client.fetch(upcomingQuery, {
-      today,
-    });
+  const performances: Performance[] = await client.fetch(upcomingQuery, {
+    today,
+  });
   const home = await client.fetch(homeQuery);
   const siteInfo = await getSiteSettings();
 

@@ -1,26 +1,23 @@
-'use client'
+'use client';
 
-import {visionTool} from '@sanity/vision'
-import {defineConfig} from 'sanity'
-import {structureTool} from 'sanity/structure'
-import {structure} from './sanity/structure'
+import { visionTool } from '@sanity/vision';
+import { defineConfig } from 'sanity';
+import { structureTool } from 'sanity/structure';
+import { structure } from './sanity/structure';
 
-import {dataset, projectId} from './sanity/env'
-import {schemaTypes} from './sanity/schemaTypes'
+import { dataset, projectId } from './sanity/env';
+import { schemaTypes } from './sanity/schemaTypes';
 
-import {StudioCountProvider} from './sanity/components/providers/StudioCountProvider'
+import { StudioCountProvider } from './sanity/components/providers/StudioCountProvider';
 
 import {
   DeletePerformanceAndGalleryAction,
   PublishPerformanceAndSyncGalleryAction,
-} from './sanity/actions/performancePosterSync'
+} from './sanity/actions/performancePosterSync';
 
-import {koKRLocale} from '@sanity/locale-ko-kr'
+import { koKRLocale } from '@sanity/locale-ko-kr';
 
-const singletonTypes = new Set([
-  'siteSettings',
-  'home',
-]);
+const singletonTypes = new Set(['siteSettings', 'home', 'equipment']);
 
 export default defineConfig({
   //basePath: '/studio',
@@ -37,18 +34,13 @@ export default defineConfig({
     koKRLocale(),
 
     // localhost에서만 Vision 표시
-    ...(process.env.NODE_ENV === 'development'
-      ? [visionTool()]
-      : []),
+    ...(process.env.NODE_ENV === 'development' ? [visionTool()] : []),
   ],
 
   schema: {
     types: schemaTypes,
 
-    templates: (templates) =>
-      templates.filter(
-        ({ schemaType }) => !singletonTypes.has(schemaType)
-      ),
+    templates: (templates) => templates.filter(({ schemaType }) => !singletonTypes.has(schemaType)),
   },
 
   /*studio: {
@@ -67,23 +59,22 @@ export default defineConfig({
   },
 
   document: {
-
-    newDocumentOptions: (prev, {creationContext}) => {
+    newDocumentOptions: (prev, { creationContext }) => {
       if (creationContext.type === 'global') {
         // Hide the creation of "settings" documents if the context is global
-        return []
+        return [];
       }
-      return prev
+      return prev;
     },
-    
+
     actions: (previousActions, context) => {
-      if (context.schemaType !== 'performance') return previousActions
+      if (context.schemaType !== 'performance') return previousActions;
 
       return previousActions.map((action) => {
-        if (action.action === 'publish') return PublishPerformanceAndSyncGalleryAction
-        if (action.action === 'delete') return DeletePerformanceAndGalleryAction
-        return action
-      })
+        if (action.action === 'publish') return PublishPerformanceAndSyncGalleryAction;
+        if (action.action === 'delete') return DeletePerformanceAndGalleryAction;
+        return action;
+      });
     },
   },
-})
+});

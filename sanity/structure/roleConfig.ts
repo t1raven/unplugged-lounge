@@ -1,4 +1,4 @@
-import type {StudioRole} from '../studioAccess'
+import type { StudioRole } from '../studioAccess';
 
 export type MenuKey =
   | 'home'
@@ -15,12 +15,13 @@ export type MenuKey =
   | 'externalGoodsOrders'
   | 'settings'
   | 'studioUsers'
+  | 'equipment';
 
 type RoleConfig = {
-  id: string
-  title: string
-  menus: readonly (MenuKey | 'divider')[]
-}
+  id: string;
+  title: string;
+  menus: readonly (MenuKey | 'divider')[];
+};
 
 export const roleConfig: Record<StudioRole, RoleConfig> = {
   superAdmin: {
@@ -31,6 +32,7 @@ export const roleConfig: Record<StudioRole, RoleConfig> = {
       'divider',
       'performance',
       'place',
+      'equipment',
       'artist',
       'divider',
       'cafeCategory',
@@ -68,5 +70,5 @@ export const roleConfig: Record<StudioRole, RoleConfig> = {
     title: '굿즈 관리',
     menus: ['goodsCategory', 'goods', 'orders', 'externalGoodsOrders'],
   },
-  none: {id: 'no-access', title: '관리', menus: []},
-}
+  none: { id: 'no-access', title: '관리', menus: [] },
+};
