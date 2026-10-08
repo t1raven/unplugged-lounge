@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useEffect, useRef } from 'react';
+import { ReactNode, useEffect, useLayoutEffect, useRef } from 'react';
 
 import Lenis from 'lenis';
 import gsap from 'gsap';
@@ -10,6 +10,7 @@ import './style.scss';
 interface Props {
   header?: ReactNode;
   children: ReactNode;
+  contentKey?: string | number;
   className?: string;
   ariaLabel?: string;
   bdOpacity?: number;
@@ -19,6 +20,7 @@ interface Props {
 export default function Modal({
   header,
   children,
+  contentKey,
   className,
   ariaLabel,
   bdOpacity,
@@ -27,8 +29,11 @@ export default function Modal({
 }: Props) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const lenisRef = useRef<Lenis | null>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    if (!open) return;
+
     const wrapper = wrapperRef.current;
     const content = contentRef.current;
 
@@ -46,6 +51,7 @@ export default function Modal({
       wheelMultiplier: 1,
       touchMultiplier: 1,
     });
+    lenisRef.current = lenis;
 
     const update = (time: number) => {
       lenis.raf(time * 1000);
@@ -56,8 +62,19 @@ export default function Modal({
     return () => {
       gsap.ticker.remove(update);
       lenis.destroy();
+      lenisRef.current = null;
     };
-  }, []);
+  }, [open]);
+
+  useLayoutEffect(() => {
+    if (!open) return;
+
+    const lenis = lenisRef.current;
+    if (!lenis) return;
+
+    lenis.resize();
+    lenis.scrollTo(0, { immediate: true, force: true });
+  }, [open, contentKey]);
 
   /*
    * ESC + body scroll lock

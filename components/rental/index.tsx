@@ -1,54 +1,33 @@
 'use client';
 
-import { useLayoutEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useState } from 'react';
 import { Button } from '@/components/ui/Button';
-
-import RentalEquipment from './Equipment';
+import useFadeUpEffect from '@/hooks/useFadeUpEffect';
 
 import './style.scss';
 
-gsap.registerPlugin(ScrollTrigger);
+interface Props {
+  equipment: {
+    list?: {
+      label?: string;
+      title?: string;
+      items: string[];
+    }[];
+    cautions?: string[];
+  };
+}
 
-export default function RentalPage() {
-  const containerRef = useRef<HTMLDivElement>(null);
+export default function RentalPage({ equipment: item }: Props) {
+  useFadeUpEffect('.rental-section');
 
-  useLayoutEffect(() => {
-    const container = containerRef.current;
+  const [active, setActive] = useState<number | null>(0);
 
-    if (!container) return;
-
-    const ctx = gsap.context(() => {
-      const sections = gsap.utils.toArray<HTMLElement>('.rental-section');
-
-      sections.forEach((section) => {
-        gsap.fromTo(
-          section,
-          {
-            y: 50,
-            opacity: 0,
-          },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.9,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: section,
-              start: 'top 85%',
-              once: true,
-            },
-          },
-        );
-      });
-    }, container);
-
-    return () => ctx.revert();
-  }, []);
+  const toggle = (index: number) => {
+    setActive((current) => (current === index ? null : index));
+  };
 
   return (
-    <div className="rental-container" ref={containerRef}>
+    <div className="rental-container">
       {/* USSOM */}
       <section className="rental-section rental-ussom-application">
         <div className="rental-section__heading">
@@ -255,7 +234,56 @@ export default function RentalPage() {
           <h2>공연 장비</h2>
         </div>
 
-        <RentalEquipment />
+        {/* <RentalEquipment /> */}
+        <div className="rental-equipment">
+          {(item.list ?? []).map((item, index) => {
+            const isActive = active === index;
+
+            return (
+              <div key={index} className={`equipment-item ${isActive ? 'is-active' : ''}`}>
+                <button
+                  type="button"
+                  className="equipment-item__header"
+                  onClick={() => toggle(index)}
+                  aria-expanded={isActive}
+                >
+                  <span className="equipment-item__number">0{index + 1}</span>
+
+                  <span className="equipment-item__category">{item.label}</span>
+
+                  <strong>{item.title}</strong>
+
+                  <span className="equipment-item__icon">+</span>
+                </button>
+
+                <div
+                  className="equipment-item__content"
+                  style={{
+                    gridTemplateRows: isActive ? '1fr' : '0fr',
+                  }}
+                >
+                  <div>
+                    <ul>
+                      {item.items.map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+
+          <div className="equipment-warning">
+            <strong>사용 시 주의사항</strong>
+
+            <ul>
+              {(item.cautions ?? []).map((text, index) => {
+                return <li key={index}>{text}</li>;
+              })}
+            </ul>
+          </div>
+        </div>
       </section>
 
       {/* APPLICATION */}

@@ -65,7 +65,7 @@ export const siteSettings = defineType({
           type: 'string',
           validation: (Rule) => Rule.required(),
         }),
-      ]
+      ],
     }),
 
     // ==================================================
@@ -84,10 +84,7 @@ export const siteSettings = defineType({
           title: '배송비',
           type: 'number',
           initialValue: 3000,
-          validation: (Rule) =>
-            Rule.required()
-              .min(0)
-              .integer(),
+          validation: (Rule) => Rule.required().min(0).integer(),
         }),
 
         defineField({
@@ -107,7 +104,7 @@ export const siteSettings = defineType({
           title: '픽업가능시간',
           type: 'string',
         }),
-      ]
+      ],
     }),
 
     // ==================================================
@@ -136,8 +133,7 @@ export const siteSettings = defineType({
           type: 'text',
           rows: 3,
           description: '검색엔진 및 SNS 공유에 사용되는 사이트 설명',
-          validation: (Rule) =>
-            Rule.max(160).warning('160자 이하를 권장합니다.'),
+          validation: (Rule) => Rule.max(160).warning('160자 이하를 권장합니다.'),
         }),
 
         defineField({
@@ -146,7 +142,7 @@ export const siteSettings = defineType({
           type: 'array',
           of: [{ type: 'string' }],
           options: {
-            layout: 'tags',
+            layout: 'list',
           },
           description: '예: 홍대 라이브카페, 홍대 공연, 언플러그드',
         }),

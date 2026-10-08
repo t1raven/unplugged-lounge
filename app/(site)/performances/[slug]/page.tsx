@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { client } from '@/sanity/lib/client';
 import { urlFor } from '@/sanity/lib/image';
 
-import { formatDateTime } from "@/utils/formatDateTime";
+import { formatDateTime } from '@/utils/date/formatDateTime';
 import type { Performance } from '@/types/performance';
 
 import PerformanceView from '@/components/performances/View';
@@ -62,17 +62,12 @@ interface Props {
 export const revalidate = 0;
 
 async function getPerformance(slug: string): Promise<Performance | null> {
-  return client.fetch<Performance | null>(
-    performanceQuery,
-    {
-      slug: decodeURIComponent(slug),
-    },
-  );
+  return client.fetch<Performance | null>(performanceQuery, {
+    slug: decodeURIComponent(slug),
+  });
 }
 
-export async function generateMetadata({
-  params,
-}: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
 
   const performance = await getPerformance(slug);
@@ -84,10 +79,16 @@ export async function generateMetadata({
     };
   }
 
-  const artist = performance.artists?.map((artist) => artist.name).filter(Boolean).join('·') ?? '';
+  const artist =
+    performance.artists
+      ?.map((artist) => artist.name)
+      .filter(Boolean)
+      .join('·') ?? '';
   const dateTime = performance.date ? formatDateTime(performance.date) : '';
   const description = [artist, dateTime].filter(Boolean).join(' | ');
-  const imageUrl = performance.poster ? urlFor(performance.poster).width(600).height(800).fit('crop').url() : '/images/common/og-image.png';
+  const imageUrl = performance.poster
+    ? urlFor(performance.poster).width(600).height(800).fit('crop').url()
+    : '/images/common/og-image.png';
 
   return {
     title: performance.title,
@@ -95,18 +96,18 @@ export async function generateMetadata({
     openGraph: {
       type: 'website',
       locale: 'ko_KR',
-      images: [{ 
-        url: imageUrl,
-        width: 600,
-        height: 800,
-      }],
+      images: [
+        {
+          url: imageUrl,
+          width: 600,
+          height: 800,
+        },
+      ],
     },
   };
 }
 
-export default async function PerformanceViewPage({
-  params,
-}: Props) {
+export default async function PerformanceViewPage({ params }: Props) {
   const { slug } = await params;
 
   const performance = await getPerformance(slug);

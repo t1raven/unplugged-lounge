@@ -116,7 +116,12 @@ export default function GoodsOptionModal({ goods, onClose }: Props) {
   };
 
   return (
-    <Modal className="goods-option-modal" open={goods !== null} onClose={onClose}>
+    <Modal
+      className="goods-option-modal"
+      contentKey={goods._id}
+      open={goods !== null}
+      onClose={onClose}
+    >
       <button
         type="button"
         className="option-modal-close"
