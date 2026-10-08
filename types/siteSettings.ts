@@ -2,6 +2,7 @@ import type { SanityImage } from './images';
 
 export interface General {
   siteName: string;
+  siteUrl: string;
   businessName: string;
   phone?: string;
   address: string;
@@ -22,8 +23,13 @@ export interface SEO {
   ogImage?: SanityImage;
 }
 
+export interface Search {
+  siteVerifications?: { key: string; value: string }[];
+}
+
 export interface SiteSettings {
   general?: General;
   orderDelivery?: OrderDelivery;
   seo?: SEO;
+  search?: Search;
 }
