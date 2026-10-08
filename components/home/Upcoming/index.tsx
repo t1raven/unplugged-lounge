@@ -11,6 +11,7 @@ import Image from 'next/image';
 import { urlFor } from '@/sanity/lib/image';
 
 import { formatDate, formatWeekDay, formatTime, formatDDay } from '@/utils/date';
+import useHydrated from '@/hooks/useHydrated';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Grid, Pagination, Navigation } from 'swiper/modules';
@@ -28,6 +29,7 @@ interface UpcomingProps {
 }
 
 export default function Upcoming({ performances }: UpcomingProps) {
+  const isHydrated = useHydrated();
   const rootRef = useRef<HTMLElement>(null);
 
   useLayoutEffect(() => {
@@ -154,7 +156,7 @@ export default function Upcoming({ performances }: UpcomingProps) {
 
                     <div className="upcoming__info">
                       <div>
-                        <em>{formatDDay(performance.date)}</em>
+                        <em>{isHydrated ? formatDDay(performance.date) : null}</em>
                       </div>
 
                       <h2>{performance.title}</h2>

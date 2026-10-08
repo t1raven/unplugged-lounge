@@ -7,6 +7,7 @@ import Link from 'next/link';
 import useFadeUpEffect from '@/hooks/useFadeUpEffect';
 
 import type { Performance } from '@/types/performance';
+import { formatDate, formatTime, formatWeekDay, formatDDay } from '@/utils/date';
 
 import './List.scss';
 
@@ -21,15 +22,11 @@ const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토'];
 // ==================================================
 
 const formatDateKey = (date: Date) => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-
-  return `${year}-${month}-${day}`;
+  return formatDate(date).replaceAll('.', '-');
 };
 
 /**
- * Sanity datetime → 브라우저 로컬 날짜
+ * Sanity datetime → 공연 시각
  */
 const getPerformanceDate = (performance: Performance) => {
   return new Date(performance.date);
@@ -39,16 +36,13 @@ const getPerformanceDate = (performance: Performance) => {
  * 공연의 날짜 Key
  */
 const getPerformanceDateKey = (performance: Performance) => {
-  return formatDateKey(getPerformanceDate(performance));
+  return formatDate(performance.date).replaceAll('.', '-');
 };
 
 export default function PerformanceCalendar({ performances }: Props) {
-  const today = new Date();
-
-  const todayKey =
-    `${today.getFullYear()}-` +
-    `${String(today.getMonth() + 1).padStart(2, '0')}-` +
-    `${String(today.getDate()).padStart(2, '0')}`;
+  const todayKey = formatDate(new Date()).replaceAll('.', '-');
+  // 달력의 날짜는 한국 날짜를 담은 UTC 값으로 관리합니다.
+  const today = new Date(`${todayKey}T00:00:00Z`);
 
   /**
    * 공연 시간 표시
@@ -59,12 +53,7 @@ export default function PerformanceCalendar({ performances }: Props) {
    * → 19:00
    */
   const formatPerformanceTime = (performance: Performance) => {
-    const date = getPerformanceDate(performance);
-
-    return `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(
-      2,
-      '0',
-    )}`;
+    return formatTime(performance.date);
   };
 
   /**
@@ -73,35 +62,15 @@ export default function PerformanceCalendar({ performances }: Props) {
   const formatSelectedDate = (dateKey: string) => {
     const [year, month, day] = dateKey.split('-').map(Number);
 
-    const date = new Date(year, month - 1, day);
+    const date = new Date(Date.UTC(year, month - 1, day));
 
     return {
       year,
       month,
       day,
-      weekday: WEEKDAYS[date.getDay()],
+      weekday: WEEKDAYS[date.getUTCDay()],
     };
   };
-
-  const getDDay = (date: string) => {
-    const todayDate = new Date();
-    const performanceDate = new Date(date);
-
-    const today = getDateOnly(todayDate);
-    const target = getDateOnly(performanceDate);
-
-    const diffTime = target - today;
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-    if (diffDays === 0) {
-      return 'D-DAY';
-    }
-
-    return `D-${diffDays}`;
-  };
-
-  const getDateOnly = (date: Date) =>
-    new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
 
   // ==================================================
   // Performance Filter
@@ -142,7 +111,7 @@ export default function PerformanceCalendar({ performances }: Props) {
   // ==================================================
 
   const [currentDate, setCurrentDate] = useState(
-    new Date(today.getFullYear(), today.getMonth(), 1),
+    () => new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), 1)),
   );
 
   // 선택된 날짜
@@ -152,13 +121,17 @@ export default function PerformanceCalendar({ performances }: Props) {
   // Month
   // ==================================================
 
-  const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+  const firstDayOfMonth = new Date(
+    Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), 1),
+  );
 
-  const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+  const lastDayOfMonth = new Date(
+    Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth() + 1, 0),
+  );
 
-  const firstDayIndex = firstDayOfMonth.getDay();
+  const firstDayIndex = firstDayOfMonth.getUTCDay();
 
-  const lastDate = lastDayOfMonth.getDate();
+  const lastDate = lastDayOfMonth.getUTCDate();
 
   // ==================================================
   // Calendar Days
@@ -172,7 +145,7 @@ export default function PerformanceCalendar({ performances }: Props) {
     }
 
     for (let date = 1; date <= lastDate; date++) {
-      days.push(new Date(currentDate.getFullYear(), currentDate.getMonth(), date));
+      days.push(new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), date)));
     }
 
     while (days.length % 7 !== 0) {
@@ -222,9 +195,11 @@ export default function PerformanceCalendar({ performances }: Props) {
   // ==================================================
 
   const handlePreviousMonth = () => {
-    const previousMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
+    const previousMonth = new Date(
+      Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth() - 1, 1),
+    );
 
-    const currentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    const currentMonth = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), 1));
 
     // 현재 달보다 이전 달로 이동하지 않음
     if (previousMonth < currentMonth) {
@@ -235,11 +210,13 @@ export default function PerformanceCalendar({ performances }: Props) {
   };
 
   const handleNextMonth = () => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
+    setCurrentDate(
+      new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth() + 1, 1)),
+    );
   };
 
   const handleToday = () => {
-    setCurrentDate(new Date(today.getFullYear(), today.getMonth(), 1));
+    setCurrentDate(new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), 1)));
 
     setSelectedDate(todayKey);
   };
@@ -263,7 +240,7 @@ export default function PerformanceCalendar({ performances }: Props) {
   // Month Title
   // ==================================================
 
-  const monthTitle = `${currentDate.getFullYear()}년 ` + `${currentDate.getMonth() + 1}월`;
+  const monthTitle = `${currentDate.getUTCFullYear()}년 ` + `${currentDate.getUTCMonth() + 1}월`;
 
   // ==================================================
   // Upcoming Performances
@@ -273,7 +250,7 @@ export default function PerformanceCalendar({ performances }: Props) {
     .filter((performance) => {
       if (!performance.date) return false;
 
-      return getDateOnly(getPerformanceDate(performance)) > getDateOnly(today);
+      return getPerformanceDateKey(performance) > todayKey;
     })
     .sort((a, b) => {
       const dateA = getPerformanceDate(a).getTime();
@@ -300,15 +277,15 @@ export default function PerformanceCalendar({ performances }: Props) {
 
             <div className="calendar-controls">
               {!(
-                currentDate.getFullYear() === today.getFullYear() &&
-                currentDate.getMonth() === today.getMonth()
+                currentDate.getUTCFullYear() === today.getUTCFullYear() &&
+                currentDate.getUTCMonth() === today.getUTCMonth()
               ) && (
                 <button
                   type="button"
                   onClick={handlePreviousMonth}
                   disabled={
-                    currentDate.getFullYear() === today.getFullYear() &&
-                    currentDate.getMonth() === today.getMonth()
+                    currentDate.getUTCFullYear() === today.getUTCFullYear() &&
+                    currentDate.getUTCMonth() === today.getUTCMonth()
                   }
                   aria-label="이전 달"
                 >
@@ -380,7 +357,7 @@ export default function PerformanceCalendar({ performances }: Props) {
                   onClick={() => handleSelectDate(date)}
                 >
                   <div className="calendar-date">
-                    <span>{date.getDate()}</span>
+                    <span>{date.getUTCDate()}</span>
                   </div>
 
                   {/* 
@@ -511,13 +488,8 @@ export default function PerformanceCalendar({ performances }: Props) {
               {upcomingPerformances.map((performance) => {
                 const slug = performance.slug?.current;
 
-                const date = getPerformanceDate(performance);
-
-                const month = date.getMonth() + 1;
-
-                const day = date.getDate();
-
-                const weekday = WEEKDAYS[date.getDay()];
+                const { month, day } = formatSelectedDate(getPerformanceDateKey(performance));
+                const weekday = formatWeekDay(performance.date, true);
 
                 const content = (
                   <>
@@ -545,7 +517,7 @@ export default function PerformanceCalendar({ performances }: Props) {
 
                     <div className="performance-info">
                       <div>
-                        <em>{getDDay(performance.date)}</em>
+                        <em>{formatDDay(performance.date)}</em>
                       </div>
 
                       <strong>{performance.title}</strong>
