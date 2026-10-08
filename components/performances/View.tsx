@@ -9,6 +9,8 @@ import { PortableText } from '@portabletext/react';
 import { useDevice } from '@/components/providers/DeviceProvider';
 import { formatDateTime } from '@/utils/date';
 
+import useFadeUpEffect from '@/hooks/useFadeUpEffect';
+
 import type { Performance } from '@/types/performance';
 
 import Fnb from '@/components/layout/Fnb';
@@ -90,6 +92,8 @@ export default function PerformanceViewPage({ performance }: Props) {
 
   const { isIOS, isReady } = useDevice();
   const ios = isIOS && isReady ? true : false;
+
+  useFadeUpEffect('.performance-detail-inner');
 
   return (
     <main id="site-body" className="performance-detail">
