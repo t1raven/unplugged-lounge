@@ -2,7 +2,7 @@ import localFont from 'next/font/local';
 const pretendard = localFont({
   src: '../../public/fonts/PretendardVariable.woff2',
   variable: '--font-pretendard',
-  weight: '45 920',
+  weight: '400 700',
   display: 'swap',
 });
 import '@/styles/globals.scss';
@@ -81,8 +81,13 @@ export default async function SiteLayout({
   const siteInfo = await getSiteSettings();
 
   return (
-    <html lang="ko" data-scroll-behavior="smooth" suppressHydrationWarning>
-      <body className={pretendard.variable} suppressHydrationWarning>
+    <html
+      lang="ko"
+      className={pretendard.variable}
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+    >
+      <body suppressHydrationWarning>
         <Providers>
           <Header />
           {children}

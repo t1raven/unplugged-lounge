@@ -3,8 +3,8 @@
   overflow: hidden;
 
   &__inner {
-    width: var(--inner-width); 
-    max-width: var(--inner-max-width); 
+    width: var(--inner-width);
+    max-width: var(--inner-max-width);
     margin: 0 auto;
   }
 
@@ -23,13 +23,13 @@
       letter-spacing: 0.2em;
 
       text-decoration: none;
-      transition: 
+      transition:
         opacity 0.35s ease,
         transform 0.35s ease;
 
       & .icon {
         font-size: 1em;
-        line-height: 1.2;
+        line-height: 1.35;
       }
 
       @media (hover: hover) and (pointer: fine) {
@@ -108,13 +108,13 @@
     }
 
     .swiper-slide-prev {
-       padding-right: 10px;
-       & ~ .swiper-slide:not(.swiper-slide-active) {
-         padding-right: 10px;
-       }
+      padding-right: 10px;
+      & ~ .swiper-slide:not(.swiper-slide-active) {
+        padding-right: 10px;
+      }
     }
     .swiper-slide-active ~ .swiper-slide {
-       padding-right: 0 !important;
+      padding-right: 0 !important;
     }
 
     /* .swiper-slide:nth-child(4n+1){
@@ -143,7 +143,7 @@
       margin: 0 5px !important;
       background-color: var(--primary-color);
       opacity: 0.3;
-      transition: all 0.25s ease,
+      transition: all 0.25s ease;
     }
 
     .swiper-pagination-bullet-active {
@@ -151,7 +151,7 @@
       opacity: 1;
     }
 
-    .swiper-button-prev, 
+    .swiper-button-prev,
     .swiper-button-next {
       top: auto;
       bottom: 0;
@@ -176,7 +176,7 @@
     background-repeat: no-repeat;
     background-size: 40px;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24px' viewBox='0 -960 960 960' width='24px' fill='%23333333cc'%3E%3Cpath d='M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0 0v-560 560Zm80-80h400q12 0 18-11t-2-21L586-459q-6-8-16-8t-16 8L450-320l-74-99q-6-8-16-8t-16 8l-80 107q-8 10-2 21t18 11Z'/%3E%3C/svg%3E");
-    
+
     border: 1px solid var(--border-color);
     border-radius: 12px;
 
@@ -314,7 +314,7 @@
       transform: translateX(5px);
     }
   }
-  
+
   &__item:active &__arrow {
     color: var(--primary-color);
     transform: translateX(5px);
@@ -329,8 +329,6 @@
     opacity: 0.5;
   }
 }
-
-
 
 @media (max-width: 768px) {
   .upcoming {
@@ -363,7 +361,7 @@
         //padding: 0 5px;
       }
 
-      .swiper-button-prev, 
+      .swiper-button-prev,
       .swiper-button-next {
         display: none;
       }
