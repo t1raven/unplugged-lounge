@@ -39,7 +39,7 @@ export default function RentalPage() {
               start: 'top 85%',
               once: true,
             },
-          }
+          },
         );
       });
     }, container);
@@ -57,10 +57,15 @@ export default function RentalPage() {
 
         <div className="rental-ussom-application__content">
           <p>
-            <strong>어썸나이트(USSOM NIGHT)</strong>는<br className="mo-view"/> <span>&apos;Unplugged Seogyo Special Open Mic&apos;</span>의 약자로, <br className="pc-view"/>
-            열정 가득한 신인 뮤지션들의 데뷔 무대이자 언플러그드 라운지만의 특별한 오픈마이크 공연입니다.
-            <br/><br/>
-            본인만의 새로운 음악을 세상에 알리고 소통하고자 하는 신인 뮤지션분들의 많은 참여와 신청 부탁드립니다.
+            <strong>어썸나이트(USSOM NIGHT)</strong>는<br className="mo-view" />{' '}
+            <span>&apos;Unplugged Seogyo Special Open Mic&apos;</span>의 약자로,{' '}
+            <br className="pc-view" />
+            열정 가득한 신인 뮤지션들의 데뷔 무대이자 언플러그드 라운지만의 특별한 오픈마이크
+            공연입니다.
+            <br />
+            <br />
+            본인만의 새로운 음악을 세상에 알리고 소통하고자 하는 신인 뮤지션분들의 많은 참여와 신청
+            부탁드립니다.
           </p>
         </div>
 
@@ -155,19 +160,14 @@ export default function RentalPage() {
 
             <li>
               <span>05</span>
-              <p>
-                대관 전 공간 및 장비 확인을 위한 사전 답사를 권장합니다.
-              </p>
+              <p>대관 전 공간 및 장비 확인을 위한 사전 답사를 권장합니다.</p>
             </li>
           </ul>
 
           <div className="rental-notice__warning">
             <strong>NOTICE</strong>
 
-            <p>
-              공지를 숙지하지 못하여 발생하는 불이익에 대해서는
-              책임지지 않습니다.
-            </p>
+            <p>공지를 숙지하지 못하여 발생하는 불이익에 대해서는 책임지지 않습니다.</p>
           </div>
         </div>
       </section>
@@ -223,7 +223,8 @@ export default function RentalPage() {
             <h3>100% 선입금</h3>
 
             <p>
-              예약문자를 수신한 후, 안내받으신 계좌로<br />
+              예약문자를 수신한 후, 안내받으신 계좌로
+              <br />
               100% 입금하시면 예약이 확정됩니다.
             </p>
           </article>
@@ -242,8 +243,7 @@ export default function RentalPage() {
             </div>
 
             <p className="refund-note">
-              여러 가지 상황에 따라 변동될 수 있으니
-              부담 없이 문의해 주세요.
+              여러 가지 상황에 따라 변동될 수 있으니 부담 없이 문의해 주세요.
             </p>
           </article>
         </div>
@@ -259,7 +259,7 @@ export default function RentalPage() {
       </section>
 
       {/* APPLICATION */}
-      <section id="rental-application" className="rental-section rental-application" >
+      <section className="rental-section rental-application">
         <div className="rental-application__inner">
           <p className="rental-label">RENTAL APPLICATION</p>
 

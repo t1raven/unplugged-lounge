@@ -8,11 +8,11 @@
   --inner-max-width: 1200px;
   --header-height: #{fluid(60px, 90px)};
   --font-family:
-    var(--font-noto), -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic',
-    'Segoe UI', 'Noto Sans KR', sans-serif !important;
+    var(--font-pretendard), -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Segoe UI',
+    'Noto Sans KR', 'Malgun Gothic', sans-serif !important;
   --title-font-family:
-    var(--font-noto), -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic',
-    'Segoe UI', 'Noto Sans KR', sans-serif !important;
+    var(--font-pretendard), -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Segoe UI',
+    'Noto Sans KR', 'Malgun Gothic', sans-serif !important;
 
   --primary-color: #ee7102;
   --secondary-color: #4eaee3;
@@ -75,7 +75,7 @@ body {
   font-family: var(--font-family);
   color: var(--font-color);
   font-size: var(--font-size);
-  line-height: 1.6;
+  line-height: 1.5;
   font-weight: 400;
   letter-spacing: 0;
   font-weight: normal;
@@ -99,8 +99,9 @@ img {
 map area {
   cursor: pointer;
 }
+strong,
 b {
-  font-weight: 700;
+  font-weight: 600;
 }
 
 caption {
