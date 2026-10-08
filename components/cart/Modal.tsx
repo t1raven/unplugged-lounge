@@ -77,6 +77,7 @@ function CartModalContent({ orderDeliverySettings }: Props) {
   return (
     <Modal
       className="cart-modal"
+      contentKey={step}
       header={
         step !== 'complete' && <ModalHeader step={step} setStep={setStep} closeCart={closeCart} />
       }

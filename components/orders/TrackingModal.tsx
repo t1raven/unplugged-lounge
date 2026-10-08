@@ -126,6 +126,7 @@ export default function OrderTrackingModal({ open, onClose }: Props) {
   return (
     <Modal
       className="order-tracking-modal"
+      contentKey={selectedOrder?.orderNumber ?? (hasSearched ? 'list' : 'search')}
       header={
         <ModalHeader
           hasSearched={hasSearched}
