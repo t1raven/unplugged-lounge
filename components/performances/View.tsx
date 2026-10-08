@@ -10,6 +10,7 @@ import { useDevice } from '@/components/providers/DeviceProvider';
 import { formatDateTime } from '@/utils/date';
 
 import useFadeUpEffect from '@/hooks/useFadeUpEffect';
+import useHydrated from '@/hooks/useHydrated';
 
 import type { Performance } from '@/types/performance';
 
@@ -76,17 +77,18 @@ interface Props {
 }
 
 export default function PerformanceViewPage({ performance }: Props) {
-  const now = new Date();
+  const isHydrated = useHydrated();
+  const now = isHydrated ? new Date() : null;
 
   const performanceDate = new Date(performance.date);
   const endDate = new Date(performanceDate.getTime() + 2 * 60 * 60 * 1000);
-  const isEnd = now >= endDate;
+  const isEnd = now !== null && now >= endDate;
 
-  const salesOpenDate = new Date(performance.salesOpen ?? new Date());
-  const isSalesOpen = now <= salesOpenDate;
+  const isSalesOpen =
+    now !== null && performance.salesOpen ? now < new Date(performance.salesOpen) : false;
 
-  const salesCloseDate = new Date(performance.salesClose ?? new Date());
-  const isSalesClose = now >= salesCloseDate;
+  const isSalesClose =
+    now !== null && performance.salesClose ? now >= new Date(performance.salesClose) : false;
 
   const mapUrl = performance.place?.naverMap;
 
@@ -162,7 +164,7 @@ export default function PerformanceViewPage({ performance }: Props) {
                 >
                   <span>사전 예매</span>
                   <strong>
-                    {performance.price1?.toLocaleString()}원
+                    {performance.price1?.toLocaleString('ko-KR')}원
                     {performance.price1Option && (
                       <small className="opt">({performance.price1Option})</small>
                     )}
@@ -177,7 +179,7 @@ export default function PerformanceViewPage({ performance }: Props) {
                 >
                   <span>현장 예매</span>
                   <strong>
-                    {performance.price2?.toLocaleString()}원
+                    {performance.price2?.toLocaleString('ko-KR')}원
                     {performance.price2Option && (
                       <small className="opt">({performance.price2Option})</small>
                     )}
@@ -289,7 +291,11 @@ export default function PerformanceViewPage({ performance }: Props) {
       )}
 
       <Fnb className="site-fnb">
-        {isEnd ? (
+        {!isHydrated ? (
+          <Button opacity={0.7} shadow disabled className="reservation_btn">
+            <span>예매 정보를 확인하는 중입니다.</span>
+          </Button>
+        ) : isEnd ? (
           <Button opacity={0.7} shadow disabled className="reservation_btn">
             <span>공연 종료</span>
           </Button>

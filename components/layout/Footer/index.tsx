@@ -1,4 +1,4 @@
-import './style.scss'
+import './style.scss';
 
 interface Props {
   data: {
@@ -10,7 +10,7 @@ interface Props {
   };
 }
 
-export default function Footer({data}: Props) {
+export default function Footer({ data }: Props) {
   return (
     <footer id="site-footer">
       <div className="inner">
@@ -18,9 +18,15 @@ export default function Footer({data}: Props) {
           <div className="footer-title">{data?.businessName}</div>
           <div className="footer-info">
             <ul>
-              <li><b>주소</b> {data?.address}</li>
-              <li><b>전화번호</b> {data?.phone}</li>
-              <li><b>영업시간</b> {data?.businessHours}</li>
+              <li>
+                <b>주소</b> {data?.address}
+              </li>
+              <li>
+                <b>전화번호</b> {data?.phone}
+              </li>
+              <li>
+                <b>영업시간</b> {data?.businessHours}
+              </li>
             </ul>
           </div>
           <div className="footer-copy">© 2026 {data?.siteName}. All Rights Reserved.</div>

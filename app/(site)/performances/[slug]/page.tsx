@@ -3,7 +3,8 @@ import { notFound } from 'next/navigation';
 import { client } from '@/sanity/lib/client';
 import { urlFor } from '@/sanity/lib/image';
 
-import { formatDateTime } from '@/utils/date/formatDateTime';
+import { getSiteSettings } from '@/lib/siteSettings';
+import { formatDateTime } from '@/utils/date';
 import type { Performance } from '@/types/performance';
 
 import PerformanceView from '@/components/performances/View';
@@ -69,13 +70,13 @@ async function getPerformance(slug: string): Promise<Performance | null> {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-
+  const siteSettings = await getSiteSettings();
   const performance = await getPerformance(slug);
 
   if (!performance) {
     return {
       title: '공연',
-      description: 'UNPLUGGED LOUNGE 공연 안내',
+      description: `${siteSettings?.general?.siteName ?? 'UNPLUGGED LOUNGE'} 공연 안내`,
     };
   }
 
@@ -89,6 +90,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const imageUrl = performance.poster
     ? urlFor(performance.poster).width(600).height(800).fit('crop').url()
     : '/images/common/og-image.png';
+  const SITE_URL = `${siteSettings?.general?.siteUrl ?? 'https://unplugged-lounge.com'}/performances/${slug}`;
 
   return {
     title: performance.title,
@@ -103,13 +105,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           height: 800,
         },
       ],
+      url: SITE_URL,
     },
   };
 }
 
 export default async function PerformanceViewPage({ params }: Props) {
   const { slug } = await params;
-
   const performance = await getPerformance(slug);
 
   if (!performance) {

@@ -8,6 +8,7 @@ const query = `
     ][0] {
       general {
         siteName,
+        siteUrl,
         businessName,
         address,
         phone,
@@ -26,12 +27,16 @@ const query = `
         description,
         keywords,
         ogImage
+      },
+
+      search {
+        siteVerifications,
       }
     }
   `;
 
 export async function getSiteSettings(): Promise<SiteSettings | null> {
-  const settings = client.fetch<SiteSettings | null>(
+  const data = client.fetch<SiteSettings | null>(
     query,
     {},
     {
@@ -39,8 +44,8 @@ export async function getSiteSettings(): Promise<SiteSettings | null> {
         revalidate: 60,
         tags: ['siteSettings'],
       },
-    }
+    },
   );
 
-  return settings;
+  return data;
 }

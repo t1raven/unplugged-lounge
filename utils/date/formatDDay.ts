@@ -1,18 +1,13 @@
+import { getDateParts } from './formatter';
+
 export function formatDDay(date: string) {
-  const performanceDate = new Date(date);
+  const { year: todayYear, month: todayMonth, day: todayDay } = getDateParts(new Date());
+  const { year, month, day } = getDateParts(date);
 
-  const todayDate = new Date();
-
-  // 시간을 제거하고 날짜만 비교
-  const today = new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate());
-
-  const target = new Date(
-    performanceDate.getFullYear(),
-    performanceDate.getMonth(),
-    performanceDate.getDate(),
-  );
-
-  const diffTime = target.getTime() - today.getTime();
+  // 한국 날짜를 UTC 기준으로 비교해 실행 환경의 시간대와 서머타임 영향을 제거합니다.
+  const today = Date.UTC(Number(todayYear), Number(todayMonth) - 1, Number(todayDay));
+  const target = Date.UTC(Number(year), Number(month) - 1, Number(day));
+  const diffTime = target - today;
 
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
