@@ -91,6 +91,7 @@ import Providers from '@/components/providers';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import Gnb from '@/components/layout/Gnb';
+import DevSignature from '@/components/common/DevSignature';
 
 export default async function SiteLayout({
   children,
@@ -107,6 +108,7 @@ export default async function SiteLayout({
       suppressHydrationWarning
     >
       <body suppressHydrationWarning>
+        <DevSignature />
         <Providers>
           <Header />
           {children}
