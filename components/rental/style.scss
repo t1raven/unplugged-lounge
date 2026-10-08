@@ -1,5 +1,4 @@
 .rental {
-  
   &-container {
     position: relative;
   }
@@ -9,59 +8,6 @@
     font-size: 13px;
     font-weight: 600;
     letter-spacing: 0.2em;
-  }
-
-  &-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    min-width: 200px;
-    height: 60px;
-    padding: 0 30px;
-    background: var(--secondary-color);
-    border-radius: 999px;
-    color: #fff;
-    font-size: 1em;
-    font-weight: 500;
-    text-decoration: none;
-    position: relative;
-    overflow: hidden;
-
-    transition:
-      background-color 0.25s ease,
-      transform 0.25s ease;
-
-    > .icon {
-      font-size: 1em;
-    }
-
-    &:before { 
-      content: ''; 
-      position: absolute; 
-      left: 0; 
-      top: 0; 
-      width: 100%; 
-      height: 100%; 
-      background-color: rgba(255,255,255,0.2); 
-      opacity: 0;
-      -webkit-transition: .2s ease-out; 
-      transition:.2s ease-out;
-    }
-
-    &:active {
-      transform: scale(1.06);
-    }
-
-    &:hover:before {
-      opacity: 1;
-    }
-  }
-
-  &-button.apply-button {
-    background: var(--primary-color);
-    border-color: var(--primary-color);
-    color: #fff;
   }
 
   &-section {
@@ -82,7 +28,7 @@
       h2 {
         margin: 0;
         font-size: clamp(28px, 5vw, 42px);
-        font-weight: 400;
+        font-weight: 500;
         line-height: 1;
       }
     }
@@ -446,16 +392,16 @@
       margin: 25px 0;
       font-size: clamp(36px, 7vw, 68px);
       line-height: 1.15;
-      font-weight: 400;
+      font-weight: 500;
     }
 
     p {
       color: var(--font-sec-color);
-      line-height: 1.7;
+      line-height: 1.6;
     }
 
     &__buttons {
-      margin-top: 40px;;
+      margin-top: 40px;
       display: flex;
       gap: 10px;
 
@@ -465,7 +411,7 @@
       }
 
       .button-icon {
-          font-variation-settings: "FILL" 1;
+        font-variation-settings: 'FILL' 1;
       }
     }
   }
@@ -528,7 +474,7 @@
             border-left: 1px solid var(--border-color);
           }
 
-          &:not(:nth-last-child(-n+2)) {
+          &:not(:nth-last-child(-n + 2)) {
             border-bottom: 1px solid var(--border-color);
           }
 
@@ -554,7 +500,7 @@
           font-size: 16px;
         }
       }
-      
+
       &__buttons > a {
         width: 100%;
       }
