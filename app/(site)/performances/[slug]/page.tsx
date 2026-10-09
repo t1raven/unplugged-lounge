@@ -90,11 +90,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const imageUrl = performance.poster
     ? urlFor(performance.poster).width(600).height(800).fit('crop').url()
     : '/images/common/og-image.png';
-  const SITE_URL = `${siteSettings?.general?.siteUrl ?? 'https://unplugged-lounge.com'}/performances/${slug}`;
+  const SITE_URL = `${siteSettings?.general?.siteUrl ?? 'https://www.unplugged-lounge.com'}/performances/${slug}`;
 
   return {
     title: performance.title,
-    description: description,
+    description,
+    alternates: {
+      canonical: SITE_URL,
+    },
     openGraph: {
       type: 'website',
       locale: 'ko_KR',

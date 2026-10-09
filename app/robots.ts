@@ -3,7 +3,7 @@ import { getSiteSettings } from '@/lib/siteSettings';
 
 export default async function robots(): Promise<MetadataRoute.Robots> {
   const siteSettings = await getSiteSettings();
-  const SITE_URL = siteSettings?.general?.siteUrl ?? 'https://unplugged-lounge.com';
+  const SITE_URL = siteSettings?.general?.siteUrl ?? 'https://www.unplugged-lounge.com';
 
   return {
     rules: {
