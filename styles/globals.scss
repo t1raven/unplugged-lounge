@@ -36,8 +36,6 @@
 
   --safe-area-bottom: env(safe-area-inset-bottom, 0px);
   --liquid-ease: cubic-bezier(0.22, 1, 0.36, 1);
-
-  color-scheme: light;
 }
 
 [data-theme='dark'] {
@@ -46,8 +44,6 @@
   --background-color: #11100f;
   --background-sec-color: #191714;
   --border-color: rgba(238, 238, 238, 0.1);
-
-  color-scheme: dark;
 }
 
 /*a { color: initial; }
