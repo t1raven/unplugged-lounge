@@ -23,7 +23,7 @@
     display: flex;
     align-items: center;
     border-radius: 10em;
-    background-color: rgba(238, 238, 238, 0.7);
+    background-color: rgba(232, 232, 232, 0.7);
     backdrop-filter: var(--backdrop-filter);
     box-shadow: var(--box-shadow);
     border: 0px solid var(--border-color);
@@ -183,7 +183,7 @@ html.scrollUp #site-gnb {
       }
     }
     .move-bg {
-      background-color: rgba(238, 238, 238, 0.15);
+      background-color: rgba(232, 232, 232, 0.15);
     }
   }
 }
