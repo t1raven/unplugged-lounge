@@ -24,7 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const ogImage = siteSettings?.seo?.ogImage
     ? urlFor(siteSettings.seo.ogImage).width(400).height(400).url()
     : undefined;
-  const SITE_URL = siteSettings?.general?.siteUrl ?? 'https://unplugged-lounge.com';
+  const SITE_URL = siteSettings?.general?.siteUrl ?? 'https://www.unplugged-lounge.com';
 
   return {
     metadataBase: new URL(SITE_URL),

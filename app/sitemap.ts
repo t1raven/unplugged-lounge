@@ -5,15 +5,18 @@ import { getSiteSettings } from '@/lib/siteSettings';
 interface PerformanceSitemap {
   slug: string;
   updatedAt: string;
+  poster?: string | null;
 }
 
 const performanceQuery = `
   *[
     _type == "performance" &&
-    defined(slug.current)
+    defined(slug.current) &&
+    slug.current != ""
   ] {
     "slug": slug.current,
-    "updatedAt": _updatedAt
+    "updatedAt": _updatedAt,
+    "poster": poster.asset->url
   }
 `;
 
@@ -21,7 +24,7 @@ export const revalidate = 3600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteSettings = await getSiteSettings();
-  const SITE_URL = siteSettings?.general?.siteUrl ?? 'https://unplugged-lounge.com';
+  const SITE_URL = siteSettings?.general?.siteUrl ?? 'https://www.unplugged-lounge.com';
 
   // 기본 페이지
   const staticPages: MetadataRoute.Sitemap = [
@@ -52,6 +55,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: new Date(performance.updatedAt),
     changeFrequency: 'weekly',
     priority: 0.7,
+    ...(performance.poster ? { images: [performance.poster] } : {}),
   }));
 
   return [...staticPages, ...performancePages];
