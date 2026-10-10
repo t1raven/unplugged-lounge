@@ -151,16 +151,12 @@ export default function GoodsList({
 
   return (
     <>
-      <div className="category_search_nav">
-        <div className="category_search_nav__inner">
-          <CategoryNav
-            category={categories}
-            categoryNavRef={categoryRef}
-            activeCategory={activeCategory}
-            onChange={handleCategoryChange}
-          />
-        </div>
-      </div>
+      <CategoryNav
+        category={categories}
+        categoryNavRef={categoryRef}
+        activeCategory={activeCategory}
+        handleCategory={handleCategoryChange}
+      />
 
       <section className="sub-page-section goods-list">
         <div className="inner">

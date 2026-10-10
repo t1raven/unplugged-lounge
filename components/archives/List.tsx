@@ -260,58 +260,6 @@ export default function ArchiveList({ categories, items: initialItems }: Props) 
     };
   }, [selectedIndex]);
 
-  const [searchActive, setSearchActive] = useState<boolean>(false);
-
-  const searchRef = useRef<HTMLInputElement>(null);
-
-  const toggleSearch = async () => {
-    setSearchActive((prev) => {
-      const state = !prev;
-
-      // 활성화되는 시점(true)에 내부 input에 포커스
-      if (state) {
-        searchRef.current?.focus();
-      } else {
-        searchRef.current?.blur();
-      }
-
-      return state;
-    });
-  };
-
-  useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
-        setSearchActive(false);
-      }
-    };
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setSearchActive(false);
-      }
-    };
-
-    const handlefocusout = (event: FocusEvent) => {
-      if (!event.target || !(event.target instanceof HTMLElement)) return;
-      if (event.target.tagName === 'INPUT') {
-        setSearchActive(false);
-      }
-    };
-
-    if (searchActive) {
-      document.addEventListener('mousedown', handleOutsideClick);
-      document.addEventListener('keydown', handleKeyDown);
-      document.addEventListener('focusout', handlefocusout);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleOutsideClick);
-      document.removeEventListener('keydown', handleKeyDown);
-      document.removeEventListener('focusout', handlefocusout);
-    };
-  }, [searchActive]);
-
   const handleSearch = useCallback(async () => {
     const keyword = searchInput.trim();
 
@@ -352,37 +300,17 @@ export default function ArchiveList({ categories, items: initialItems }: Props) 
 
   return (
     <>
-      <div className={`category_search_nav ${searchActive ? 'active' : ''}`}>
-        <div className="category_search_nav__inner">
-          <div className="search-nav">
-            <div className="input">
-              <span className="material-symbols-rounded icon">search</span>
-              <input
-                type="search"
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    handleSearch();
-                  }
-                }}
-                placeholder="공연명, 아티스트 검색"
-                ref={searchRef}
-              />
-            </div>
+      <CategoryNav
+        category={categories}
+        categoryNavRef={categoryRef}
+        activeCategory={activeCategory}
+        handleCategory={handleCategoryChange}
 
-            <button type="button" onClick={toggleSearch}>
-              <span className="material-symbols-rounded">search</span>
-            </button>
-          </div>
-          <CategoryNav
-            category={categories}
-            categoryNavRef={categoryRef}
-            activeCategory={activeCategory}
-            onChange={handleCategoryChange}
-          />
-        </div>
-      </div>
+        searchInput={searchInput}
+        setSearchInput={setSearchInput}
+        searchHandle={handleSearch}
+        searchPlaceholder={'공연명, 아티스트 검색'}
+      />
 
       <section className="sub-page-section gallery">
         <div className="inner">
