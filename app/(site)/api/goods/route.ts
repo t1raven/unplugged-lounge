@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server';
 
-import { client } from '@/sanity/lib/client'
+import { client } from '@/sanity/lib/client';
 
 const PAGE_SIZE = 12;
 
@@ -43,16 +43,12 @@ export async function GET(request: NextRequest) {
       },
 
       stock,
-      newItem,
-      bestItem,
+      label,
       soldOut
     }
   `;
 
-  const page = Math.max(
-    Number(searchParams.get('page')) || 1,
-    1
-  );
+  const page = Math.max(Number(searchParams.get('page')) || 1, 1);
 
   const start = (page - 1) * PAGE_SIZE;
   const end = start + PAGE_SIZE;
@@ -61,17 +57,14 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       items: [],
       hasMore: false,
-    })
-  };
+    });
+  }
 
-  const items = await client.fetch(
-    listQuery,
-    {
-      category,
-      start,
-      end,
-    }
-  );
+  const items = await client.fetch(listQuery, {
+    category,
+    start,
+    end,
+  });
 
   return NextResponse.json({
     items,

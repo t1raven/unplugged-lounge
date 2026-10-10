@@ -14,9 +14,9 @@ export default function MenuCard({ item }: Props) {
     <article className="menu-card">
       <div className="menu-card__image">
         {item.label && (
-          <div className="goods-card__label">
-            {item.label.includes('new') && <div className="goods-card__label_item new">NEW</div>}
-            {item.label.includes('best') && <div className="goods-card__label_item best">BEST</div>}
+          <div className="menu-card__label">
+            {item.label.includes('new') && <div className="menu-card__label_item new">NEW</div>}
+            {item.label.includes('best') && <div className="menu-card__label_item best">BEST</div>}
           </div>
         )}
 
@@ -33,9 +33,9 @@ export default function MenuCard({ item }: Props) {
 
       <div className="menu-card__info">
         {item.label && (
-          <div className="goods-card__label">
-            {item.label.includes('new') && <div className="goods-card__label_item new">NEW</div>}
-            {item.label.includes('best') && <div className="goods-card__label_item best">BEST</div>}
+          <div className="menu-card__label">
+            {item.label.includes('new') && <div className="menu-card__label_item new">NEW</div>}
+            {item.label.includes('best') && <div className="menu-card__label_item best">BEST</div>}
           </div>
         )}
         <div className="menu-card__title">

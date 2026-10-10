@@ -33,6 +33,7 @@ export default defineConfig({
 
   plugins: [
     structureTool({
+      title: 'Content',
       structure,
     }),
 
