@@ -3,7 +3,7 @@ import { API_VERSION } from '../types';
 import { orderableDocumentListDeskItem } from '@sanity/orderable-document-list';
 import { ImageIcon } from '@sanity/icons/Image';
 import { TiersIcon } from '@sanity/icons/Tiers';
-import { CategoryCountBadge } from '../../components/ui/StudioCountBadge';
+import { CategoryCountBadge, CategoryNullCountBadge } from '../../components/ui/StudioCountBadge';
 export const createGalleryCategoryMenu: MenuFactory = (S, context) => {
   return orderableDocumentListDeskItem({
     type: 'galleryCategory',
@@ -26,18 +26,20 @@ export const createGalleryMenu: MenuFactory = (S, context) => {
           title: string;
         }[]
       >(`
-      *[_type == "galleryCategory"]
-      | order(orderRank asc) {
-        _id,
-        title
-      }
-    `);
+          *[_type == "galleryCategory"]
+          | order(orderRank asc) {
+            _id,
+            title
+          }
+        `);
+      const nullFilter = '_type == "galleryItem" && !defined(category._ref)';
+      const nullCount = await client.fetch<number>(`count(*[${nullFilter}])`);
 
       return S.list()
         .id('gallery-images-category-list')
         .title('아카이브 이미지')
-        .items(
-          categories.map((category) => {
+        .items([
+          ...categories.map((category) => {
             // 공연 카테고리만 연도별 분류
             if (category._id === 'b357b289-48b0-4924-b0ef-7ee003296edf') {
               return S.listItem()
@@ -70,6 +72,12 @@ export const createGalleryMenu: MenuFactory = (S, context) => {
                         .filter((year): year is number => year !== null),
                     ),
                   ].sort((a, b) => b - a);
+
+                  const nullDateFilter =
+                    '_type == "galleryItem" && category._ref == $categoryId && (!defined(performanceDate) || performanceDate == "")';
+                  const nullDateCount = await client.fetch<number>(`count(*[${nullDateFilter}])`, {
+                    categoryId: category._id,
+                  });
 
                   return S.list()
                     .id(`gallery-years-${category._id}`)
@@ -111,26 +119,26 @@ export const createGalleryMenu: MenuFactory = (S, context) => {
                           context,
                         });
                       }),
-                      orderableDocumentListDeskItem({
-                        type: 'galleryItem',
-                        id: `gallery-${category._id}-other`,
-                        title: '기타',
-                        icon: () => (
-                          <CategoryCountBadge
-                            type="galleryItem"
-                            categoryId={category._id}
-                            year="other"
-                          />
-                        ),
-                        filter: `
-                          _type == "galleryItem"
-                          && category._ref == $categoryId
-                          && (!defined(performanceDate) || performanceDate == "")
-                        `,
-                        params: { categoryId: category._id },
-                        S,
-                        context,
-                      }),
+                      ...(nullCount > 0
+                        ? [
+                            orderableDocumentListDeskItem({
+                              type: 'galleryItem',
+                              id: `gallery-${category._id}-other`,
+                              title: '분류되지 않음',
+                              icon: () => (
+                                <CategoryCountBadge
+                                  type="galleryItem"
+                                  categoryId={category._id}
+                                  year="other"
+                                />
+                              ),
+                              filter: nullDateFilter,
+                              params: { categoryId: category._id },
+                              S,
+                              context,
+                            }),
+                          ]
+                        : []),
                     ]);
                 });
             }
@@ -159,6 +167,19 @@ export const createGalleryMenu: MenuFactory = (S, context) => {
               context,
             });
           }),
-        );
+          ...(nullCount > 0
+            ? [
+                orderableDocumentListDeskItem({
+                  type: 'galleryItem',
+                  id: 'gallery-null',
+                  title: '분류되지 않음',
+                  icon: () => CategoryNullCountBadge({ type: 'galleryItem' }),
+                  filter: nullFilter,
+                  S,
+                  context,
+                }),
+              ]
+            : []),
+        ]);
     });
 };

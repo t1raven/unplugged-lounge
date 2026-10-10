@@ -3,7 +3,7 @@ import { API_VERSION } from '../types';
 import { orderableDocumentListDeskItem } from '@sanity/orderable-document-list';
 import { PackageIcon } from '@sanity/icons/Package';
 import { TiersIcon } from '@sanity/icons/Tiers';
-import { CategoryCountBadge } from '../../components/ui/StudioCountBadge';
+import { CategoryCountBadge, CategoryNullCountBadge } from '../../components/ui/StudioCountBadge';
 export const createGoodsCategoryMenu: MenuFactory = (S, context) => {
   return orderableDocumentListDeskItem({
     type: 'goodsCategory',
@@ -14,7 +14,10 @@ export const createGoodsCategoryMenu: MenuFactory = (S, context) => {
   });
 };
 export const createGoodsMenu: MenuFactory = (S, context) => {
-  const client = context.getClient({ apiVersion: API_VERSION });
+  const client = context.getClient({ apiVersion: API_VERSION }).withConfig({
+    perspective: 'drafts',
+    useCdn: false,
+  });
   return S.listItem()
     .id('goods-item')
     .title('굿즈 아이템')
@@ -32,12 +35,14 @@ export const createGoodsMenu: MenuFactory = (S, context) => {
             title
           }
         `);
+      const nullFilter = '_type == "goodsItem" && !defined(category._ref)';
+      const nullCount = await client.fetch<number>(`count(*[${nullFilter}])`);
 
       return S.list()
         .id('goods-item-category-list')
         .title('굿즈 아이템')
-        .items(
-          categories.map((category) =>
+        .items([
+          ...categories.map((category) =>
             orderableDocumentListDeskItem({
               type: 'goodsItem',
               id: `goods-${category._id}`,
@@ -54,6 +59,19 @@ export const createGoodsMenu: MenuFactory = (S, context) => {
               context,
             }),
           ),
-        );
+          ...(nullCount > 0
+            ? [
+                orderableDocumentListDeskItem({
+                  type: 'goodsItem',
+                  id: 'goods-null',
+                  title: '분류되지 않음',
+                  icon: () => CategoryNullCountBadge({ type: 'goodsItem' }),
+                  filter: nullFilter,
+                  S,
+                  context,
+                }),
+              ]
+            : []),
+        ]);
     });
 };
