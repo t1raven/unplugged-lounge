@@ -90,7 +90,7 @@ export default function QuickActions() {
           <Heading size={2}>빠른 메뉴</Heading>
         </Flex>
 
-        <Grid gridTemplateColumns={[1, 1, 5]} gap={3}>
+        <Grid gridTemplateColumns={[1, 1, 3, 5]} gap={3}>
           {createActions.map((action) => (
             <IntentLink
               key={action.type}

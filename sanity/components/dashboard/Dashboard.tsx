@@ -97,7 +97,7 @@ export default function Dashboard() {
           </Text>
         </Stack>
 
-        <Grid gridTemplateColumns={[1, 2, 4]} gap={3}>
+        <Grid gridTemplateColumns={[1, 2, 4, 4]} gap={3}>
           {items.map((item) => (
             <Card key={item.title} padding={4} radius={3} border tone="primary">
               <Stack gap={4}>
@@ -111,7 +111,7 @@ export default function Dashboard() {
           ))}
         </Grid>
 
-        <Grid gridTemplateColumns={[1, 1, 3]} gap={3}>
+        <Grid gridTemplateColumns={[1, 1, 2, 3]} gap={3}>
           <RecentPerformanceList />
           <UpcomingPerformanceList />
           <RecentOrderList />
