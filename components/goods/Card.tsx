@@ -13,16 +13,10 @@ import type { Goods } from '@/types/goods';
 interface Props {
   goods: Goods;
 
-  onOpenOptionModal: (
-    goods: Goods
-  ) => void;
+  onOpenOptionModal: (goods: Goods) => void;
 }
 
-export default function GoodsCard({
-  goods,
-  onOpenOptionModal,
-}: Props) {
-
+export default function GoodsCard({ goods, onOpenOptionModal }: Props) {
   const addItem = useCart((state) => state.addItem);
 
   const [added, setAdded] = useState(false);
@@ -31,19 +25,11 @@ export default function GoodsCard({
 
   const displayPrice = goods.salePrice ?? goods.price;
 
-  const discountRate =
-    getDiscountRate(
-      goods.price,
-      goods.salePrice
-    );
+  const discountRate = getDiscountRate(goods.price, goods.salePrice);
 
-  const isSoldOut =
-    goods.soldOut ||
-    goods.stock <= 0;
+  const isSoldOut = goods.soldOut || goods.stock <= 0;
 
-  const hasOptions =
-    Array.isArray(goods.options) &&
-    goods.options.length > 0;
+  const hasOptions = Array.isArray(goods.options) && goods.options.length > 0;
 
   const handleAddCart = () => {
     if (isSoldOut || added) return;
@@ -84,23 +70,19 @@ export default function GoodsCard({
   return (
     <article className={`goods-card${isSoldOut ? ' soldOut' : ''}`}>
       <div className="goods-card__top">
-        {(goods.newItem || goods.bestItem) && (
+        {goods.label && (
           <div className="goods-card__label">
-            {goods.newItem && (
-              <div className="goods-card__label_item new">NEW</div>
-            )}
-            {goods.bestItem && (
+            {goods.label.includes('new') && <div className="goods-card__label_item new">NEW</div>}
+            {goods.label.includes('best') && (
               <div className="goods-card__label_item best">BEST</div>
             )}
           </div>
         )}
-        
+
         <div className="goods-card__image">
           {goods.image && (
             <Image
-              src={urlFor(goods.image)
-                .width(600)
-                .url()}
+              src={urlFor(goods.image).width(600).url()}
               alt={goods.name}
               fill
               priority
@@ -116,29 +98,28 @@ export default function GoodsCard({
           disabled={isSoldOut}
         >
           <div className={`${added ? ' added' : ''}`}>
-            {isSoldOut ?
+            {isSoldOut ? (
               <>
                 <span className="material-symbols-rounded icon">error</span>
-                <span className="text">품절</span> 
+                <span className="text">품절</span>
               </>
-              : added ? 
+            ) : added ? (
               <>
                 <span className="material-symbols-rounded icon">check_circle</span>
-                <span className="text">담았습니다</span> 
+                <span className="text">담았습니다</span>
               </>
-              : <span className="material-symbols-rounded icon">add_shopping_cart</span>
-            }
+            ) : (
+              <span className="material-symbols-rounded icon">add_shopping_cart</span>
+            )}
           </div>
         </button>
       </div>
 
       <div className="goods-card__info">
-        {(goods.newItem || goods.bestItem) && (
+        {goods.label && (
           <div className="goods-card__label">
-            {goods.newItem && (
-              <div className="goods-card__label_item new">NEW</div>
-            )}
-            {goods.bestItem && (
+            {goods.label.includes('new') && <div className="goods-card__label_item new">NEW</div>}
+            {goods.label.includes('best') && (
               <div className="goods-card__label_item best">BEST</div>
             )}
           </div>
@@ -147,40 +128,31 @@ export default function GoodsCard({
           <h2>{goods.name}</h2>
         </div>
 
-        {goods.description && (
-          <div className="goods-card__desc">{goods.description}</div>
-        )}
+        {goods.description && <div className="goods-card__desc">{goods.description}</div>}
 
         <div className="goods-card__price">
           {goods.salePrice != null && goods.salePrice < goods.price && (
-            <del>
-              {basePrice.toLocaleString()}원
-            </del>
+            <del>{basePrice.toLocaleString()}원</del>
           )}
 
           <strong>
             {discountRate > 0 && (
               <span className="discount-rate">
-                {discountRate}<small>%</small>
+                {discountRate}
+                <small>%</small>
               </span>
             )}
-            {displayPrice.toLocaleString()}<small>원</small>
+            {displayPrice.toLocaleString()}
+            <small>원</small>
           </strong>
 
           {goods.quantityDiscounts?.length ? (
             <div className="quantity-discounts">
-              {goods.quantityDiscounts.map(
-                (discount) => (
-                  <p
-                    key={
-                      discount.minQuantity
-                    }
-                  >
-                    {discount.minQuantity}개 이상 구매시{' '}
-                    {discount.unitPrice.toLocaleString()}원
-                  </p>
-                )
-              )}
+              {goods.quantityDiscounts.map((discount) => (
+                <p key={discount.minQuantity}>
+                  {discount.minQuantity}개 이상 구매시 {discount.unitPrice.toLocaleString()}원
+                </p>
+              ))}
             </div>
           ) : null}
         </div>

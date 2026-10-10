@@ -1,17 +1,14 @@
-import {defineField, defineType} from 'sanity'
-import {orderRankField, orderRankOrdering} from '@sanity/orderable-document-list'
+import { defineField, defineType } from 'sanity';
+import { orderRankField, orderRankOrdering } from '@sanity/orderable-document-list';
 
 export const goodsItem = defineType({
   name: 'goodsItem',
   title: '굿즈 아이템',
   type: 'document',
 
-  orderings: [
-    orderRankOrdering,
-  ],
+  orderings: [orderRankOrdering],
 
   fields: [
-
     orderRankField({
       type: 'goodsItem',
       newItemPosition: 'before',
@@ -107,16 +104,11 @@ export const goodsItem = defineType({
               unitPrice: 'unitPrice',
             },
 
-            prepare({
-              minQuantity,
-              unitPrice,
-            }) {
+            prepare({ minQuantity, unitPrice }) {
               return {
-                title:
-                  `${minQuantity}개 이상`,
+                title: `${minQuantity}개 이상`,
 
-                subtitle:
-                  `개당 ${unitPrice?.toLocaleString() ?? 0}원`,
+                subtitle: `개당 ${unitPrice?.toLocaleString() ?? 0}원`,
               };
             },
           },
@@ -171,9 +163,7 @@ export const goodsItem = defineType({
             prepare({ name, values }) {
               return {
                 title: name,
-                subtitle: Array.isArray(values)
-                  ? values.join(', ')
-                  : '',
+                subtitle: Array.isArray(values) ? values.join(', ') : '',
               };
             },
           },
@@ -190,17 +180,17 @@ export const goodsItem = defineType({
     }),
 
     defineField({
-      name: 'newItem',
-      title: 'NEW',
-      type: 'boolean',
-      initialValue: false,
-    }),
-
-    defineField({
-      name: 'bestItem',
-      title: 'BEST',
-      type: 'boolean',
-      initialValue: false,
+      name: 'label',
+      title: '라벨',
+      type: 'array',
+      of: [{ type: 'string' }],
+      options: {
+        layout: 'list',
+        list: [
+          { title: 'NEW', value: 'new' },
+          { title: 'BEST', value: 'best' },
+        ],
+      },
     }),
 
     defineField({
@@ -228,7 +218,7 @@ export const goodsItem = defineType({
       soldOut: 'soldOut',
     },
 
-    prepare({title, media, category, price, isAvailable, soldOut}) {
+    prepare({ title, media, category, price, isAvailable, soldOut }) {
       let status = '판매중';
 
       if (!isAvailable) status = '판매중지';
@@ -238,7 +228,7 @@ export const goodsItem = defineType({
         title,
         subtitle: `${category ?? ''} · ${price?.toLocaleString() ?? 0}원 · ${status}`,
         media,
-      }
+      };
     },
   },
-})
+});

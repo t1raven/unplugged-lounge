@@ -4,7 +4,7 @@ import { CalendarIcon } from '@sanity/icons/Calendar';
 import { MarkerIcon } from '@sanity/icons/Marker';
 import { StarIcon } from '@sanity/icons/Star';
 import { MicrophoneIcon } from '@sanity/icons/Microphone';
-import { PerformanceCountBadge } from '../../components/StudioCountBadge';
+import { PerformanceCountBadge } from '../../components/ui/StudioCountBadge';
 export const createPerformanceMenu: MenuFactory = (S, context) => {
   const client = context.getClient({ apiVersion: API_VERSION }).withConfig({
     perspective: 'drafts',

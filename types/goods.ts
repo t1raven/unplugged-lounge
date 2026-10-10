@@ -16,7 +16,7 @@ export interface Goods {
   slug: string;
 
   category: Category | null;
-  
+
   description?: string;
   price: number;
   salePrice?: number | null;
@@ -28,8 +28,7 @@ export interface Goods {
   options?: GoodsOption[];
 
   stock: number;
-  newItem: boolean;
-  bestItem: boolean;
+  label?: string[];
   soldOut: boolean;
   isAvailable: boolean;
 }

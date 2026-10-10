@@ -1,4 +1,4 @@
-import {defineField, defineType} from 'sanity'
+import { defineField, defineType } from 'sanity';
 
 export const studioUser = defineType({
   name: 'studioUser',
@@ -17,8 +17,7 @@ export const studioUser = defineType({
       name: 'email',
       title: '이메일',
       type: 'string',
-      validation: (Rule) =>
-        Rule.required().email(),
+      validation: (Rule) => Rule.required().email(),
     }),
 
     defineField({
@@ -49,7 +48,7 @@ export const studioUser = defineType({
             value: 'goodsManager',
           },
         ],
-
+        direction: 'horizontal',
         layout: 'radio',
       },
 
@@ -72,26 +71,19 @@ export const studioUser = defineType({
       enabled: 'enabled',
     },
 
-    prepare({
-      title,
-      subtitle,
-      role,
-      enabled,
-    }) {
+    prepare({ title, subtitle, role, enabled }) {
       const roleLabel = {
         superAdmin: '최고관리자',
         performanceManager: '공연관리자',
         galleryManager: '아카이브관리자',
         cafeManager: '카페관리자',
         goodsManager: '굿즈관리자',
-      }[role as string]
+      }[role as string];
 
       return {
         title,
-        subtitle:
-          `${subtitle} · ${roleLabel ?? ''}` +
-          (enabled === false ? ' · 사용중지' : ''),
-      }
+        subtitle: `${subtitle} · ${roleLabel ?? ''}` + (enabled === false ? ' · 사용중지' : ''),
+      };
     },
   },
-})
+});
