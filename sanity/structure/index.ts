@@ -11,7 +11,7 @@ import {
 import { createCafeCategoryMenu, createCafeMenu } from './menus/cafe';
 import { createGalleryCategoryMenu, createGalleryMenu } from './menus/gallery';
 import { createGoodsCategoryMenu, createGoodsMenu } from './menus/goods';
-import { createOrdersMenu, createExternalGoodsOrdersMenu } from './menus/orders';
+import { createOrdersMenu } from './menus/orders';
 import { createHomeMenu, createSettingsMenu, createStudioUsersMenu } from './menus/settings';
 
 const menuFactories: Record<MenuKey, MenuFactory> = {
@@ -26,7 +26,6 @@ const menuFactories: Record<MenuKey, MenuFactory> = {
   goodsCategory: createGoodsCategoryMenu,
   goods: createGoodsMenu,
   orders: createOrdersMenu,
-  externalGoodsOrders: createExternalGoodsOrdersMenu,
   equipment: createEquipmentMenu,
   settings: createSettingsMenu,
   studioUsers: createStudioUsersMenu,
