@@ -2,12 +2,13 @@
 
 import { useMemo, useState } from 'react';
 import { urlFor } from '@/sanity/lib/image';
-import Image from 'next/image';
 import Link from 'next/link';
 import useFadeUpEffect from '@/hooks/useFadeUpEffect';
 
 import type { Performance } from '@/types/performance';
 import { formatDate, formatTime, formatWeekDay, formatDDay } from '@/utils/date';
+
+import { SkeletonImage } from '@/components/ui/Skeleton';
 
 import './List.scss';
 
@@ -418,17 +419,14 @@ export default function PerformanceCalendar({ performances }: Props) {
                   <>
                     <div className="performance-time">{formatPerformanceTime(performance)}</div>
 
-                    <div className="performance-poster">
-                      {performance.poster?.asset && (
-                        <Image
-                          src={urlFor(performance.poster).width(100).url()}
-                          alt={performance.title}
-                          fill
-                          priority
-                          sizes="(max-width: 768px) 25vw, 100px"
-                        />
-                      )}
-                    </div>
+                    <SkeletonImage
+                      className="performance-poster"
+                      src={
+                        performance.poster?.asset ? urlFor(performance.poster).width(100).url() : ''
+                      }
+                      alt={performance.title}
+                      size={100}
+                    />
 
                     <div className="performance-info">
                       <strong>{performance.title}</strong>
@@ -503,17 +501,14 @@ export default function PerformanceCalendar({ performances }: Props) {
                       </span>
                     </div>
 
-                    <div className="performance-poster">
-                      {performance.poster?.asset && (
-                        <Image
-                          src={urlFor(performance.poster).width(100).url()}
-                          alt={performance.title}
-                          fill
-                          priority
-                          sizes="(max-width: 768px) 25vw, 100px"
-                        />
-                      )}
-                    </div>
+                    <SkeletonImage
+                      className="performance-poster"
+                      src={
+                        performance.poster?.asset ? urlFor(performance.poster).width(100).url() : ''
+                      }
+                      alt={performance.title}
+                      size={100}
+                    />
 
                     <div className="performance-info">
                       <div>

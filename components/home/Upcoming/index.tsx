@@ -7,7 +7,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import type { Performance } from '@/types/performance';
 
-import Image from 'next/image';
+import { SkeletonImage } from '@/components/ui/Skeleton';
 import { urlFor } from '@/sanity/lib/image';
 
 import { formatDate, formatWeekDay, formatTime, formatDDay } from '@/utils/date';
@@ -134,17 +134,14 @@ export default function Upcoming({ performances }: UpcomingProps) {
                     href={`/performances/${performance.slug?.current ?? ''}`}
                     className="upcoming__item"
                   >
-                    <div className="upcoming__poster">
-                      {performance.poster?.asset && (
-                        <Image
-                          src={urlFor(performance.poster).width(120).url()}
-                          alt={performance.title}
-                          fill
-                          priority
-                          sizes="(max-width: 768px) 25vw, 120px"
-                        />
-                      )}
-                    </div>
+                    <SkeletonImage
+                      className="upcoming__poster"
+                      src={
+                        performance.poster?.asset ? urlFor(performance.poster).width(100).url() : ''
+                      }
+                      alt={performance.title}
+                      size={100}
+                    />
 
                     <div className="upcoming__date">
                       <strong>{formatDate(performance.date).slice(5)}</strong>

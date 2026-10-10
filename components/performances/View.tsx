@@ -21,6 +21,8 @@ import './View.scss';
 
 import heroKvImage from '@/public/images/common/site-sub-hero-kv.png';
 
+import { SkeletonImage } from '@/components/ui/Skeleton';
+
 const admissionTypeNames: Record<string, string> = {
   1: '입장번호순',
   2: '공연장대기순',
@@ -109,22 +111,17 @@ export default function PerformanceViewPage({ performance }: Props) {
             src={heroKvImage}
             priority
             fill
-            sizes="(max-width: 768px) 100vw, 50vw"
+            sizes="(max-width: 768px) 50vw, 100vw"
             alt="Hero Key Visual"
           />
         </div>
         <div className="performance-detail-inner">
-          <div className="performance-poster">
-            {performance.poster?.asset && (
-              <Image
-                src={urlFor(performance.poster).width(600).url()}
-                alt={performance.title}
-                fill
-                priority
-                sizes="(max-width: 768px) 100vw, 600px"
-              />
-            )}
-          </div>
+          <SkeletonImage
+            className="performance-poster"
+            src={performance.poster?.asset ? urlFor(performance.poster).width(600).url() : ''}
+            alt={performance.title}
+            size={600}
+          />
 
           <div className="performance-detail-content">
             <p className="performance-eyebrow">LIVE PERFORMANCE</p>
