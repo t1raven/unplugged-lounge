@@ -6,7 +6,7 @@ import { useStudioCounts } from '../providers/StudioCountProvider';
 
 type CategoryType = 'menuItem' | 'galleryItem' | 'goodsItem';
 
-type PerformanceType = 'today' | 'upcoming' | 'past';
+type PerformanceType = 'today' | 'upcoming' | 'past' | 'null';
 
 type OrderStatus =
   'all' | 'pending' | 'confirmed' | 'paid' | 'inTransit' | 'completed' | 'cancelled';
@@ -68,6 +68,12 @@ export function CategoryCountBadge({
       }
     />
   );
+}
+
+export function CategoryNullCountBadge({ type }: { type: CategoryType }) {
+  const counts = useStudioCounts();
+
+  return <BadgeUI count={counts[`${type}Null`]} />;
 }
 
 export function OrderCountBadge({ status }: { status: OrderStatus }) {

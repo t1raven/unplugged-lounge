@@ -3,7 +3,7 @@ import { API_VERSION } from '../types';
 import { orderableDocumentListDeskItem } from '@sanity/orderable-document-list';
 import { BottleIcon } from '@sanity/icons/Bottle';
 import { TiersIcon } from '@sanity/icons/Tiers';
-import { CategoryCountBadge } from '../../components/ui/StudioCountBadge';
+import { CategoryCountBadge, CategoryNullCountBadge } from '../../components/ui/StudioCountBadge';
 export const createCafeCategoryMenu: MenuFactory = (S, context) => {
   return orderableDocumentListDeskItem({
     type: 'menuCategory',
@@ -32,12 +32,14 @@ export const createCafeMenu: MenuFactory = (S, context) => {
             title
           }
         `);
+      const nullFilter = '_type == "menuItem" && !defined(category._ref)';
+      const nullCount = await client.fetch<number>(`count(*[${nullFilter}])`);
 
       return S.list()
         .id('cafe-menu-category-list')
         .title('카페 메뉴')
-        .items(
-          categories.map((category) =>
+        .items([
+          ...categories.map((category) =>
             orderableDocumentListDeskItem({
               type: 'menuItem',
               id: `menu-${category._id}`,
@@ -54,6 +56,19 @@ export const createCafeMenu: MenuFactory = (S, context) => {
               context,
             }),
           ),
-        );
+          ...(nullCount > 0
+            ? [
+                orderableDocumentListDeskItem({
+                  type: 'menuItem',
+                  id: 'menu-null',
+                  title: '분류되지 않음',
+                  icon: () => CategoryNullCountBadge({ type: 'menuItem' }),
+                  filter: nullFilter,
+                  S,
+                  context,
+                }),
+              ]
+            : []),
+        ]);
     });
 };

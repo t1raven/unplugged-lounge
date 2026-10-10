@@ -26,6 +26,9 @@ export const createPerformanceMenu: MenuFactory = (S, context) => {
       const todayStartISO = todayStart.toISOString();
       const tomorrowStartISO = tomorrowStart.toISOString();
 
+      const nullFilter = '_type == "performance" && !defined(dateTime(date))';
+      const nullCount = await client.fetch<number>(`count(*[${nullFilter}])`);
+
       return S.list()
         .id('performance-list')
         .title('공연 일정')
@@ -116,7 +119,7 @@ export const createPerformanceMenu: MenuFactory = (S, context) => {
                       .child(
                         S.documentList()
                           .id(`performance-past-${year}-list`)
-                          .title(`${year}년 이전 공연`)
+                          .title(`${year}년 공연`)
                           .schemaType('performance')
                           .apiVersion(API_VERSION)
                           .filter(
@@ -132,6 +135,23 @@ export const createPerformanceMenu: MenuFactory = (S, context) => {
                   ),
                 );
             }),
+          ...(nullCount > 0
+            ? [
+                S.listItem()
+                  .id('performance-null')
+                  .title('분류되지 않음')
+                  .icon(() => <PerformanceCountBadge type="null" />)
+                  .child(
+                    S.documentList()
+                      .id('performance-null-list')
+                      .title('분류되지 않음')
+                      .schemaType('performance')
+                      .apiVersion(API_VERSION)
+                      .filter(nullFilter)
+                      .defaultOrdering([{ field: '_updatedAt', direction: 'desc' }]),
+                  ),
+              ]
+            : []),
         ]);
     });
 };
