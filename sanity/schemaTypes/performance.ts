@@ -1,5 +1,5 @@
-import {defineField, defineType} from 'sanity'
-import {PerformanceTimeInput, SalesTimeInput} from '../components/SelectTimeInput'
+import { defineField, defineType } from 'sanity';
+import { PerformanceTimeInput, SalesTimeInput } from '../components/SelectTimeInput';
 
 export const performance = defineType({
   name: 'performance',
@@ -30,9 +30,9 @@ export const performance = defineType({
       type: 'slug',
       options: {
         source: (doc) => {
-          const dateStr = typeof doc.date === 'string' ? doc.date.split('T')[0] : ''
-          const titleStr = typeof doc.title === 'string' ? doc.title : ''
-          return dateStr ? `${dateStr}-${titleStr}` : titleStr
+          const dateStr = typeof doc.date === 'string' ? doc.date.split('T')[0] : '';
+          const titleStr = typeof doc.title === 'string' ? doc.title : '';
+          return dateStr ? `${dateStr}-${titleStr}` : titleStr;
         },
         maxLength: 96,
         slugify: (input) =>
@@ -152,11 +152,14 @@ export const performance = defineType({
       title: '입장 방식',
       type: 'string',
       options: {
+        layout: 'radio',
+        direction: 'horizontal',
         list: [
-          {title: '입장번호순', value: '1'},
-          {title: '공연장대기순', value: '2'},
+          { title: '입장번호순', value: '1' },
+          { title: '공연장대기순', value: '2' },
         ],
       },
+      initialValue: '1',
     }),
 
     defineField({
@@ -164,11 +167,14 @@ export const performance = defineType({
       title: '관람 방식',
       type: 'string',
       options: {
+        layout: 'radio',
+        direction: 'horizontal',
         list: [
-          {title: '좌석', value: '1'},
-          {title: '입석', value: '2'},
+          { title: '좌석', value: '1' },
+          { title: '입석', value: '2' },
         ],
       },
+      initialValue: '1',
     }),
 
     defineField({
@@ -210,34 +216,18 @@ export const performance = defineType({
       media: 'poster',
     },
 
-    prepare({title, date, media, open, siteOnly}) {
+    prepare({ title, date, media, open, siteOnly }) {
       const getDate = new Date(date);
 
       const year = getDate.getFullYear();
-      const month = String(
-        getDate.getMonth() + 1
-      ).padStart(2, '0');
-      const day = String(
-        getDate.getDate()
-      ).padStart(2, '0');
+      const month = String(getDate.getMonth() + 1).padStart(2, '0');
+      const day = String(getDate.getDate()).padStart(2, '0');
 
-      const weekday = [
-        '일',
-        '월',
-        '화',
-        '수',
-        '목',
-        '금',
-        '토',
-      ][getDate.getDay()];
+      const weekday = ['일', '월', '화', '수', '목', '금', '토'][getDate.getDay()];
 
-      const hours = String(
-        getDate.getHours()
-      ).padStart(2, '0');
+      const hours = String(getDate.getHours()).padStart(2, '0');
 
-      const minutes = String(
-        getDate.getMinutes()
-      ).padStart(2, '0');
+      const minutes = String(getDate.getMinutes()).padStart(2, '0');
 
       const status = !open && !siteOnly ? ' · 매진' : '';
 
@@ -245,7 +235,7 @@ export const performance = defineType({
         title,
         subtitle: `${year}-${month}-${day} (${weekday}) ${hours}:${minutes}${status}`,
         media,
-      }
+      };
     },
   },
 
@@ -255,10 +245,10 @@ export const performance = defineType({
       name: 'orderDesc',
       by: [
         {
-          field: 'date', 
-          direction: 'desc'
+          field: 'date',
+          direction: 'desc',
         },
       ],
     },
   ],
-})
+});

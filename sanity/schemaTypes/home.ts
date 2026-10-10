@@ -123,6 +123,8 @@ export const home = defineType({
               title: '정렬',
               type: 'string',
               options: {
+                layout: 'radio',
+                direction: 'horizontal',
                 list: [
                   { title: 'Left', value: 'left' },
                   { title: 'Center', value: 'center' },
