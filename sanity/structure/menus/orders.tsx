@@ -2,7 +2,7 @@ import type { MenuFactory } from '../types';
 import { API_VERSION } from '../types';
 import type { StructureResolver } from 'sanity/structure';
 import { BillIcon } from '@sanity/icons/Bill';
-import { OrderCountBadge } from '../../components/StudioCountBadge';
+import { OrderCountBadge } from '../../components/ui/StudioCountBadge';
 export const createOrdersMenu: MenuFactory = (S) => {
   return S.listItem()
     .id('purchase-management') // 고유 ID 추가

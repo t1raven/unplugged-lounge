@@ -291,7 +291,7 @@ export const purchaseOrder = defineType({
             value: 'paid',
           },
           {
-            title: '배송중',
+            title: '배송 중',
             value: 'inTransit',
           },
           {
@@ -299,7 +299,7 @@ export const purchaseOrder = defineType({
             value: 'completed',
           },
           {
-            title: '취소',
+            title: '주문 취소',
             value: 'cancelled',
           },
         ],

@@ -1,23 +1,17 @@
-'use client'
+'use client';
 
-import {Badge} from '@sanity/ui'
+import { Badge } from '@sanity/ui';
 
-import {useStudioCounts} from './providers/StudioCountProvider'
+import { useStudioCounts } from '../providers/StudioCountProvider';
 
-type CategoryType = 'menuItem' | 'galleryItem' | 'goodsItem'
+type CategoryType = 'menuItem' | 'galleryItem' | 'goodsItem';
 
-type PerformanceType = 'today' | 'upcoming' | 'past'
+type PerformanceType = 'today' | 'upcoming' | 'past';
 
 type OrderStatus =
-  | 'all'
-  | 'pending'
-  | 'confirmed'
-  | 'paid'
-  | 'inTransit'
-  | 'completed'
-  | 'cancelled'
+  'all' | 'pending' | 'confirmed' | 'paid' | 'inTransit' | 'completed' | 'cancelled';
 
-function BadgeUI({count}: {count: number}) {
+function BadgeUI({ count }: { count: number }) {
   return (
     <Badge
       tone={count ? 'primary' : 'default'}
@@ -36,17 +30,11 @@ function BadgeUI({count}: {count: number}) {
     >
       {count ?? '…'}
     </Badge>
-  )
+  );
 }
 
-export function PerformanceCountBadge({
-  type,
-  year,
-}: {
-  type: PerformanceType
-  year?: number
-}) {
-  const counts = useStudioCounts()
+export function PerformanceCountBadge({ type, year }: { type: PerformanceType; year?: number }) {
+  const counts = useStudioCounts();
 
   return (
     <BadgeUI
@@ -56,7 +44,7 @@ export function PerformanceCountBadge({
           : counts.performance[type]
       }
     />
-  )
+  );
 }
 
 export function CategoryCountBadge({
@@ -64,11 +52,11 @@ export function CategoryCountBadge({
   categoryId,
   year,
 }: {
-  type: CategoryType
-  categoryId: string
-  year?: number | 'other'
+  type: CategoryType;
+  categoryId: string;
+  year?: number | 'other';
 }) {
-  const counts = useStudioCounts()
+  const counts = useStudioCounts();
 
   //return <BadgeUI count={counts[type][categoryId] ?? 0} />
   return (
@@ -79,11 +67,11 @@ export function CategoryCountBadge({
           : (counts[type][categoryId] ?? 0)
       }
     />
-  )
+  );
 }
 
-export function OrderCountBadge({status}: {status: OrderStatus}) {
-  const counts = useStudioCounts()
+export function OrderCountBadge({ status }: { status: OrderStatus }) {
+  const counts = useStudioCounts();
 
-  return <BadgeUI count={counts.orders[status]} />
+  return <BadgeUI count={counts.orders[status]} />;
 }

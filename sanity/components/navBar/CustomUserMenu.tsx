@@ -22,8 +22,13 @@ export default function CustomUserMenu() {
   const { auth } = useWorkspace();
 
   const handleLogout = async () => {
+    if (!auth || typeof auth.logout !== 'function') {
+      console.error('로그아웃을 사용할 수 없는 인증 상태입니다.');
+      return;
+    }
+
     try {
-      // 🌟 로그아웃 실행 (세션 및 쿠키 폐기)
+      // 로그아웃 실행 (세션 및 쿠키 폐기)
       await auth.logout();
       // 로그아웃 후 안전하게 새로고침 처리하여 초기 로그인 화면으로 이동
       window.location.reload();

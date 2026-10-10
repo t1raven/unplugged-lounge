@@ -4,13 +4,16 @@ import { visionTool } from '@sanity/vision';
 import { defineConfig } from 'sanity';
 import { structureTool } from 'sanity/structure';
 import { structure } from '@/sanity/structure';
+
 import { media } from 'sanity-plugin-media';
+
+import { dashboardTool } from '@/sanity/components/tools/dashboardTool';
 
 import { dataset, projectId } from '@/sanity/env';
 import { schemaTypes } from '@/sanity/schemaTypes';
 
 import { StudioCountProvider } from '@/sanity/components/providers/StudioCountProvider';
-import { CustomNavbar } from '@/sanity/components/navBar';
+import { default as CustomNavbar } from '@/sanity/components/navBar/CustomNavbar';
 
 import {
   DeletePerformanceAndGalleryAction,
@@ -40,6 +43,8 @@ export default defineConfig({
     // localhost에서만 Vision 표시
     ...(process.env.NODE_ENV === 'development' ? [visionTool()] : []),
   ],
+
+  tools: (prev) => [dashboardTool, ...prev.filter((tool) => tool.name !== 'dashboard')],
 
   schema: {
     types: schemaTypes,

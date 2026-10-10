@@ -1,5 +1,5 @@
 import { defineField, defineType } from 'sanity';
-import { PerformanceTimeInput, SalesTimeInput } from '../components/SelectTimeInput';
+import { PerformanceTimeInput, SalesTimeInput } from '../components/ui/SelectTimeInput';
 
 export const performance = defineType({
   name: 'performance',
