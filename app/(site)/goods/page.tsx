@@ -59,8 +59,7 @@ const listQuery = `
     },
 
     stock,
-    newItem,
-    bestItem,
+    label,
     soldOut
   }
 `;

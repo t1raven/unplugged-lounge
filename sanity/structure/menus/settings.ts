@@ -14,7 +14,9 @@ export const createSettingsMenu: MenuFactory = (S) => {
     .id('site-settings')
     .title('사이트 설정')
     .icon(CogIcon)
-    .child(S.document().schemaType('siteSettings').documentId('siteSettings').title('사이트 설정'));
+    .child(
+      S.document().schemaType('siteSettings').documentId('site-settings').title('사이트 설정'),
+    );
 };
 export const createStudioUsersMenu: MenuFactory = (S) => {
   return S.documentTypeListItem('studioUser').title('관리자 계정').icon(UsersIcon);

@@ -1,9 +1,9 @@
-import type {MenuFactory} from '../types'
-import {API_VERSION} from '../types'
-import {orderableDocumentListDeskItem} from '@sanity/orderable-document-list'
-import {PackageIcon} from '@sanity/icons/Package'
-import {TiersIcon} from '@sanity/icons/Tiers'
-import {CategoryCountBadge} from '../../components/StudioCountBadge'
+import type { MenuFactory } from '../types';
+import { API_VERSION } from '../types';
+import { orderableDocumentListDeskItem } from '@sanity/orderable-document-list';
+import { PackageIcon } from '@sanity/icons/Package';
+import { TiersIcon } from '@sanity/icons/Tiers';
+import { CategoryCountBadge } from '../../components/ui/StudioCountBadge';
 export const createGoodsCategoryMenu: MenuFactory = (S, context) => {
   return orderableDocumentListDeskItem({
     type: 'goodsCategory',
@@ -11,22 +11,21 @@ export const createGoodsCategoryMenu: MenuFactory = (S, context) => {
     icon: TiersIcon,
     S,
     context,
-  })
-}
+  });
+};
 export const createGoodsMenu: MenuFactory = (S, context) => {
-  const client = context.getClient({apiVersion: API_VERSION})
+  const client = context.getClient({ apiVersion: API_VERSION });
   return S.listItem()
     .id('goods-item')
     .title('굿즈 아이템')
     .icon(PackageIcon)
     .child(async () => {
-      const categories =
-        await client.fetch<
-          {
-            _id: string
-            title: string
-          }[]
-        >(`
+      const categories = await client.fetch<
+        {
+          _id: string;
+          title: string;
+        }[]
+      >(`
           *[_type == "goodsCategory"]
           | order(orderRank asc) {
             _id,
@@ -45,8 +44,7 @@ export const createGoodsMenu: MenuFactory = (S, context) => {
               title: `${category.title}`,
               icon: () => CategoryCountBadge({ type: 'goodsItem', categoryId: category._id }),
 
-              filter:
-                '_type == "goodsItem" && category._ref == $categoryId',
+              filter: '_type == "goodsItem" && category._ref == $categoryId',
 
               params: {
                 categoryId: category._id,
@@ -54,8 +52,8 @@ export const createGoodsMenu: MenuFactory = (S, context) => {
 
               S,
               context,
-            })
-          )
+            }),
+          ),
         );
-    })
-}
+    });
+};

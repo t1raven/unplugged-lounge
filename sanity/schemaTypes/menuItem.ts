@@ -1,22 +1,19 @@
-import {defineField, defineType} from 'sanity'
-import {orderRankField, orderRankOrdering} from '@sanity/orderable-document-list'
+import { defineField, defineType } from 'sanity';
+import { orderRankField, orderRankOrdering } from '@sanity/orderable-document-list';
 
 export const menuItem = defineType({
   name: 'menuItem',
   title: '카페 메뉴',
   type: 'document',
 
-  orderings: [
-    orderRankOrdering,
-  ],
+  orderings: [orderRankOrdering],
 
   fields: [
-
     orderRankField({
       type: 'menuCategory',
       newItemPosition: 'before',
     }),
-    
+
     defineField({
       name: 'name',
       title: '메뉴명',
@@ -58,17 +55,17 @@ export const menuItem = defineType({
     }),
 
     defineField({
-      name: 'newItem',
-      title: 'NEW',
-      type: 'boolean',
-      initialValue: true,
-    }),
-
-    defineField({
-      name: 'bestItem',
-      title: 'BEST',
-      type: 'boolean',
-      initialValue: false,
+      name: 'label',
+      title: '라벨',
+      type: 'array',
+      of: [{ type: 'string' }],
+      options: {
+        layout: 'list',
+        list: [
+          { title: 'NEW', value: 'new' },
+          { title: 'BEST', value: 'best' },
+        ],
+      },
     }),
 
     defineField({
@@ -88,15 +85,14 @@ export const menuItem = defineType({
       media: 'image',
     },
 
-    prepare({title, category, price, media, isAvailable}) {
-
+    prepare({ title, category, price, media, isAvailable }) {
       const status = !isAvailable ? ' · 판매중지' : '';
 
       return {
         title,
         subtitle: `${category ?? ''} · ${price ?? ''}${status}`,
         media,
-      }
+      };
     },
   },
-})
+});

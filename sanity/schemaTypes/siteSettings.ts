@@ -47,6 +47,7 @@ export const siteSettings = defineType({
           name: 'siteUrl',
           title: '사이트 URL',
           type: 'string',
+          description: '예: https://www.example.com',
           validation: (Rule) => Rule.required(),
         }),
 

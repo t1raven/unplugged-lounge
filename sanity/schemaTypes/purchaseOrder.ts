@@ -38,12 +38,11 @@ export const purchaseOrder = defineType({
             value: 'pickup',
           },
         ],
-
+        direction: 'horizontal',
         layout: 'radio',
       },
 
-      validation: (Rule) =>
-        Rule.required(),
+      validation: (Rule) => Rule.required(),
     }),
 
     defineField({
@@ -99,8 +98,7 @@ export const purchaseOrder = defineType({
       title: '구매 상품',
       type: 'array',
 
-      validation: (Rule) =>
-        Rule.required().min(1),
+      validation: (Rule) => Rule.required().min(1),
 
       of: [
         {
@@ -185,8 +183,7 @@ export const purchaseOrder = defineType({
               title: '실제 구매 단가',
               type: 'number',
               readOnly: true,
-              validation: (Rule) =>
-                Rule.required().min(0),
+              validation: (Rule) => Rule.required().min(0),
             },
 
             {
@@ -194,10 +191,7 @@ export const purchaseOrder = defineType({
               title: '수량',
               type: 'number',
               readOnly: true,
-              validation: (Rule) =>
-                Rule.required()
-                  .integer()
-                  .min(1),
+              validation: (Rule) => Rule.required().integer().min(1),
             },
 
             {
@@ -205,8 +199,7 @@ export const purchaseOrder = defineType({
               title: '상품 금액',
               type: 'number',
               readOnly: true,
-              validation: (Rule) =>
-                Rule.required().min(0),
+              validation: (Rule) => Rule.required().min(0),
             },
           ],
 
@@ -217,11 +210,7 @@ export const purchaseOrder = defineType({
               subtotal: 'subtotal',
             },
 
-            prepare({
-              name,
-              quantity,
-              subtotal,
-            }) {
+            prepare({ name, quantity, subtotal }) {
               return {
                 title: `${name} × ${quantity}`,
                 subtitle: `${subtotal?.toLocaleString() ?? 0}원`,
@@ -238,9 +227,7 @@ export const purchaseOrder = defineType({
       type: 'number',
       readOnly: true,
 
-      validation: (Rule) =>
-        Rule.required()
-          .min(0),
+      validation: (Rule) => Rule.required().min(0),
     }),
 
     defineField({
@@ -249,9 +236,7 @@ export const purchaseOrder = defineType({
       type: 'number',
       readOnly: true,
 
-      validation: (Rule) =>
-        Rule.required()
-          .min(0),
+      validation: (Rule) => Rule.required().min(0),
     }),
 
     defineField({
@@ -260,9 +245,7 @@ export const purchaseOrder = defineType({
       type: 'number',
       readOnly: true,
 
-      validation: (Rule) =>
-        Rule.required()
-          .min(0),
+      validation: (Rule) => Rule.required().min(0),
     }),
 
     defineField({
@@ -308,7 +291,7 @@ export const purchaseOrder = defineType({
             value: 'paid',
           },
           {
-            title: '배송중',
+            title: '배송 중',
             value: 'inTransit',
           },
           {
@@ -316,11 +299,11 @@ export const purchaseOrder = defineType({
             value: 'completed',
           },
           {
-            title: '취소',
+            title: '주문 취소',
             value: 'cancelled',
           },
         ],
-
+        direction: 'horizontal',
         layout: 'radio',
       },
 
@@ -347,8 +330,7 @@ export const purchaseOrder = defineType({
       title: 'Google Sheets 오류',
       type: 'text',
       readOnly: true,
-      hidden: ({ document }) =>
-        document?.sheetSynced === true,
+      hidden: ({ document }) => document?.sheetSynced === true,
     }),
   ],
 
@@ -385,18 +367,8 @@ export const purchaseOrder = defineType({
       status: 'status',
     },
 
-    prepare({
-      orderNumber,
-      customerName,
-      deliveryMethod,
-      totalPrice,
-      status,
-    }) {
-      const deliveryLabel =
-        deliveryMethod ===
-        'delivery'
-          ? '배송'
-          : '픽업';
+    prepare({ orderNumber, customerName, deliveryMethod, totalPrice, status }) {
+      const deliveryLabel = deliveryMethod === 'delivery' ? '배송' : '픽업';
 
       const statusLabels: Record<string, string> = {
         pending: '신청',
@@ -414,9 +386,7 @@ export const purchaseOrder = defineType({
 
           `${totalPrice?.toLocaleString() ?? 0}원`,
 
-          statusLabels[
-            status
-          ] ?? status,
+          statusLabels[status] ?? status,
         ].join(' · '),
       };
     },

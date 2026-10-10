@@ -1,0 +1,71 @@
+.custom-navbar {
+  &__inner {
+    gap: 16px;
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    text-decoration: none;
+    color: inherit;
+
+    &-image {
+      width: auto;
+      height: 40px;
+      object-fit: contain;
+    }
+
+    &-text {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+  }
+
+  &__menu {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &__menu-button {
+    font-size: 12px !important;
+  }
+
+  &__action {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 768px) {
+    &__inner {
+      gap: 8px;
+    }
+
+    &__logo-text {
+      display: none;
+    }
+
+    &__menu {
+      gap: 0;
+    }
+
+    &__action {
+      *[data-ui='Text'] {
+        font-size: 12px !important;
+      }
+      & > span {
+        padding-left: 2px;
+        padding-right: 2px;
+        & > span {
+          gap: 6px;
+        }
+      }
+      &.site_url {
+        display: none;
+      }
+    }
+  }
+}
