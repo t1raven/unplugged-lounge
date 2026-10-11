@@ -1,10 +1,8 @@
 /* --------------------------------
    MENU LIST
 -------------------------------- */
-
 .menu-list {
-  max-width: 1400px;
-  margin: 0 auto;
+  min-height: 50vh;
 }
 
 .menu-grid {
@@ -120,36 +118,20 @@
 }
 
 /* --------------------------------
-   LOADING
--------------------------------- */
-
-.menu-loading {
-  display: flex;
-
-  justify-content: center;
-  align-items: center;
-
-  min-height: 300px;
-
-  color: var(--font-sec-color);
-
-  font-size: 1em;
-
-  letter-spacing: 0.2em;
-}
-
-/* --------------------------------
    EMPTY
 -------------------------------- */
 
 .menu-empty {
-  padding: 100px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  color: var(--font-sec-color);
+  min-height: 320px;
 
   font-size: 1em;
-
   text-align: center;
+
+  color: var(--font-sec-color);
 }
 
 /* --------------------------------

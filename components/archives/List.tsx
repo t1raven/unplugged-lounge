@@ -7,10 +7,14 @@ import { Image } from '@/components/ui/Skeleton';
 import { urlFor } from '@/sanity/lib/image';
 
 import CategoryNav from '@/components/common/CategoryNav';
+import useScrollToCategory from '@/hooks/useScrollToCategory';
+
 import Modal from './Modal';
 
 import type { Category } from '@/types/category';
 import type { Archive } from '@/types/archive';
+
+import { Loading } from '@/components/ui/Skeleton';
 
 import './List.scss';
 
@@ -39,15 +43,17 @@ export default function ArchiveList({ categories, items: initialItems }: Props) 
   const [page, setPage] = useState(1);
 
   const [loading, setLoading] = useState(false);
+  const [moreLoading, setMoreLoading] = useState(false);
   const [hasMore, setHasMore] = useState(initialItems.length === PAGE_SIZE);
 
+  const scrollToCategory = useScrollToCategory();
   /*
    * 다음 페이지 로드
    */
   const loadMore = useCallback(async () => {
-    if (loading || !hasMore) return;
+    if (moreLoading || !hasMore) return;
 
-    setLoading(true);
+    setMoreLoading(true);
 
     try {
       const nextPage = page + 1;
@@ -75,9 +81,9 @@ export default function ArchiveList({ categories, items: initialItems }: Props) 
     } catch (error) {
       console.error(error);
     } finally {
-      setLoading(false);
+      setMoreLoading(false);
     }
-  }, [page, activeCategory, loading, hasMore, items.length, search]);
+  }, [page, activeCategory, moreLoading, hasMore, items.length, search]);
 
   /*
    * IntersectionObserver
@@ -104,27 +110,6 @@ export default function ArchiveList({ categories, items: initialItems }: Props) 
     return () => observer.disconnect();
   }, [loadMore, hasMore]);
 
-  const scrollToCategory = () => {
-    const element = document.querySelector('.category_search_nav');
-
-    if (!element) return;
-
-    const elementPrev = element.previousElementSibling;
-
-    if (elementPrev?.scrollHeight && elementPrev.scrollHeight >= window.scrollY) return;
-
-    const header = document.getElementById('site-header');
-
-    if (!header || !elementPrev) return;
-
-    const top = elementPrev.scrollHeight - header.getBoundingClientRect().height;
-
-    window.scrollTo({
-      top,
-      behavior: 'smooth',
-    });
-  };
-
   /*
    * 카테고리 변경
    */
@@ -132,9 +117,11 @@ export default function ArchiveList({ categories, items: initialItems }: Props) 
     async (category: string) => {
       if (category === activeCategory) return;
 
+      scrollToCategory();
       setActiveCategory(category);
       setPage(1);
-      setHasMore(true);
+      setHasMore(false);
+      setMoreLoading(false);
       setLoading(true);
 
       try {
@@ -158,10 +145,6 @@ export default function ArchiveList({ categories, items: initialItems }: Props) 
 
         setItems(data.items);
         setHasMore(data.hasMore);
-
-        requestAnimationFrame(() => {
-          scrollToCategory();
-        });
       } catch (error) {
         console.error(error);
         setItems([]);
@@ -170,7 +153,7 @@ export default function ArchiveList({ categories, items: initialItems }: Props) 
         setLoading(false);
       }
     },
-    [activeCategory, search],
+    [activeCategory, search, scrollToCategory],
   );
 
   /*
@@ -315,7 +298,9 @@ export default function ArchiveList({ categories, items: initialItems }: Props) 
       <section className="sub-page-section gallery">
         <div className="inner">
           <div className="gallery__list" ref={gridRef}>
-            {items.length > 0 ? (
+            {loading ? (
+              <Loading loading={loading} />
+            ) : items.length ? (
               <div className="gallery__grid">
                 {items.map((item, index) => (
                   <button
@@ -346,13 +331,10 @@ export default function ArchiveList({ categories, items: initialItems }: Props) 
             ) : null}
 
             {/* 무한스크롤 감지 영역 */}
-            {hasMore && <div ref={sentinelRef} className="gallery__sentinel" aria-hidden="true" />}
-
-            {/*{loading && (
-              <div className="gallery__loading">
-                Loading...
-              </div>
-            )}*/}
+            {hasMore && !moreLoading && (
+              <div ref={sentinelRef} className="gallery__sentinel" aria-hidden="true" />
+            )}
+            {moreLoading && <Loading loading={moreLoading} />}
           </div>
         </div>
       </section>
