@@ -12,7 +12,7 @@ interface SkeletonProps {
 
 export default function Skeleton({
   width = '100%',
-  height,
+  height = '100%',
   aspectRatio,
   radius,
   className = '',

@@ -21,7 +21,7 @@ import './View.scss';
 
 import heroKvImage from '@/public/images/common/site-sub-hero-kv.png';
 
-import { SkeletonImage } from '@/components/ui/Skeleton';
+import { Image as SkeletonImage } from '@/components/ui/Skeleton';
 
 const admissionTypeNames: Record<string, string> = {
   1: '입장번호순',
