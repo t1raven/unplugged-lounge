@@ -7,13 +7,13 @@ import Skeleton from './Skeleton';
 export default function Image({
   className = '',
   src,
-  alt,
+  alt = '',
   size,
   children,
 }: {
   className?: string;
   src: string;
-  alt: string;
+  alt?: string | undefined;
   size?: number | string;
   children?: React.ReactNode;
 }) {

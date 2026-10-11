@@ -50,7 +50,7 @@ function ArchiveImage({ item }: { item: Archive }) {
         <Image
           ref={imageRef}
           src={item.imageUrl}
-          alt={item.title}
+          alt={item.title ?? ''}
           fill
           sizes="(max-width: 768px) 100vw, 50vw"
           onLoad={() => setImageLoaded(true)}
@@ -137,6 +137,17 @@ export default function ArchiveModal({ items, currentIndex, onClose, onPrev, onN
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [onPrev, onNext]);
+
+  /*
+   * Modal 열렸을 때 body scroll 방지
+   */
+  useEffect(() => {
+    document.body.style.overflow = currentIndex !== null ? 'hidden' : '';
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [currentIndex]);
 
   if (!item) return null;
 
