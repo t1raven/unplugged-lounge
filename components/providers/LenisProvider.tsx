@@ -16,6 +16,8 @@ gsap.registerPlugin(ScrollTrigger);
 interface LenisContextValue {
   start: () => void;
   stop: () => void;
+  resize: () => void;
+  scrollTo: (top: number, options?: { immediate: boolean }) => void;
   scrollToTop: () => void;
 }
 
@@ -92,8 +94,16 @@ export default function LenisProvider({ children }: LenisProviderProps) {
     lenisRef.current?.stop();
   };
 
+  const resize = () => {
+    lenisRef.current?.resize();
+  };
+
+  const scrollTo = (top: number, options?: { immediate: boolean }) => {
+    lenisRef.current?.scrollTo(top, options);
+  };
+
   const scrollToTop = () => {
-    lenisRef.current?.scrollTo(0);
+    lenisRef.current?.scrollTo(0, { immediate: true });
   };
 
   return (
@@ -101,6 +111,8 @@ export default function LenisProvider({ children }: LenisProviderProps) {
       value={{
         start,
         stop,
+        resize,
+        scrollTo,
         scrollToTop,
       }}
     >

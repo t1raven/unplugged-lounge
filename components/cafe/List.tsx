@@ -4,11 +4,14 @@ import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 
 import CategoryNav from '@/components/common/CategoryNav';
+import useScrollToCategory from '@/hooks/useScrollToCategory';
 
 import MenuCard from './Card';
 
 import type { Category } from '@/types/category';
 import type { Cafe } from '@/types/cafe';
+
+import { Loading } from '@/components/ui/Skeleton';
 
 import './style.scss';
 
@@ -28,26 +31,9 @@ export default function MenuList({ categories, items: initialItems }: Props) {
 
   const [items, setItems] = useState<Cafe[]>(initialItems);
 
-  function scrollToCategory() {
-    const element = document.querySelector('.category_search_nav');
+  const [loading, setLoading] = useState(false);
 
-    if (!element) return;
-
-    const elementPrev = element.previousElementSibling;
-
-    if (elementPrev && elementPrev.scrollHeight >= window.scrollY) return;
-
-    const header = document.getElementById('site-header');
-
-    if (!elementPrev || !header) return;
-
-    const top = elementPrev.scrollHeight - header.getBoundingClientRect().height;
-
-    window.scrollTo({
-      top,
-      behavior: 'smooth',
-    });
-  }
+  const scrollToCategory = useScrollToCategory();
 
   /*
    * 카테고리 변경
@@ -56,7 +42,10 @@ export default function MenuList({ categories, items: initialItems }: Props) {
     async (category: string) => {
       if (category === activeCategory) return;
 
+      scrollToCategory();
       setActiveCategory(category);
+      setLoading(true);
+
       const params = new URLSearchParams({
         category,
       });
@@ -74,12 +63,9 @@ export default function MenuList({ categories, items: initialItems }: Props) {
       previousLengthRef.current = 0;
 
       setItems(data.items);
-
-      requestAnimationFrame(() => {
-        scrollToCategory();
-      });
+      setLoading(false);
     },
-    [activeCategory],
+    [activeCategory, scrollToCategory],
   );
 
   /*
@@ -134,19 +120,19 @@ export default function MenuList({ categories, items: initialItems }: Props) {
         handleCategory={handleCategoryChange}
       />
 
-      <section className="sub-page-section menu-content">
+      <section className="sub-page-section menu-list">
         <div className="inner">
-          <div className="menu-list">
-            {items.length ? (
-              <div className="menu-grid" ref={gridRef}>
-                {items.map((item) => (
-                  <MenuCard item={item} key={item._id} />
-                ))}
-              </div>
-            ) : (
-              <div className="menu-empty">등록된 메뉴가 없습니다.</div>
-            )}
-          </div>
+          {loading ? (
+            <Loading loading={loading} />
+          ) : items.length ? (
+            <div className="menu-grid" ref={gridRef}>
+              {items.map((item) => (
+                <MenuCard item={item} key={item._id} />
+              ))}
+            </div>
+          ) : (
+            <div className="menu-empty">등록된 메뉴가 없습니다.</div>
+          )}
         </div>
       </section>
     </>

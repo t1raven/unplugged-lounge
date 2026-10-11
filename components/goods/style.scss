@@ -272,30 +272,15 @@
 }
 
 /* --------------------------------
-   LOADING
--------------------------------- */
-
-.goods-loading {
-  display: flex;
-
-  justify-content: center;
-  align-items: center;
-
-  min-height: 300px;
-
-  color: var(--font-sec-color);
-
-  font-size: 1em;
-
-  letter-spacing: 0.2em;
-}
-
-/* --------------------------------
    EMPTY
 -------------------------------- */
 
 .goods-empty {
-  padding: 100px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 320px;
 
   font-size: 1em;
   text-align: center;
