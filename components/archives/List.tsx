@@ -232,17 +232,6 @@ export default function ArchiveList({ categories, items: initialItems }: Props) 
     });
   }, [items.length]);
 
-  /*
-   * Modal 열렸을 때 body scroll 방지
-   */
-  useEffect(() => {
-    document.body.style.overflow = selectedIndex !== null ? 'hidden' : '';
-
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [selectedIndex]);
-
   const handleSearch = useCallback(async () => {
     const keyword = searchInput.trim();
 
@@ -312,7 +301,7 @@ export default function ArchiveList({ categories, items: initialItems }: Props) 
                     <Image
                       className="gallery__image"
                       src={item.imageUrl ? urlFor(item.imageUrl).width(600).url() : ''}
-                      alt={item.title}
+                      alt={item.title ?? ''}
                       size={600}
                     >
                       {item.label && <div className="label">{item.label}</div>}
