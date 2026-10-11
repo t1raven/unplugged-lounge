@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import Image from 'next/image';
+import { Image } from '@/components/ui/Skeleton';
 import { urlFor } from '@/sanity/lib/image';
 
 import { useCart } from '@/components/providers/CartProvider';
@@ -79,17 +79,12 @@ export default function GoodsCard({ goods, onOpenOptionModal }: Props) {
           </div>
         )}
 
-        <div className="goods-card__image">
-          {goods.image && (
-            <Image
-              src={urlFor(goods.image).width(600).url()}
-              alt={goods.name}
-              fill
-              priority
-              sizes="(max-width: 768px) 50vw, 400px"
-            />
-          )}
-        </div>
+        <Image
+          className="goods-card__image"
+          src={goods.image ? urlFor(goods.image).width(600).url() : ''}
+          alt={goods.name}
+          size={600}
+        />
 
         <button
           type="button"

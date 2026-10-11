@@ -8,7 +8,7 @@ import useFadeUpEffect from '@/hooks/useFadeUpEffect';
 import type { Performance } from '@/types/performance';
 import { formatDate, formatTime, formatWeekDay, formatDDay } from '@/utils/date';
 
-import { SkeletonImage } from '@/components/ui/Skeleton';
+import { Image } from '@/components/ui/Skeleton';
 
 import './List.scss';
 
@@ -419,7 +419,7 @@ export default function PerformanceCalendar({ performances }: Props) {
                   <>
                     <div className="performance-time">{formatPerformanceTime(performance)}</div>
 
-                    <SkeletonImage
+                    <Image
                       className="performance-poster"
                       src={
                         performance.poster?.asset ? urlFor(performance.poster).width(100).url() : ''
@@ -501,7 +501,7 @@ export default function PerformanceCalendar({ performances }: Props) {
                       </span>
                     </div>
 
-                    <SkeletonImage
+                    <Image
                       className="performance-poster"
                       src={
                         performance.poster?.asset ? urlFor(performance.poster).width(100).url() : ''

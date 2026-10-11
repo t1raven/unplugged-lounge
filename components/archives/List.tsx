@@ -3,7 +3,7 @@
 import { useEffect, useCallback, useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 
-import Image from 'next/image';
+import { Image } from '@/components/ui/Skeleton';
 import { urlFor } from '@/sanity/lib/image';
 
 import CategoryNav from '@/components/common/CategoryNav';
@@ -324,16 +324,14 @@ export default function ArchiveList({ categories, items: initialItems }: Props) 
                     className="gallery__item"
                     onClick={() => handleOpenModal(index)}
                   >
-                    <div className="gallery__image">
+                    <Image
+                      className="gallery__image"
+                      src={item.imageUrl ? urlFor(item.imageUrl).width(600).url() : ''}
+                      alt={item.title}
+                      size={600}
+                    >
                       {item.label && <div className="label">{item.label}</div>}
-                      <Image
-                        src={urlFor(item.imageUrl).width(600).url()}
-                        alt={item.title}
-                        fill
-                        priority
-                        sizes="(max-width: 768px) 50vw, 600px"
-                      />
-                    </div>
+                    </Image>
 
                     {item.category?._id != '3eb51abf-f89b-4350-a9fa-2f0eac2514c4' && (
                       <div className="gallery__info">
