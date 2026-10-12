@@ -344,24 +344,10 @@
   }
 
   .description-content {
-    max-width: 900px;
-    font-size: 1em;
-    line-height: 2;
+    max-width: 750px;
+    font-size: 1rem;
+    line-height: 1.5;
     color: var(--font-sec-color);
-
-    p {
-      margin: 0 0 25px;
-    }
-
-    h2,
-    h3 {
-      margin: 50px 0 20px;
-      color: #f5f3ee;
-    }
-
-    strong {
-      color: #f5f3ee;
-    }
   }
 
   // ==================================================
@@ -473,7 +459,7 @@
     }
 
     .performance-description {
-      padding-bottom: 80px;
+      padding-bottom: 120px;
     }
 
     .section-heading {
@@ -505,10 +491,6 @@
       h2 {
         font-size: 26px;
       }
-    }
-
-    .performance-back {
-      padding-bottom: 100px;
     }
   }
 }
