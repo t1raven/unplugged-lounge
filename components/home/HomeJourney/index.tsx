@@ -157,7 +157,9 @@ export default function HomeJourney({ children }: { children: ReactNode }) {
                 start: () =>
                   'top+=' + element.offsetHeight * (name === 'about' ? 0.04 : 0.12) + ' 80%',
                 end: () =>
-                  'top+=' + element.offsetHeight * (name === 'about' ? 0.9 : 0.95) + ' 65%',
+                  name === 'location'
+                    ? 'bottom 85%'
+                    : 'top+=' + element.offsetHeight * (name === 'about' ? 0.9 : 0.95) + ' 65%',
                 scrub: 0.4,
               },
             },
