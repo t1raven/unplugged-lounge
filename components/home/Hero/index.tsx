@@ -3,7 +3,9 @@
 import { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { HERO_PATHS, VIEWBOX, exitOrangeWave } from './paths';
+import { HERO_PATHS, VIEWBOX } from './paths';
+import useLiquidEase from '@/hooks/useLiquidEase';
+
 import Image from 'next/image';
 import { urlFor } from '@/sanity/lib/image';
 
@@ -21,6 +23,8 @@ interface Props {
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero({ data }: Props) {
+  useLiquidEase();
+
   const rootRef = useRef<HTMLElement>(null);
 
   useLayoutEffect(() => {
@@ -80,8 +84,8 @@ export default function Hero({ data }: Props) {
     const media = gsap.matchMedia();
     media.add(
       {
-        desktop: '(min-width: 768px)',
-        mobile: '(max-width: 767px)',
+        desktop: '(min-width: 769px)',
+        mobile: '(max-width: 768px)',
         reduce: '(prefers-reduced-motion: reduce)',
       },
       (context) => {
@@ -89,16 +93,14 @@ export default function Hero({ data }: Props) {
         // matchMedia reverts previous animations before preferences change.
         if (context.conditions?.reduce) return;
 
-        const stage = root.querySelector<HTMLElement>('.hero__stage')!;
         const svg = root.querySelector<SVGSVGElement>('.hero__artwork')!;
         const wave = svg.querySelector<SVGPathElement>('[data-scroll-path="orange-wave"]')!;
         const paths = svg.querySelectorAll<SVGPathElement>('[data-scroll-path]');
-        const mobile = Boolean(context.conditions?.mobile);
 
         // pathLength="1" normalizes dashes; getTotalLength() would mix units.
         gsap.set(paths, { attr: { 'stroke-dasharray': 1, 'stroke-dashoffset': 1 } });
         gsap.set(wave, { attr: { 'stroke-dashoffset': -1 } });
-        const intro = gsap.timeline({ defaults: { ease: 'power2.out' } });
+        const intro = gsap.timeline({ defaults: { ease: 'liquidEase' } });
         const draw = (id: string, at: number, duration: number) => {
           intro.to(
             svg.querySelector('[data-scroll-path="' + id + '"]'),
@@ -109,9 +111,9 @@ export default function Hero({ data }: Props) {
             at,
           );
         };
-        draw('orange-guitar', 0.25, 1.35);
-        draw('blue-top', 0.45, 1.05);
-        draw('blue-bottom', 0.65, 1.05);
+        draw('orange-guitar', 2, 2.55);
+        draw('blue-top', 2.65, 1.15);
+        draw('blue-bottom', 2.85, 1.15);
         /* draw('orange-wave', 1.5, 1.5); */
 
         /* intro.from(
@@ -160,6 +162,11 @@ export default function Hero({ data }: Props) {
           aria-hidden="true"
           focusable="false"
         >
+          <defs>
+            <filter id="svg-blur" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="2" />
+            </filter>
+          </defs>
           <g strokeLinecap="round" strokeLinejoin="round">
             {HERO_PATHS.map((path) => (
               <path
@@ -168,8 +175,10 @@ export default function Hero({ data }: Props) {
                 data-scroll-path={path.id}
                 pathLength={1}
                 stroke={path.stroke}
+                opacity={0.7}
                 strokeWidth={path.strokeWidth}
                 d={path.d}
+                filter="url(#svg-blur)"
               />
             ))}
           </g>

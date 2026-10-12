@@ -1,5 +1,5 @@
 // Exact geometry, paint and drawing order from unplugged-scroll-path.svg.
-export const VIEWBOX = { width: 2048, height: 724 } as const;
+export const VIEWBOX = { width: 2048, height: 640 } as const;
 export const HERO_PATHS = [
   {
     id: 'blue-top',
@@ -19,15 +19,15 @@ export const HERO_PATHS = [
     strokeWidth: 46,
     d: 'M1376 506 C1465 571 1583 592 1684 577 C1823 556 1940 468 1975 334',
   },
-  {
+  /* {
     id: 'orange-wave',
     stroke: '#F57900',
     strokeWidth: 62,
     d: 'M-38 369 C62 390 133 540 233 602 C341 665 509 632 669 557 C814 490 929 400 1035 435 C1194 480 1323 605 1502 653 C1704 711 1870 584 2085 588',
-  },
+  }, */
 ] as const;
 
 export function exitOrangeWave(): string {
   // Keep the artwork and join tangent, while sending the left end off canvas.
-  return HERO_PATHS[3].d.replace('M-38 369 C62 390', 'M-240 520 C-120 540');
+  return HERO_PATHS[2].d.replace('M-38 369 C62 390', 'M-240 520 C-120 540');
 }

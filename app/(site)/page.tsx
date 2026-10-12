@@ -1,6 +1,6 @@
 import { client } from '@/sanity/lib/client';
 
-import HomeJourney from '@/components/home/HomeJourney';
+import ScrollPath from '@/components/home/ScrollPath';
 import Hero from '@/components/home/Hero';
 import Upcoming from '@/components/home/Upcoming';
 import About from '@/components/home/About';
@@ -77,12 +77,12 @@ export default async function Home() {
 
   return (
     <main id="site-body" className="home" style={{ paddingTop: 'var(--header-height)' }}>
-      <HomeJourney>
+      <ScrollPath>
         <Hero data={home.hero} />
         <Upcoming performances={performances} />
         <About data={home.about} />
         <Location data={siteInfo?.general ?? {}} />
-      </HomeJourney>
+      </ScrollPath>
     </main>
   );
 }

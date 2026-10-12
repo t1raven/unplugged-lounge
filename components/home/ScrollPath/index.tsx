@@ -3,25 +3,27 @@
 import { useLayoutEffect, useRef, type ReactNode } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
 import './style.scss';
 
 const SECTIONS = ['upcoming', 'about', 'location'] as const;
 
-export default function HomeJourney({ children }: { children: ReactNode }) {
+gsap.registerPlugin(ScrollTrigger);
+
+export default function ScrollPath({ children }: { children: ReactNode }) {
   const rootRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     const root = rootRef.current;
     if (!root) return;
-    const svg = root.querySelector<SVGSVGElement>('.home-journey__line');
+    const svg = root.querySelector<SVGSVGElement>('.home-scroll-path__line');
     const sections = SECTIONS.map((name) => ({
       name,
       element: root.querySelector<HTMLElement>('.' + name),
-      path: svg?.querySelector<SVGPathElement>('[data-journey-path="' + name + '"]'),
+      path: svg?.querySelector<SVGPathElement>('[data-scroll-path="' + name + '"]'),
     }));
     if (!svg || sections.some(({ element, path }) => !element || !path)) return;
 
-    gsap.registerPlugin(ScrollTrigger);
     const media = gsap.matchMedia();
     media.add(
       '(prefers-reduced-motion: no-preference)',
@@ -29,24 +31,27 @@ export default function HomeJourney({ children }: { children: ReactNode }) {
         const measure = () => {
           // Use layout dimensions, ignoring existing entrance/parallax transforms.
           const width = root.clientWidth;
-          const stroke = Math.min(64, Math.max(10, (width * 62) / 2048));
+          const stroke = Math.min(62, Math.max(24, (width * 62) / 2048));
           const pad = stroke * 2;
           svg.setAttribute('viewBox', '0 0 ' + width + ' ' + root.offsetHeight);
           sections.forEach(({ name, element, path }) => {
             if (!element || !path) return;
             const top = element.offsetTop;
             const h = element.offsetHeight;
-            const point = (x: number, y: number) => width * x + ' ' + (top + h * y);
+            if (name === 'location') console.log('width:', width, 'top:', top, 'height:', h);
+            const point = (x: number, y: number) =>
+              Math.trunc(width * x) + ' ' + Math.trunc(top + h * y);
             const left = -pad;
             const right = width + pad;
             let d: string;
+            let opacity = 0.3;
             if (name === 'upcoming') {
               // Right -> left: a shallow wave across the performance section.
               d =
                 'M' +
                 right +
                 ' ' +
-                (top + h * 0.42) +
+                Math.trunc(top + h * 0.22) +
                 ' C' +
                 point(0.96, 0.34) +
                 ' ' +
@@ -66,14 +71,14 @@ export default function HomeJourney({ children }: { children: ReactNode }) {
                 ' ' +
                 left +
                 ' ' +
-                (top + h * 0.35);
+                Math.trunc(top + h * 0.75);
             } else if (name === 'about') {
               // Left -> right: a longer descending S through the image gallery.
               d =
                 'M' +
                 left +
                 ' ' +
-                (top + h * 0.03) +
+                Math.trunc(top + h * 0.03) +
                 ' C' +
                 point(0.27, 0.02) +
                 ' ' +
@@ -85,7 +90,7 @@ export default function HomeJourney({ children }: { children: ReactNode }) {
                 ' ' +
                 point(0.58, 0.26) +
                 ' ' +
-                point(0.66, 0.35) +
+                point(0.7, 0.37) +
                 ' C' +
                 point(0.84, 0.48) +
                 ' ' +
@@ -99,43 +104,39 @@ export default function HomeJourney({ children }: { children: ReactNode }) {
                 ' ' +
                 right +
                 ' ' +
-                (top + h * 0.83);
+                Math.trunc(top + h * 0.83);
             } else {
               // Right -> left: finish outside the left edge, within Location.
               d =
                 'M' +
                 right +
                 ' ' +
-                (top + h * 0.52) +
+                Math.trunc(top + h * 0.1) +
                 ' C' +
-                point(0.96, 0.52) +
+                point(0.98, 0.1) +
                 ' ' +
-                point(0.91, 0.75) +
+                point(0.87, 0.68) +
                 ' ' +
-                point(0.85, 0.7) +
+                point(0.7, 0.58) +
                 ' C' +
-                point(0.73, 0.6) +
+                point(0.55, 0.5) +
                 ' ' +
-                point(0.69, 0.25) +
+                point(0.48, 0.31) +
                 ' ' +
-                point(0.57, 0.33) +
+                point(0.36, 0.33) +
                 ' C' +
-                point(0.45, 0.41) +
+                point(0.3, 0.34) +
                 ' ' +
-                point(0.35, 0.82) +
-                ' ' +
-                point(0.25, 0.7) +
-                ' C' +
-                point(0.1, 0.52) +
-                ' ' +
-                point(0.14, 0.2) +
+                point(0.1, 0.5) +
                 ' ' +
                 left +
                 ' ' +
-                (top + h * 0.2);
+                Math.trunc(top + h * 0.97);
+              opacity = 0.7;
             }
             path.setAttribute('d', d);
             path.setAttribute('stroke-width', String(stroke));
+            path.setAttribute('opacity', String(opacity));
           });
         };
 
@@ -197,25 +198,32 @@ export default function HomeJourney({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <div className="home-journey" ref={rootRef}>
+    <div className="home-scroll-path" ref={rootRef}>
       {children}
       <svg
-        className="home-journey__line"
+        className="home-scroll-path__line"
         aria-hidden="true"
         focusable="false"
         preserveAspectRatio="none"
       >
+        <defs>
+          <filter id="svg-blur" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="2" />
+          </filter>
+        </defs>
         {SECTIONS.map((name) => (
           <path
             key={name}
-            data-journey-path={name}
+            data-scroll-path={name}
             fill="none"
             stroke="#F57900"
+            opacity={0.3}
             strokeLinecap="round"
             strokeLinejoin="round"
             pathLength={1}
             strokeDasharray={1}
             strokeDashoffset={1}
+            filter="url(#svg-blur)"
           />
         ))}
       </svg>
