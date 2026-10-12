@@ -1,9 +1,16 @@
 .hero {
   position: relative;
-  height: -webkit-fill-available; 
+  isolation: isolate;
+  height: -webkit-fill-available;
   height: calc(100vh - var(--header-height));
   max-height: 1440px;
-  overflow: hidden;
+  overflow: clip;
+
+  &__stage {
+    position: relative;
+    height: calc(100svh - var(--header-height));
+    min-height: 620px;
+  }
 
   &__image {
     position: absolute;
@@ -12,7 +19,7 @@
     background-position: center;
     background-size: cover; */
     transform-origin: center center;
-    
+
     & img {
       object-fit: cover;
     }
@@ -22,12 +29,21 @@
     position: absolute;
     inset: 0;
 
-    background:
-      linear-gradient(
-        to top,
-        rgba(0, 0, 0, 0.15),
-        rgba(0, 0, 0, 0.85)
-      );
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.85));
+  }
+
+  &__artwork {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 2048 / 724;
+    // Uniform scale preserves artwork; the left end exits outside the canvas.
+    overflow: visible;
+    pointer-events: none;
+    opacity: 1;
   }
 
   &__content {
@@ -40,8 +56,8 @@
     display: flex;
     flex-direction: column;
 
-    width: var(--inner-width); 
-    max-width: var(--inner-max-width); 
+    width: var(--inner-width);
+    max-width: var(--inner-max-width);
     margin: 0 auto;
   }
 
@@ -104,6 +120,10 @@
 @media (max-width: 767px) {
   .hero {
     min-height: 600px;
+
+    &__stage {
+      min-height: 580px;
+    }
 
     &__scroll {
       bottom: 160px;
