@@ -1,9 +1,9 @@
 'use client';
 
-import Image from 'next/image';
-
 import type { CartItem } from '@/types/cart';
 import { getGoodsUnitPrice } from '@/lib/goodsPrice';
+import { Image } from '@/components/ui/Skeleton';
+import { urlFor } from '@/sanity/lib/image';
 import { Button } from '@/components/ui/Button';
 
 interface Props {
@@ -43,14 +43,6 @@ export default function Cart({
 }: Props) {
   return (
     <>
-      {/* <div className="cart-header">
-        <h2>장바구니</h2>
-
-        <button type="button" className="cart-close" onClick={closeCart} aria-label="닫기">
-          <span className="material-symbols-rounded">close</span>
-        </button>
-      </div> */}
-
       {items.length === 0 ? (
         <div className="cart-empty">장바구니가 비어 있습니다.</div>
       ) : (
@@ -65,9 +57,12 @@ export default function Cart({
 
               return (
                 <article key={item.cartId} className="cart-item">
-                  <div className="cart-image">
-                    {item.image && <Image src={item.image} alt={item.name} fill sizes="96px" />}
-                  </div>
+                  <Image
+                    className="cart-image"
+                    src={item.image ? urlFor(item.image).width(90).url() : ''}
+                    alt={item.name}
+                    size={90}
+                  />
 
                   <div className="cart-info">
                     <div className="cart-item-head">

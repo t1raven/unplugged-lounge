@@ -1,6 +1,6 @@
 .gallery {
   width: 100%;
-  
+
   &__grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -29,15 +29,8 @@
   }
 
   &__image {
-    position: relative;
-    overflow: hidden;
     aspect-ratio: 3 / 4;
 
-    background-color: var(--background-sec-color);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: 40px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24px' viewBox='0 -960 960 960' width='24px' fill='%23333333cc'%3E%3Cpath d='M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0 0v-560 560Zm80-80h400q12 0 18-11t-2-21L586-459q-6-8-16-8t-16 8L450-320l-74-99q-6-8-16-8t-16 8l-80 107q-8 10-2 21t18 11Z'/%3E%3C/svg%3E");
     border: 1px solid var(--border-color);
     border-radius: 16px;
 
@@ -65,11 +58,7 @@
     }
 
     img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+      transition: transform 0.7s var(--liquid-ease);
     }
   }
 
@@ -93,17 +82,21 @@
   }
 
   &__empty {
-    grid-column: 1 / -1;
-    padding: 100px 0;
-    color: var(--font-sec-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 320px;
+
+    font-size: 1em;
     text-align: center;
+
+    color: var(--font-sec-color);
   }
 
   &__sentinel {
     width: 100%;
-    height: 100vh;
   }
-
 }
 
 @media (max-width: 1024px) {

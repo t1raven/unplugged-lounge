@@ -5,6 +5,7 @@ import Image from 'next/image';
 import gsap from 'gsap';
 import Link from 'next/link';
 
+import { Loading } from '@/components/ui/Skeleton';
 import Modal from '@/components/ui/Modal';
 
 import type { Archive } from '@/types/archive';
@@ -44,15 +45,19 @@ function ArchiveImage({ item }: { item: Archive }) {
   }, [imageLoaded]);
 
   return (
-    <Image
-      ref={imageRef}
-      src={item.imageUrl}
-      alt={item.title}
-      fill
-      sizes="(max-width: 768px) 100vw, 50vw"
-      onLoad={() => setImageLoaded(true)}
-      style={{ opacity: imageLoaded ? 1 : 0 }}
-    />
+    <>
+      <Loading loading={!imageLoaded}>
+        <Image
+          ref={imageRef}
+          src={item.imageUrl}
+          alt={item.title ?? ''}
+          fill
+          sizes="(max-width: 768px) 100vw, 50vw"
+          onLoad={() => setImageLoaded(true)}
+          style={{ opacity: imageLoaded ? 1 : 0 }}
+        />
+      </Loading>
+    </>
   );
 }
 
@@ -132,6 +137,17 @@ export default function ArchiveModal({ items, currentIndex, onClose, onPrev, onN
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [onPrev, onNext]);
+
+  /*
+   * Modal 열렸을 때 body scroll 방지
+   */
+  useEffect(() => {
+    document.body.style.overflow = currentIndex !== null ? 'hidden' : '';
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [currentIndex]);
 
   if (!item) return null;
 

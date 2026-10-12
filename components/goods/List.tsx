@@ -6,7 +6,10 @@ import gsap from 'gsap';
 
 import Fnb from '@/components/layout/Fnb';
 import { Button } from '@/components/ui/Button';
+
 import CategoryNav from '@/components/common/CategoryNav';
+import useScrollToCategory from '@/hooks/useScrollToCategory';
+
 import CartModal from '@/components/cart/Modal';
 import OrderTrackingModal from '@/components/orders/TrackingModal';
 
@@ -17,30 +20,14 @@ import type { Category } from '@/types/category';
 import type { Goods } from '@/types/goods';
 import type { OrderDelivery } from '@/types/siteSettings';
 
+import { Loading } from '@/components/ui/Skeleton';
+
 import './style.scss';
 
 interface Props {
   orderDeliverySettings: OrderDelivery;
   categories: Category[];
   items: Goods[];
-}
-
-function scrollToCategory() {
-  const element = document.querySelector('.category_search_nav');
-
-  if (!element) return;
-
-  const elementPrev = element.previousElementSibling;
-
-  if (!elementPrev || elementPrev.scrollHeight >= window.scrollY) return;
-
-  const header = document.getElementById('site-header');
-  const top = elementPrev.scrollHeight - (header?.getBoundingClientRect().height ?? 0);
-
-  window.scrollTo({
-    top,
-    behavior: 'smooth',
-  });
 }
 
 export default function GoodsList({
@@ -65,6 +52,10 @@ export default function GoodsList({
 
   const [selectedGoods, setSelectedGoods] = useState<Goods | null>(null);
 
+  const [loading, setLoading] = useState(false);
+
+  const scrollToCategory = useScrollToCategory();
+
   const handleOpenOptionModal = (goods: Goods) => {
     setSelectedGoods(goods);
   };
@@ -80,7 +71,10 @@ export default function GoodsList({
     async (category: string) => {
       if (category === activeCategory) return;
 
+      scrollToCategory();
       setActiveCategory(category);
+      setLoading(true);
+
       const params = new URLSearchParams({
         category,
       });
@@ -98,12 +92,9 @@ export default function GoodsList({
       previousLengthRef.current = 0;
 
       setItems(data.items);
-
-      requestAnimationFrame(() => {
-        scrollToCategory();
-      });
+      setLoading(false);
     },
-    [activeCategory],
+    [activeCategory, scrollToCategory],
   );
 
   /*
@@ -151,20 +142,18 @@ export default function GoodsList({
 
   return (
     <>
-      <div className="category_search_nav">
-        <div className="category_search_nav__inner">
-          <CategoryNav
-            category={categories}
-            categoryNavRef={categoryRef}
-            activeCategory={activeCategory}
-            onChange={handleCategoryChange}
-          />
-        </div>
-      </div>
+      <CategoryNav
+        category={categories}
+        categoryNavRef={categoryRef}
+        activeCategory={activeCategory}
+        handleCategory={handleCategoryChange}
+      />
 
       <section className="sub-page-section goods-list">
         <div className="inner">
-          {items.length ? (
+          {loading ? (
+            <Loading loading={loading} />
+          ) : items.length ? (
             <div className="goods-grid" ref={gridRef}>
               {items.map((item) => (
                 <GoodsCard key={item._id} goods={item} onOpenOptionModal={handleOpenOptionModal} />

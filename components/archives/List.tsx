@@ -3,14 +3,18 @@
 import { useEffect, useCallback, useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 
-import Image from 'next/image';
+import { Image } from '@/components/ui/Skeleton';
 import { urlFor } from '@/sanity/lib/image';
 
 import CategoryNav from '@/components/common/CategoryNav';
+import useScrollToCategory from '@/hooks/useScrollToCategory';
+
 import Modal from './Modal';
 
 import type { Category } from '@/types/category';
 import type { Archive } from '@/types/archive';
+
+import { Loading } from '@/components/ui/Skeleton';
 
 import './List.scss';
 
@@ -39,15 +43,17 @@ export default function ArchiveList({ categories, items: initialItems }: Props) 
   const [page, setPage] = useState(1);
 
   const [loading, setLoading] = useState(false);
+  const [moreLoading, setMoreLoading] = useState(false);
   const [hasMore, setHasMore] = useState(initialItems.length === PAGE_SIZE);
 
+  const scrollToCategory = useScrollToCategory();
   /*
    * 다음 페이지 로드
    */
   const loadMore = useCallback(async () => {
-    if (loading || !hasMore) return;
+    if (moreLoading || !hasMore) return;
 
-    setLoading(true);
+    setMoreLoading(true);
 
     try {
       const nextPage = page + 1;
@@ -75,9 +81,9 @@ export default function ArchiveList({ categories, items: initialItems }: Props) 
     } catch (error) {
       console.error(error);
     } finally {
-      setLoading(false);
+      setMoreLoading(false);
     }
-  }, [page, activeCategory, loading, hasMore, items.length, search]);
+  }, [page, activeCategory, moreLoading, hasMore, items.length, search]);
 
   /*
    * IntersectionObserver
@@ -104,27 +110,6 @@ export default function ArchiveList({ categories, items: initialItems }: Props) 
     return () => observer.disconnect();
   }, [loadMore, hasMore]);
 
-  const scrollToCategory = () => {
-    const element = document.querySelector('.category_search_nav');
-
-    if (!element) return;
-
-    const elementPrev = element.previousElementSibling;
-
-    if (elementPrev?.scrollHeight && elementPrev.scrollHeight >= window.scrollY) return;
-
-    const header = document.getElementById('site-header');
-
-    if (!header || !elementPrev) return;
-
-    const top = elementPrev.scrollHeight - header.getBoundingClientRect().height;
-
-    window.scrollTo({
-      top,
-      behavior: 'smooth',
-    });
-  };
-
   /*
    * 카테고리 변경
    */
@@ -132,9 +117,11 @@ export default function ArchiveList({ categories, items: initialItems }: Props) 
     async (category: string) => {
       if (category === activeCategory) return;
 
+      scrollToCategory();
       setActiveCategory(category);
       setPage(1);
-      setHasMore(true);
+      setHasMore(false);
+      setMoreLoading(false);
       setLoading(true);
 
       try {
@@ -158,10 +145,6 @@ export default function ArchiveList({ categories, items: initialItems }: Props) 
 
         setItems(data.items);
         setHasMore(data.hasMore);
-
-        requestAnimationFrame(() => {
-          scrollToCategory();
-        });
       } catch (error) {
         console.error(error);
         setItems([]);
@@ -170,7 +153,7 @@ export default function ArchiveList({ categories, items: initialItems }: Props) 
         setLoading(false);
       }
     },
-    [activeCategory, search],
+    [activeCategory, search, scrollToCategory],
   );
 
   /*
@@ -249,69 +232,6 @@ export default function ArchiveList({ categories, items: initialItems }: Props) 
     });
   }, [items.length]);
 
-  /*
-   * Modal 열렸을 때 body scroll 방지
-   */
-  useEffect(() => {
-    document.body.style.overflow = selectedIndex !== null ? 'hidden' : '';
-
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [selectedIndex]);
-
-  const [searchActive, setSearchActive] = useState<boolean>(false);
-
-  const searchRef = useRef<HTMLInputElement>(null);
-
-  const toggleSearch = async () => {
-    setSearchActive((prev) => {
-      const state = !prev;
-
-      // 활성화되는 시점(true)에 내부 input에 포커스
-      if (state) {
-        searchRef.current?.focus();
-      } else {
-        searchRef.current?.blur();
-      }
-
-      return state;
-    });
-  };
-
-  useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
-        setSearchActive(false);
-      }
-    };
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setSearchActive(false);
-      }
-    };
-
-    const handlefocusout = (event: FocusEvent) => {
-      if (!event.target || !(event.target instanceof HTMLElement)) return;
-      if (event.target.tagName === 'INPUT') {
-        setSearchActive(false);
-      }
-    };
-
-    if (searchActive) {
-      document.addEventListener('mousedown', handleOutsideClick);
-      document.addEventListener('keydown', handleKeyDown);
-      document.addEventListener('focusout', handlefocusout);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleOutsideClick);
-      document.removeEventListener('keydown', handleKeyDown);
-      document.removeEventListener('focusout', handlefocusout);
-    };
-  }, [searchActive]);
-
   const handleSearch = useCallback(async () => {
     const keyword = searchInput.trim();
 
@@ -352,42 +272,24 @@ export default function ArchiveList({ categories, items: initialItems }: Props) 
 
   return (
     <>
-      <div className={`category_search_nav ${searchActive ? 'active' : ''}`}>
-        <div className="category_search_nav__inner">
-          <div className="search-nav">
-            <div className="input">
-              <span className="material-symbols-rounded icon">search</span>
-              <input
-                type="search"
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    handleSearch();
-                  }
-                }}
-                placeholder="공연명, 아티스트 검색"
-                ref={searchRef}
-              />
-            </div>
+      <CategoryNav
+        category={categories}
+        categoryNavRef={categoryRef}
+        activeCategory={activeCategory}
+        handleCategory={handleCategoryChange}
 
-            <button type="button" onClick={toggleSearch}>
-              <span className="material-symbols-rounded">search</span>
-            </button>
-          </div>
-          <CategoryNav
-            category={categories}
-            categoryNavRef={categoryRef}
-            activeCategory={activeCategory}
-            onChange={handleCategoryChange}
-          />
-        </div>
-      </div>
+        searchInput={searchInput}
+        setSearchInput={setSearchInput}
+        searchHandle={handleSearch}
+        searchPlaceholder={'공연명, 아티스트 검색'}
+      />
 
       <section className="sub-page-section gallery">
         <div className="inner">
           <div className="gallery__list" ref={gridRef}>
-            {items.length > 0 ? (
+            {loading ? (
+              <Loading loading={loading} />
+            ) : items.length ? (
               <div className="gallery__grid">
                 {items.map((item, index) => (
                   <button
@@ -396,16 +298,14 @@ export default function ArchiveList({ categories, items: initialItems }: Props) 
                     className="gallery__item"
                     onClick={() => handleOpenModal(index)}
                   >
-                    <div className="gallery__image">
+                    <Image
+                      className="gallery__image"
+                      src={item.imageUrl ? urlFor(item.imageUrl).width(600).url() : ''}
+                      alt={item.title ?? ''}
+                      size={600}
+                    >
                       {item.label && <div className="label">{item.label}</div>}
-                      <Image
-                        src={urlFor(item.imageUrl).width(600).url()}
-                        alt={item.title}
-                        fill
-                        priority
-                        sizes="(max-width: 768px) 50vw, 600px"
-                      />
-                    </div>
+                    </Image>
 
                     {item.category?._id != '3eb51abf-f89b-4350-a9fa-2f0eac2514c4' && (
                       <div className="gallery__info">
@@ -420,13 +320,10 @@ export default function ArchiveList({ categories, items: initialItems }: Props) 
             ) : null}
 
             {/* 무한스크롤 감지 영역 */}
-            {hasMore && <div ref={sentinelRef} className="gallery__sentinel" aria-hidden="true" />}
-
-            {/*{loading && (
-              <div className="gallery__loading">
-                Loading...
-              </div>
-            )}*/}
+            {hasMore && !moreLoading && (
+              <div ref={sentinelRef} className="gallery__sentinel" aria-hidden="true" />
+            )}
+            {moreLoading && <Loading loading={moreLoading} />}
           </div>
         </div>
       </section>

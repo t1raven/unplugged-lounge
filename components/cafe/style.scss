@@ -1,10 +1,8 @@
 /* --------------------------------
    MENU LIST
 -------------------------------- */
-
 .menu-list {
-  max-width: 1400px;
-  margin: 0 auto;
+  min-height: 50vh;
 }
 
 .menu-grid {
@@ -28,25 +26,9 @@
   position: relative;
   width: 100%;
   aspect-ratio: 1 / 1;
-  overflow: hidden;
-
-  background-color: var(--background-sec-color);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 40px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24px' viewBox='0 -960 960 960' width='24px' fill='%23333333cc'%3E%3Cpath d='M440-240q-117 0-198.5-81.5T160-520v-240q0-33 23.5-56.5T240-840h500q58 0 99 41t41 99q0 58-41 99t-99 41h-20v40q0 117-81.5 198.5T440-240ZM240-640h400v-120H240v120Zm200 320q83 0 141.5-58.5T640-520v-40H240v40q0 83 58.5 141.5T440-320Zm280-320h20q25 0 42.5-17.5T800-700q0-25-17.5-42.5T740-760h-20v120ZM200-120q-17 0-28.5-11.5T160-160q0-17 11.5-28.5T200-200h560q17 0 28.5 11.5T800-160q0 17-11.5 28.5T760-120H200Zm240-440Z'/%3E%3C/svg%3E");
 
   border: 1px solid var(--border-color);
   border-radius: 16px;
-
-  img {
-    width: 100%;
-    height: 100%;
-
-    object-fit: cover;
-
-    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-  }
 
   .menu-card__label {
     display: flex;
@@ -136,36 +118,20 @@
 }
 
 /* --------------------------------
-   LOADING
--------------------------------- */
-
-.menu-loading {
-  display: flex;
-
-  justify-content: center;
-  align-items: center;
-
-  min-height: 300px;
-
-  color: var(--font-sec-color);
-
-  font-size: 1em;
-
-  letter-spacing: 0.2em;
-}
-
-/* --------------------------------
    EMPTY
 -------------------------------- */
 
 .menu-empty {
-  padding: 100px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  color: var(--font-sec-color);
+  min-height: 320px;
 
   font-size: 1em;
-
   text-align: center;
+
+  color: var(--font-sec-color);
 }
 
 /* --------------------------------

@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+import { Image } from '@/components/ui/Skeleton';
 import { urlFor } from '@/sanity/lib/image';
 
 import type { Cafe } from '@/types/cafe';
@@ -12,24 +12,19 @@ interface Props {
 export default function MenuCard({ item }: Props) {
   return (
     <article className="menu-card">
-      <div className="menu-card__image">
+      <Image
+        className="menu-card__image"
+        src={item.imageUrl ? urlFor(item.imageUrl).width(600).url() : ''}
+        alt={item.name}
+        size={600}
+      >
         {item.label && (
           <div className="menu-card__label">
             {item.label.includes('new') && <div className="menu-card__label_item new">NEW</div>}
             {item.label.includes('best') && <div className="menu-card__label_item best">BEST</div>}
           </div>
         )}
-
-        {item.imageUrl && (
-          <Image
-            src={urlFor(item.imageUrl).width(600).url()}
-            alt={item.name}
-            fill
-            priority
-            sizes="(max-width: 768px) 50vw, 400px"
-          />
-        )}
-      </div>
+      </Image>
 
       <div className="menu-card__info">
         {item.label && (

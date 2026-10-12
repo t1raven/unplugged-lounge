@@ -2,8 +2,6 @@
 
 import { FormEvent, useRef, useState } from 'react';
 
-import Image from 'next/image';
-
 import { useDaumPostcode } from '@/hooks/useDaumPostcode';
 
 import type { CartItem } from '@/types/cart';
@@ -11,6 +9,9 @@ import type { CartItem } from '@/types/cart';
 import { TextField, TextareaField } from '@/components/ui/TextField';
 import { Button } from '@/components/ui/Button';
 import { formatPhone } from '@/utils/formatPhone';
+
+import { Image } from '@/components/ui/Skeleton';
+import { urlFor } from '@/sanity/lib/image';
 
 import type { OrderDelivery } from '@/types/siteSettings';
 
@@ -251,9 +252,12 @@ export default function Order({
 
             {items.map((item) => (
               <div key={item.cartId} className="order-product">
-                <div className="order-product-image">
-                  {item.image && <Image src={item.image} alt={item.name} fill sizes="96px" />}
-                </div>
+                <Image
+                  className="order-product-image"
+                  src={item.image ? urlFor(item.image).width(70).url() : ''}
+                  alt={item.name}
+                  size={70}
+                />
 
                 <div className="order-product-info">
                   <strong>{item.name}</strong>
