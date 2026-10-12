@@ -206,11 +206,6 @@ export default function ScrollPath({ children }: { children: ReactNode }) {
         focusable="false"
         preserveAspectRatio="none"
       >
-        <defs>
-          <filter id="svg-blur" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="2" />
-          </filter>
-        </defs>
         {SECTIONS.map((name) => (
           <path
             key={name}
@@ -223,7 +218,6 @@ export default function ScrollPath({ children }: { children: ReactNode }) {
             pathLength={1}
             strokeDasharray={1}
             strokeDashoffset={1}
-            filter="url(#svg-blur)"
           />
         ))}
       </svg>

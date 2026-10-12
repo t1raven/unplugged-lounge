@@ -162,11 +162,6 @@ export default function Hero({ data }: Props) {
           aria-hidden="true"
           focusable="false"
         >
-          <defs>
-            <filter id="svg-blur" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur in="SourceGraphic" stdDeviation="2" />
-            </filter>
-          </defs>
           <g strokeLinecap="round" strokeLinejoin="round">
             {HERO_PATHS.map((path) => (
               <path
@@ -178,7 +173,6 @@ export default function Hero({ data }: Props) {
                 opacity={0.7}
                 strokeWidth={path.strokeWidth}
                 d={path.d}
-                filter="url(#svg-blur)"
               />
             ))}
           </g>
