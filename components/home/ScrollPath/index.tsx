@@ -171,7 +171,12 @@ export default function ScrollPath({ children }: { children: ReactNode }) {
         ScrollTrigger.addEventListener('refreshInit', measure);
         let active = true;
         let frame = 0;
+        let lastWidth = window.innerWidth;
         const refresh = () => {
+          const width = window.innerWidth;
+          // Safari 주소창 변화처럼 높이만 바뀌는 resize는 무시한다.
+          if (width === lastWidth) return;
+          lastWidth = width;
           if (!active) return;
           cancelAnimationFrame(frame);
           frame = requestAnimationFrame(() => {
