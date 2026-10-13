@@ -2,6 +2,9 @@
 
 import { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { HERO_PATHS, VIEWBOX } from './paths';
+import useLiquidEase from '@/hooks/useLiquidEase';
 
 import Image from 'next/image';
 import { urlFor } from '@/sanity/lib/image';
@@ -17,7 +20,11 @@ interface Props {
   };
 }
 
+gsap.registerPlugin(ScrollTrigger);
+
 export default function Hero({ data }: Props) {
+  useLiquidEase();
+
   const rootRef = useRef<HTMLElement>(null);
 
   useLayoutEffect(() => {
@@ -37,7 +44,7 @@ export default function Hero({ data }: Props) {
             duration: 0.7,
             ease: 'power3.out',
           },
-          '-=1'
+          '-=1',
         )
         .from(
           '.hero__title',
@@ -47,7 +54,7 @@ export default function Hero({ data }: Props) {
             duration: 1,
             ease: 'power4.out',
           },
-          '-=0.45'
+          '-=0.45',
         )
         .from(
           '.hero__location',
@@ -56,7 +63,7 @@ export default function Hero({ data }: Props) {
             y: 20,
             duration: 0.6,
           },
-          '-=0.5'
+          '-=0.5',
         )
         .from(
           '.hero__scroll',
@@ -64,11 +71,58 @@ export default function Hero({ data }: Props) {
             opacity: 0,
             duration: 0.6,
           },
-          '-=0.2'
+          '-=0.2',
         );
     }, rootRef);
 
     return () => ctx.revert();
+  }, []);
+
+  useLayoutEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const media = gsap.matchMedia();
+    media.add(
+      '(prefers-reduced-motion: no-preference)',
+      (context) => {
+        // Server markup is fully visible, including when JS is disabled.
+        // matchMedia reverts previous animations before preferences change.
+        if (context.conditions?.reduce) return;
+
+        const svg = root.querySelector<SVGSVGElement>('.hero__artwork')!;
+        const paths = svg.querySelectorAll<SVGPathElement>('[data-scroll-path]');
+
+        // pathLength="1" normalizes dashes; getTotalLength() would mix units.
+        gsap.set(paths, { attr: { 'stroke-dasharray': 1.1, 'stroke-dashoffset': 1.1 } });
+        const intro = gsap.timeline({ defaults: { ease: 'liquidEase' } });
+        const draw = (id: string, at: number, duration: number) => {
+          intro.to(
+            svg.querySelector('[data-scroll-path="' + id + '"]'),
+            {
+              attr: { 'stroke-dashoffset': 0 },
+              duration,
+            },
+            at,
+          );
+        };
+        draw('orange-guitar', 1.85, 2.55);
+        draw('blue-top', 2.65, 1.15);
+        draw('blue-bottom', 2.85, 1.15);
+
+        return () => {
+          // GSAP AttrPlugin can revert absent attributes to empty strings.
+          paths.forEach((path) => {
+            path.removeAttribute('stroke-dasharray');
+            path.removeAttribute('stroke-dashoffset');
+          });
+        };
+      },
+      root,
+    );
+
+    // Reverts only this hero's attributes, timelines, triggers and listeners.
+    // Safe for React Strict Mode, route changes and preference changes.
+    return () => media.revert();
   }, []);
 
   return (
@@ -81,19 +135,34 @@ export default function Hero({ data }: Props) {
 
       <div className="hero__overlay" />
 
+      <svg
+        className="hero__artwork"
+        viewBox={'0 0 ' + VIEWBOX.width + ' ' + VIEWBOX.height}
+        preserveAspectRatio="xMidYMid meet"
+        fill="none"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <g strokeLinecap="round" strokeLinejoin="round">
+          {HERO_PATHS.map((path) => (
+            <path
+              key={path.id}
+              id={path.id}
+              data-scroll-path={path.id}
+              pathLength={1}
+              stroke={path.stroke}
+              opacity={0.7}
+              strokeWidth={path.strokeWidth}
+              d={path.d}
+            />
+          ))}
+        </g>
+      </svg>
+
       <div className="hero__content">
-        <p className="hero__eyebrow">
-          {data.label}
-        </p>
-
-        <h1 className="hero__title">
-          {data.title}
-        </h1>
-
-        <p className="hero__location">
-          {data.location}
-        </p>
-
+        <p className="hero__eyebrow">{data.label}</p>
+        <h1 className="hero__title">{data.title}</h1>
+        <p className="hero__location">{data.location}</p>
         <div className="hero__scroll">
           <span>SCROLL</span>
           <i />

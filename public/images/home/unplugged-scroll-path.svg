@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2172" height="768" viewBox="0 0 2048 724" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">Unplugged Lounge key visual</title>
+  <desc id="desc">Transparent orange guitar contour and lower wave with two blue arcs. Four independent centerline paths for scroll animation.</desc>
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <path id="blue-top" data-scroll-path="blue-top" pathLength="1" stroke="#4AACE0" stroke-width="46" d="M1120 218 C1180 108 1326 29 1450 35 C1580 29 1685 72 1748 146"/>
+    <path id="orange-guitar" data-scroll-path="orange-guitar" pathLength="1" stroke="#F57900" stroke-width="55" d="M1640 365 C1616 401 1590 426 1555 411 C1521 398 1500 367 1467 378 C1426 392 1392 450 1334 454 C1260 462 1210 426 1208 344 C1204 275 1234 209 1289 180 C1358 143 1393 213 1440 232 C1485 251 1507 197 1555 198 C1604 199 1622 237 1682 234 C1754 232 1799 205 1840 152 C1886 89 1907 44 1977 32 C2005 27 2038 27 2082 27"/>
+    <path id="blue-bottom" data-scroll-path="blue-bottom" pathLength="1" stroke="#4AACE0" stroke-width="46" d="M1376 506 C1465 571 1583 592 1684 577 C1823 556 1940 468 1975 334"/>
+    <path id="orange-wave" data-scroll-path="orange-wave" pathLength="1" stroke="#F57900" stroke-width="62" d="M-38 369 C62 390 133 540 233 602 C341 665 509 632 669 557 C814 490 929 400 1035 435 C1194 480 1323 605 1502 653 C1704 711 1870 584 2085 588"/>
+  </g>
+</svg>

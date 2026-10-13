@@ -1,6 +1,7 @@
 'use client';
 
 import { ReactNode, useEffect, useLayoutEffect, useRef } from 'react';
+import { useDevice } from '@/components/providers/DeviceProvider';
 
 import Lenis from 'lenis';
 import gsap from 'gsap';
@@ -31,8 +32,11 @@ export default function Modal({
   const contentRef = useRef<HTMLDivElement>(null);
   const lenisRef = useRef<Lenis | null>(null);
 
+  const { isMobile, isTablet } = useDevice();
+  const useNativeScroll = isMobile || isTablet;
+
   useLayoutEffect(() => {
-    if (!open) return;
+    if (!open || useNativeScroll) return;
 
     const wrapper = wrapperRef.current;
     const content = contentRef.current;
@@ -64,16 +68,18 @@ export default function Modal({
       lenis.destroy();
       lenisRef.current = null;
     };
-  }, [open]);
+  }, [open, useNativeScroll]);
 
   useLayoutEffect(() => {
     if (!open) return;
 
     const lenis = lenisRef.current;
-    if (!lenis) return;
-
-    lenis.resize();
-    lenis.scrollTo(0, { immediate: true, force: true });
+    if (!lenis) {
+      wrapperRef.current?.scrollTo(0, 0);
+    } else {
+      lenis.resize();
+      lenis.scrollTo(0, { immediate: true, force: true });
+    }
   }, [open, contentKey]);
 
   /*
