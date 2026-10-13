@@ -1,6 +1,6 @@
 'use client';
 
-import { useLayoutEffect, useRef, type ReactNode } from 'react';
+import { useLayoutEffect, type ReactNode } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -11,10 +11,8 @@ const SECTIONS = ['upcoming', 'about', 'location'] as const;
 gsap.registerPlugin(ScrollTrigger);
 
 export default function ScrollPath({ children }: { children: ReactNode }) {
-  const rootRef = useRef<HTMLDivElement>(null);
-
   useLayoutEffect(() => {
-    const root = rootRef.current;
+    const root = document.querySelector<HTMLDivElement>('.home-scroll-path');
     if (!root) return;
     const svg = root.querySelector<SVGSVGElement>('.home-scroll-path__line');
     const sections = SECTIONS.map((name) => ({
@@ -31,7 +29,7 @@ export default function ScrollPath({ children }: { children: ReactNode }) {
         const measure = () => {
           // Use layout dimensions, ignoring existing entrance/parallax transforms.
           const width = root.clientWidth;
-          const stroke = Math.min(62, Math.max(24, (width * 62) / 2048));
+          const stroke = Math.min(55, Math.max(20, (width * 55) / 970));
           const pad = stroke * 2;
           svg.setAttribute('viewBox', '0 0 ' + width + ' ' + root.offsetHeight);
           sections.forEach(({ name, element, path }) => {
@@ -203,7 +201,7 @@ export default function ScrollPath({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <div className="home-scroll-path" ref={rootRef}>
+    <>
       {children}
       <svg
         className="home-scroll-path__line"
@@ -226,6 +224,6 @@ export default function ScrollPath({ children }: { children: ReactNode }) {
           />
         ))}
       </svg>
-    </div>
+    </>
   );
 }

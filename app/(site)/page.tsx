@@ -76,7 +76,11 @@ export default async function Home() {
   const siteInfo = await getSiteSettings();
 
   return (
-    <main id="site-body" className="home" style={{ paddingTop: 'var(--header-height)' }}>
+    <main
+      id="site-body"
+      className="home home-scroll-path"
+      style={{ paddingTop: 'var(--header-height)' }}
+    >
       <ScrollPath>
         <Hero data={home.hero} />
         <Upcoming performances={performances} />
