@@ -96,6 +96,7 @@ export default function CustomNavbar(props: NavbarProps) {
                 src={scheme === 'dark' ? loageImageWh : loageImageBk}
                 alt="UNPLUGGED LOUNGE"
                 className="custom-navbar__logo-image"
+                unoptimized
               />
               <span className="custom-navbar__logo-text">CMS</span>
             </a>
