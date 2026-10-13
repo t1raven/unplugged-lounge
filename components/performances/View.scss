@@ -17,6 +17,7 @@
     padding-bottom: 120px;
     background: var(--background-sec-color);
     overflow: hidden;
+    flex: 1;
   }
 
   .performance-detail-kv {
@@ -107,7 +108,7 @@
   .meta-item {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 4px;
     padding: 20px 0;
     border-bottom: 1px solid var(--gray-color);
 
@@ -117,7 +118,7 @@
     }
 
     strong {
-      font-size: 1em;
+      font-size: 1.1rem;
       font-weight: 500;
       color: var(--font-color);
 
@@ -155,60 +156,6 @@
   }
 
   // ==================================================
-  // Button
-  // ==================================================
-
-  .reservation-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 200px;
-    height: 60px;
-    margin-top: 35px;
-    padding: 0 30px;
-    background: var(--secondary-color);
-    border-radius: 10px;
-    color: #fff;
-    font-size: 13px;
-    font-weight: 500;
-    text-decoration: none;
-    position: relative;
-    overflow: hidden;
-    border: 0;
-
-    transition:
-      background-color 0.25s ease,
-      transform 0.25s ease;
-
-    &:before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(255, 255, 255, 0.2);
-      opacity: 0;
-      -webkit-transition: 0.2s ease-out;
-      transition: 0.2s ease-out;
-    }
-
-    &:not(:disabled):hover {
-      transform: translateY(-2px);
-    }
-
-    &:not(:disabled):hover:before {
-      opacity: 1;
-    }
-
-    &:disabled {
-      background-color: #a9a59d;
-      color: #66635d;
-      cursor: not-allowed;
-    }
-  }
-
-  // ==================================================
   // Section Heading
   // ==================================================
 
@@ -241,8 +188,8 @@
   }
 
   .artist-list {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 12px;
   }
 
@@ -449,10 +396,6 @@
       }
     }
 
-    .reservation-button {
-      width: 100%;
-    }
-
     .performance-artists,
     .performance-description {
       padding: 60px 0;
@@ -468,10 +411,6 @@
       h2 {
         font-size: 24px;
       }
-    }
-
-    .artist-card {
-      width: 100%;
     }
 
     .artist-info {

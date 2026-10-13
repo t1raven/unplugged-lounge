@@ -27,7 +27,10 @@ const GALLERY_ITEMS = [
   'https://cdn.sanity.io/images/hjsu6mnr/production/bf2e014a264b233ea087986be4640b03d00e45be-1500x1000.jpg',
 ].map((url, index) => ({
   _id: String(index),
+  category: null,
+  performance: null,
   imageUrl: url,
+  alt: `Space Rental image ${index + 1}`,
 }));
 
 export default function RentalPage({ equipment: item }: Props) {
@@ -141,17 +144,15 @@ export default function RentalPage({ equipment: item }: Props) {
           <div className="rental-gallery">
             <ul className="rental-gallery__grid">
               {GALLERY_ITEMS.map((item, index) => (
-                <li
-                  className="rental-gallery__item"
-                  onClick={() => handleOpenModal(index)}
-                  key={item._id}
-                >
-                  <Image
-                    className="rental-gallery__image"
-                    src={item.imageUrl}
-                    alt={''}
-                    size={600}
-                  />
+                <li className="rental-gallery__item" key={item._id}>
+                  <button onClick={() => handleOpenModal(index)}>
+                    <Image
+                      className="rental-gallery__image"
+                      src={item.imageUrl}
+                      alt={item.alt || `Space Rental image ${index + 1}`}
+                      size={'(max-width: 768px) 100vw, 600px'}
+                    />
+                  </button>
                 </li>
               ))}
             </ul>

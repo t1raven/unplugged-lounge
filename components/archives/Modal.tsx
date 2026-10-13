@@ -50,7 +50,7 @@ function ArchiveImage({ item }: { item: Archive }) {
         <Image
           ref={imageRef}
           src={item.imageUrl}
-          alt={item.title ?? ''}
+          alt={(item.alt || item.title) ?? ''}
           fill
           sizes="(max-width: 768px) 100vw, 50vw"
           onLoad={() => setImageLoaded(true)}

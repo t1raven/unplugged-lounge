@@ -75,6 +75,19 @@
   }
 }
 
+.skeleton-image-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--background-color);
+  opacity: 0.7;
+  font-size: 1rem;
+  color: var(--text-color);
+  text-align: center;
+}
+
 @keyframes skeleton-shimmer {
   100% {
     transform: translateX(100%);
