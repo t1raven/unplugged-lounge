@@ -129,7 +129,7 @@ export default function Hero({ data }: Props) {
     <section ref={rootRef} className="hero">
       {data.bgImage && (
         <div className="hero__image">
-          <Image src={urlFor(data.bgImage).url()} alt="Hero BG Image" fill priority />
+          <Image src={urlFor(data.bgImage).url()} alt="Hero BG Image" fill priority unoptimized />
         </div>
       )}
 

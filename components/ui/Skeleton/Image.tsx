@@ -49,6 +49,7 @@ export default function Image({
                 setHasError(true);
               }}
               className={loading ? 'loading' : ''}
+              unoptimized
             />
           )}
         </>

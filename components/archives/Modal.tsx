@@ -55,6 +55,7 @@ function ArchiveImage({ item }: { item: Archive }) {
           sizes="(max-width: 768px) 100vw, 50vw"
           onLoad={() => setImageLoaded(true)}
           style={{ opacity: imageLoaded ? 1 : 0 }}
+          unoptimized
         />
       </Loading>
     </>

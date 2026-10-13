@@ -57,7 +57,7 @@ export default function SubPageHero({ label, title, description }: Props) {
     <section className="sub-page-hero" ref={rootRef}>
       <ParaSection className="sub-page-hero-kv" delay={100}>
         <div>
-          <Image src={heroKvImage} priority sizes="100vw" alt="Hero Key Visual" />
+          <Image src={heroKvImage} priority sizes="100vw" alt="Hero Key Visual" unoptimized />
         </div>
       </ParaSection>
       <div className="sub-page-hero-inner">

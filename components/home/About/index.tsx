@@ -137,23 +137,6 @@ export default function About({ data }: Props) {
           once: true,
         },
       });
-
-      /*
-       * Equipment
-       */
-      /*gsap.from('.about__equipment', {
-        opacity: 0,
-        y: 60,
-        duration: 1,
-
-        ease: 'power3.out',
-
-        scrollTrigger: {
-          trigger: '.about__equipment',
-          start: 'top 80%',
-          once: true,
-        },
-      });*/
     }, rootRef);
 
     ScrollTrigger.refresh();
@@ -181,6 +164,7 @@ export default function About({ data }: Props) {
                 fill
                 priority
                 sizes="(max-width: 768px) 100vw, 800px"
+                unoptimized
               />
             </div>
           ))}

@@ -14,9 +14,9 @@ export default function MenuCard({ item }: Props) {
     <article className="menu-card">
       <Image
         className="menu-card__image"
-        src={item.imageUrl ? urlFor(item.imageUrl).width(600).url() : ''}
+        src={item.imageUrl ? urlFor(item.imageUrl).width(300).url() : ''}
         alt={item.name}
-        size={600}
+        size={300}
       >
         {item.label && (
           <div className="menu-card__label">
