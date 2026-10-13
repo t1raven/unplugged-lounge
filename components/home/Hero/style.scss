@@ -1,3 +1,5 @@
+@use '@/styles/functions' as *;
+
 .hero {
   position: relative;
   isolation: isolate;
@@ -5,7 +7,7 @@
   width: 100%;
   height: -webkit-fill-available;
   height: calc(100vh - var(--header-height));
-  max-height: 1080px;
+  max-height: 1440px;
   overflow: clip;
 
   &__image {
@@ -31,13 +33,12 @@
   &__artwork {
     position: absolute;
     right: 0;
-    bottom: 5%;
+    top: 45%;
+    bottom: 10%;
     display: block;
-    max-width: 90%;
-    min-width: 55%;
-    width: 520px;
+    max-width: 970px;
+    width: 90%;
     height: auto;
-    // Uniform scale preserves artwork; the left end exits outside the canvas.
     overflow: visible;
     pointer-events: none;
     opacity: 1;
@@ -48,7 +49,7 @@
     z-index: 2;
 
     height: 100%;
-    padding: clamp(40px, 24vh, 320px) 0;
+    padding: fluid(100px, 320px) 0;
 
     display: flex;
     flex-direction: column;
