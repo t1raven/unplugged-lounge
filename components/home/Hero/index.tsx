@@ -83,11 +83,7 @@ export default function Hero({ data }: Props) {
     if (!root) return;
     const media = gsap.matchMedia();
     media.add(
-      {
-        desktop: '(min-width: 769px)',
-        mobile: '(max-width: 768px)',
-        reduce: '(prefers-reduced-motion: reduce)',
-      },
+      '(prefers-reduced-motion: no-preference)',
       (context) => {
         // Server markup is fully visible, including when JS is disabled.
         // matchMedia reverts previous animations before preferences change.
@@ -111,7 +107,7 @@ export default function Hero({ data }: Props) {
             at,
           );
         };
-        draw('orange-guitar', 2, 2.55);
+        draw('orange-guitar', 1.85, 2.55);
         draw('blue-top', 2.65, 1.15);
         draw('blue-bottom', 2.85, 1.15);
         /* draw('orange-wave', 1.5, 1.5); */

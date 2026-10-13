@@ -36,9 +36,7 @@ export default function LenisProvider({ children }: LenisProviderProps) {
   const useNativeScroll = isMobile || isTablet;
 
   useEffect(() => {
-    /* if (useNativeScroll) {
-      return;
-    } */
+    if (useNativeScroll) return;
 
     const lenis = new Lenis({
       duration: 1.2,

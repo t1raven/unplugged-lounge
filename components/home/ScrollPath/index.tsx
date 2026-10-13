@@ -38,7 +38,7 @@ export default function ScrollPath({ children }: { children: ReactNode }) {
             if (!element || !path) return;
             const top = element.offsetTop;
             const h = element.offsetHeight;
-            if (name === 'location') console.log('width:', width, 'top:', top, 'height:', h);
+            if (name === 'upcoming') console.log('width:', width, 'top:', top, 'height:', h);
             const point = (x: number, y: number) =>
               Math.trunc(width * x) + ' ' + Math.trunc(top + h * y);
             const left = -pad;
@@ -51,9 +51,9 @@ export default function ScrollPath({ children }: { children: ReactNode }) {
                 'M' +
                 right +
                 ' ' +
-                Math.trunc(top + h * 0.22) +
+                Math.trunc(top + h * 0.1) +
                 ' C' +
-                point(0.96, 0.34) +
+                point(0.94, 0.17) +
                 ' ' +
                 point(0.9, 0.58) +
                 ' ' +

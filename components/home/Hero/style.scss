@@ -34,12 +34,12 @@
 
   &__artwork {
     position: absolute;
-    left: 0;
-    bottom: 0;
+    right: 0;
+    bottom: 5%;
     display: block;
-    width: 100%;
+    width: 90%;
+    max-width: 970px;
     height: auto;
-    aspect-ratio: 2048 / 640;
     // Uniform scale preserves artwork; the left end exits outside the canvas.
     overflow: visible;
     pointer-events: none;
@@ -123,10 +123,6 @@
 
     &__stage {
       min-height: 580px;
-    }
-
-    &__artwork {
-      aspect-ratio: 640 / 920;
     }
 
     &__scroll {
