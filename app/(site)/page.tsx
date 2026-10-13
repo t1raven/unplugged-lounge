@@ -1,5 +1,6 @@
 import { client } from '@/sanity/lib/client';
 
+import ScrollPath from '@/components/home/ScrollPath';
 import Hero from '@/components/home/Hero';
 import Upcoming from '@/components/home/Upcoming';
 import About from '@/components/home/About';
@@ -75,11 +76,17 @@ export default async function Home() {
   const siteInfo = await getSiteSettings();
 
   return (
-    <main id="site-body" className="home" style={{ paddingTop: 'var(--header-height)' }}>
-      <Hero data={home.hero} />
-      <Upcoming performances={performances} />
-      <About data={home.about} />
-      <Location data={siteInfo?.general ?? {}} />
+    <main
+      id="site-body"
+      className="home home-scroll-path"
+      style={{ paddingTop: 'var(--header-height)' }}
+    >
+      <ScrollPath>
+        <Hero data={home.hero} />
+        <Upcoming performances={performances} />
+        <About data={home.about} />
+        <Location data={siteInfo?.general ?? {}} />
+      </ScrollPath>
     </main>
   );
 }

@@ -75,24 +75,30 @@ export default function GoodsList({
       setActiveCategory(category);
       setLoading(true);
 
-      const params = new URLSearchParams({
-        category,
-      });
+      try {
+        const params = new URLSearchParams({
+          category,
+        });
 
-      const response = await fetch(`/api/goods?${params.toString()}`);
+        const response = await fetch(`/api/goods?${params.toString()}`);
 
-      if (!response.ok) {
-        throw new Error('데이터를 불러오지 못했습니다.');
+        if (!response.ok) {
+          throw new Error('데이터를 불러오지 못했습니다.');
+        }
+
+        const data = await response.json();
+
+        animationContextRef.current?.revert();
+        animationContextRef.current = null;
+        previousLengthRef.current = 0;
+
+        setItems(data.items);
+      } catch (error) {
+        console.error(error);
+        setItems([]);
+      } finally {
+        setLoading(false);
       }
-
-      const data = await response.json();
-
-      animationContextRef.current?.revert();
-      animationContextRef.current = null;
-      previousLengthRef.current = 0;
-
-      setItems(data.items);
-      setLoading(false);
     },
     [activeCategory, scrollToCategory],
   );

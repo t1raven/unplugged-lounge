@@ -1,0 +1,37 @@
+.home-scroll-path {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+
+  &__line {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  // The wave crosses cards / photos like the guide, while text stays readable.
+  .upcoming__inner,
+  .about__inner {
+    position: relative;
+  }
+
+  .upcoming__inner,
+  .about__heading,
+  .about__text,
+  .about__faq,
+  .about__notice,
+  .location__content {
+    position: relative;
+    z-index: 20;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-scroll-path__line {
+    display: none;
+  }
+}

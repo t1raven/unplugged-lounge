@@ -6,7 +6,8 @@ export interface Archive {
   title?: string;
   description?: string;
   label?: string;
-  category?: Category | null;
-  performance?: Performance | null;
+  category: Category | null;
+  performance: Performance | null;
   imageUrl: string;
+  alt?: string;
 }

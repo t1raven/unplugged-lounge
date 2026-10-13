@@ -1,6 +1,7 @@
 'use client';
 
-import Image from 'next/image';
+import { default as NextImage } from 'next/image';
+import { Image } from '@/components/ui/Skeleton';
 import Link from 'next/link';
 
 import { urlFor } from '@/sanity/lib/image';
@@ -20,8 +21,6 @@ import { Button } from '@/components/ui/Button';
 import './View.scss';
 
 import heroKvImage from '@/public/images/common/site-sub-hero-kv.png';
-
-import { Image as SkeletonImage } from '@/components/ui/Skeleton';
 
 const admissionTypeNames: Record<string, string> = {
   1: '입장번호순',
@@ -100,23 +99,24 @@ export default function PerformanceViewPage({ performance }: Props) {
   useFadeUpEffect('.performance-detail-inner');
 
   return (
-    <main id="site-body" className="performance-detail">
+    <>
       {/* ==================================================
           Hero
       ================================================== */}
 
       <section className="performance-detail-hero">
         <div className="performance-detail-kv">
-          <Image
+          <NextImage
             src={heroKvImage}
             priority
             fill
-            sizes="(max-width: 768px) 50vw, 100vw"
+            sizes="100vw"
             alt="Hero Key Visual"
+            unoptimized
           />
         </div>
         <div className="performance-detail-inner">
-          <SkeletonImage
+          <Image
             className="performance-poster"
             src={performance.poster?.asset ? urlFor(performance.poster).width(600).url() : ''}
             alt={performance.title}
@@ -252,22 +252,20 @@ export default function PerformanceViewPage({ performance }: Props) {
           Description
       ================================================== */}
 
-      <section className="performance-description">
-        <div className="performance-detail-inner">
-          <div className="section-heading">
-            <p>ABOUT PERFORMANCE</p>
-            <h2>공연 소개</h2>
-          </div>
+      {performance.description && (
+        <section className="performance-description">
+          <div className="performance-detail-inner">
+            <div className="section-heading">
+              <p>ABOUT PERFORMANCE</p>
+              <h2>공연 소개</h2>
+            </div>
 
-          <div className="description-content">
-            {performance.description ? (
+            <div className="description-content">
               <PortableText value={performance.description} />
-            ) : (
-              <p>등록된 공연 소개가 없습니다.</p>
-            )}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ==================================================
           Notice
@@ -351,6 +349,6 @@ export default function PerformanceViewPage({ performance }: Props) {
           </span>
         </Button>
       </Fnb>
-    </main>
+    </>
   );
 }

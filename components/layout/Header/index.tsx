@@ -127,6 +127,7 @@ export default function Header() {
                 src={theme === 'dark' ? loageImageWh : loageImageBk}
                 priority
                 alt="UNPLUGGED LOUNGE"
+                unoptimized
               />
             </Link>
           </div>
