@@ -18,6 +18,8 @@ import type { Performance } from '@/types/performance';
 import Fnb from '@/components/layout/Fnb';
 import { Button } from '@/components/ui/Button';
 
+import { trackEvent } from '@/lib/analytics';
+
 import './View.scss';
 
 import heroKvImage from '@/public/images/common/site-sub-hero-kv.png';
@@ -95,6 +97,13 @@ export default function PerformanceViewPage({ performance }: Props) {
 
   const { isIOS, isReady } = useDevice();
   const ios = isIOS && isReady ? true : false;
+
+  function handleTrackEvent() {
+    trackEvent('reservation_click', {
+      performance_id: performance._id,
+      performance_title: performance.title,
+    });
+  }
 
   useFadeUpEffect('.performance-detail-inner');
 
@@ -329,6 +338,7 @@ export default function PerformanceViewPage({ performance }: Props) {
             className="reservation_btn"
             opacity={0.7}
             shadow
+            onClick={handleTrackEvent}
           >
             <span className="icon material-symbols-rounded" translate="no">
               confirmation_number
