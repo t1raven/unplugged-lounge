@@ -29,8 +29,9 @@ const query = `
         ogImage
       },
 
-      search {
+      thirdParty {
         siteVerifications,
+        gtm
       }
     }
   `;

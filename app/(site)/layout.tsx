@@ -14,6 +14,8 @@ import type { Metadata, Viewport } from 'next';
 import { getSiteSettings } from '@/lib/siteSettings';
 import { urlFor } from '@/sanity/lib/image';
 
+import GoogleTagManager from '@/components/analytics/GoogleTagManager';
+
 export async function generateMetadata(): Promise<Metadata> {
   const siteSettings = await getSiteSettings();
 
@@ -74,7 +76,7 @@ export async function generateMetadata(): Promise<Metadata> {
     verification: {
       other: {
         ...Object.fromEntries(
-          siteSettings?.search?.siteVerifications?.map(({ key, value }) => [key, value]) ?? [],
+          siteSettings?.thirdParty?.siteVerifications?.map(({ key, value }) => [key, value]) ?? [],
         ),
       },
     },
@@ -115,6 +117,7 @@ export default async function SiteLayout({
           <Gnb />
           <Footer data={siteInfo?.general ?? {}} />
         </Providers>
+        <GoogleTagManager />
         <Analytics />
         <SpeedInsights />
       </body>
