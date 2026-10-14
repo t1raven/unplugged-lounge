@@ -108,56 +108,58 @@ export default function PerformanceCalendar({ performances }: Props) {
     })
     .slice(0, 12);
 
-  useFadeUpEffect('.calendar-container, .selected-date-performance, .upcoming-performances');
+  useFadeUpEffect('.date-picker, .selected-date-performance, .upcoming-performances');
 
   return (
-    <div className="sub-page-section performance-calendar">
+    <div className="sub-page-section performance-list">
       <div className="inner">
-        <DatePicker
-          selectedDate={selectedDate}
-          setSelectedDate={setSelectedDate}
-          performancesByDate={performancesByDate}
-        />
+        <div className="date-picker-container">
+          <DatePicker
+            selectedDate={selectedDate}
+            setSelectedDate={setSelectedDate}
+            performancesByDate={performancesByDate}
+          />
 
-        {/* ==================================================
-            Selected Date
-        ================================================== */}
+          {/* ==================================================
+              Selected Date
+          ================================================== */}
 
-        <div className="selected-date-performance">
-          <div className="performance-list-header">
-            <div>
-              <p>SELECTED DATE</p>
-              <h3>
-                {selectedDateInfo.month}.{String(selectedDateInfo.day).padStart(2, '0')}{' '}
-                <span>
-                  {selectedDateInfo.weekday}
-                  요일
-                </span>
-              </h3>
+          <div className="selected-date-performance">
+            <div className="performance-list-header">
+              <div>
+                {/* <p>SELECTED DATE</p> */}
+                <h3>
+                  {selectedDateInfo.month}.{String(selectedDateInfo.day).padStart(2, '0')}{' '}
+                  <span>
+                    {selectedDateInfo.weekday}
+                    요일
+                  </span>
+                </h3>
+              </div>
+
+              <div className="performance-list-count">
+                공연 <span>{selectedPerformances.length}</span>
+              </div>
             </div>
 
-            <div className="performance-list-count">
-              공연 <span>{selectedPerformances.length}</span>
-            </div>
+            {selectedPerformances.length > 0 ? (
+              <div className="performance-list-body">
+                {selectedPerformances.map((performance) => {
+                  return (
+                    <PerformanceCard
+                      key={performance._id}
+                      type="selected"
+                      performance={performance}
+                    />
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="no-performance">
+                <p>선택한 날짜에는 예정된 공연이 없습니다.</p>
+              </div>
+            )}
           </div>
-
-          {selectedPerformances.length > 0 ? (
-            <div className="performance-list">
-              {selectedPerformances.map((performance) => {
-                return (
-                  <PerformanceCard
-                    key={performance._id}
-                    type="selected"
-                    performance={performance}
-                  />
-                );
-              })}
-            </div>
-          ) : (
-            <div className="no-performance">
-              <p>선택한 날짜에는 예정된 공연이 없습니다.</p>
-            </div>
-          )}
         </div>
 
         {/* ==================================================
@@ -173,7 +175,7 @@ export default function PerformanceCalendar({ performances }: Props) {
           </div>
 
           {upcomingPerformances.length > 0 ? (
-            <div className="performance-list">
+            <div className="performance-list-body">
               {upcomingPerformances.map((performance) => {
                 return (
                   <PerformanceCard

@@ -101,7 +101,7 @@ export default function DatePicker({ selectedDate, setSelectedDate, performances
   }, [currentDate]);
 
   return (
-    <div className="date-picker-container">
+    <div className="date-picker">
       {/* ==================================================
           Calendar Header
       ================================================== */}

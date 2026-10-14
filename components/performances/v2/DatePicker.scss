@@ -139,8 +139,8 @@
 .date-picker-day {
   position: relative;
   display: block;
+  aspect-ratio: 1;
   width: 100%;
-  min-height: 80px;
   padding: 14px;
   border: 0;
   border-right: 1px solid var(--border-color);
@@ -252,7 +252,6 @@
 
 @media (max-width: 1024px) {
   .date-picker-day {
-    min-height: 80px;
     padding: 10px;
   }
 }
@@ -305,7 +304,6 @@
   // ----------------------------------------------
 
   .date-picker-day {
-    min-height: 50px;
     padding: 5px 2px;
   }
 
