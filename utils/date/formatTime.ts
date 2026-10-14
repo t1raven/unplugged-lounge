@@ -1,9 +1,7 @@
-import { timeFormatter } from './formatter';
+import { getDateParts } from './formatter';
 
 export function formatTime(date: string | Date) {
-  const parts = timeFormatter.formatToParts(typeof date === 'string' ? new Date(date) : date);
-  const hours = parts.find((part) => part.type === 'hour')!.value;
-  const minutes = parts.find((part) => part.type === 'minute')!.value;
+  const { hour, minute } = getDateParts(date);
 
-  return `${hours}:${minutes}`;
+  return `${hour}:${minute}`;
 }

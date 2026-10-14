@@ -3,15 +3,7 @@ export const dateFormatter = new Intl.DateTimeFormat('ko-KR', {
   year: 'numeric',
   month: '2-digit',
   day: '2-digit',
-});
-
-export const weekdayFormatter = new Intl.DateTimeFormat('ko-KR', {
-  timeZone: 'Asia/Seoul',
   weekday: 'long',
-});
-
-export const timeFormatter = new Intl.DateTimeFormat('ko-KR', {
-  timeZone: 'Asia/Seoul',
   hour: '2-digit',
   minute: '2-digit',
   hourCycle: 'h23',
@@ -25,5 +17,8 @@ export function getDateParts(date: Date | string) {
     year: parts.find((part) => part.type === 'year')!.value,
     month: parts.find((part) => part.type === 'month')!.value,
     day: parts.find((part) => part.type === 'day')!.value,
+    weekday: parts.find((part) => part.type === 'weekday')!.value,
+    hour: parts.find((part) => part.type === 'hour')!.value,
+    minute: parts.find((part) => part.type === 'minute')!.value,
   };
 }
