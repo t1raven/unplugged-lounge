@@ -12,6 +12,7 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
+    "@next/third-parties": "^16.4.0",
     "@portabletext/types": "^4.0.2",
     "@sanity/icons": "^5.2.2",
     "@sanity/image-url": "^2.1.1",
