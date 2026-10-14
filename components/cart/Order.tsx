@@ -26,7 +26,7 @@ interface Props {
 
   //onBack: () => void;
 
-  onComplete: (orderNumber: string) => void;
+  onComplete: (orderNumber: string, totalPrice: number) => void;
 }
 
 type DeliveryMethod = 'delivery' | 'pickup';
@@ -124,7 +124,7 @@ export default function Order({
         throw new Error(data.message || '구매 신청에 실패했습니다.');
       }
 
-      onComplete(data.orderNumber);
+      onComplete(data.orderNumber, data.totalPrice);
     } catch (error) {
       setError(error instanceof Error ? error.message : '구매 신청에 실패했습니다.');
     } finally {
