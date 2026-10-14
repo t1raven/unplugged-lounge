@@ -26,7 +26,7 @@ export default function PerformanceCard({ performance, type }: Props) {
 
         {type === 'upcoming' && (
           <span>
-            {formatWeekDay(performance.date, true)} {formatTime(performance.date)}
+            {formatWeekDay(performance.date, 'short')} {formatTime(performance.date)}
           </span>
         )}
       </div>

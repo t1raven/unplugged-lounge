@@ -1,28 +1,17 @@
 .performance-list {
-  padding-top: 60px;
-  padding-bottom: 120px;
+  padding-top: 80px;
 
   .date-picker-container {
     width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 30px;
-
-    .date-picker {
-      width: clamp(320px, 50%, 520px);
-      flex-shrink: 0;
-    }
-
-    .selected-date-performance {
-      flex-grow: 1;
-    }
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(430px, 1fr));
+    gap: 20px 30px;
   }
 
   .performance-list-header {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    min-height: 45px;
     margin-bottom: 24px;
 
     p {
@@ -81,6 +70,18 @@
   }
 
   // ==================================================
+  // Upcoming Performances
+  // ==================================================
+
+  .upcoming-performances {
+    margin-top: 80px;
+    .performance-list-body {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(430px, 1fr));
+    }
+  }
+
+  // ==================================================
   // No Performance
   // ==================================================
 
@@ -102,18 +103,18 @@
   }
 
   // ==================================================
-  // Upcoming Performances
+  // Tablet
   // ==================================================
 
-  .upcoming-performances {
-    margin-top: 100px;
-    .performance-list-body {
-      flex-direction: row;
-      flex-wrap: wrap;
-      gap: 12px;
+  @media (max-width: 1024px) {
+    .date-picker-container {
+      grid-template-columns: 1fr;
+    }
 
-      .performance-card {
-        flex: 1 1 clamp(360px, 100%, 420px);
+    .upcoming-performances {
+      margin-top: 40px;
+      .performance-list-body {
+        grid-template-columns: 1fr;
       }
     }
   }
@@ -127,7 +128,7 @@
     padding-bottom: 80px;
 
     .performance-list-header {
-      padding-bottom: 16px;
+      margin-bottom: 16px;
 
       p {
         margin-bottom: 6px;
@@ -135,7 +136,7 @@
       }
 
       h3 {
-        font-size: 24px;
+        font-size: 20px;
 
         span {
           font-size: 13px;
@@ -143,25 +144,21 @@
       }
     }
 
+    .date-picker-container {
+      grid-template-columns: 1fr;
+    }
+
     .performance-list-count {
       font-size: 13px;
     }
 
-    .performance-list {
+    .performance-list-body {
       gap: 8px;
     }
 
     .no-performance {
       min-height: 85px;
       border-radius: 8px;
-    }
-
-    // ----------------------------------------------
-    // Upcoming
-    // ----------------------------------------------
-
-    .upcoming-performances {
-      margin-top: 64px;
     }
   }
 }

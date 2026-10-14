@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { formatDate } from '@/utils/date';
 
 import type { Performance } from '@/types/performance';
@@ -8,8 +8,9 @@ import type { Performance } from '@/types/performance';
 import './DatePicker.scss';
 
 interface Props {
+  currentDate: Date;
   selectedDate: string;
-  setSelectedDate: (date: string) => void;
+  onSelectDate: (date: string) => void;
   performancesByDate: Record<string, Performance[]>;
 }
 
@@ -23,43 +24,13 @@ const formatDateKey = (date: Date) => {
   return formatDate(date).replaceAll('.', '-');
 };
 
-export default function DatePicker({ selectedDate, setSelectedDate, performancesByDate }: Props) {
+export default function DatePicker({
+  currentDate,
+  selectedDate,
+  onSelectDate,
+  performancesByDate,
+}: Props) {
   const todayKey = formatDateKey(new Date());
-  // 달력의 날짜는 한국 날짜를 담은 UTC 값으로 관리합니다.
-  const today = new Date();
-
-  const [currentDate, setCurrentDate] = useState(
-    () => new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), 1)),
-  );
-
-  const monthTitle = `${currentDate.getUTCFullYear()}년 ${currentDate.getUTCMonth() + 1}월`;
-
-  const handlePreviousMonth = () => {
-    const previousMonth = new Date(
-      Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth() - 1, 1),
-    );
-
-    const currentMonth = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), 1));
-
-    // 현재 달보다 이전 달로 이동하지 않음
-    if (previousMonth < currentMonth) {
-      return;
-    }
-
-    setCurrentDate(previousMonth);
-  };
-
-  const handleNextMonth = () => {
-    setCurrentDate(
-      new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth() + 1, 1)),
-    );
-  };
-
-  const handleToday = () => {
-    setCurrentDate(new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), 1)));
-
-    setSelectedDate(todayKey);
-  };
 
   const handleSelectDate = (date: Date) => {
     const dateKey = formatDateKey(date);
@@ -69,7 +40,7 @@ export default function DatePicker({ selectedDate, setSelectedDate, performances
       return;
     }
 
-    setSelectedDate(dateKey);
+    onSelectDate(dateKey);
   };
 
   // ==================================================
@@ -103,42 +74,6 @@ export default function DatePicker({ selectedDate, setSelectedDate, performances
   return (
     <div className="date-picker">
       {/* ==================================================
-          Calendar Header
-      ================================================== */}
-
-      <div className="date-picker-header">
-        <div className="date-picker-title">
-          <h2>{monthTitle}</h2>
-        </div>
-
-        <div className="date-picker-controls">
-          {!(
-            currentDate.getUTCFullYear() === today.getUTCFullYear() &&
-            currentDate.getUTCMonth() === today.getUTCMonth()
-          ) && (
-            <button
-              type="button"
-              onClick={handlePreviousMonth}
-              disabled={
-                currentDate.getUTCFullYear() === today.getUTCFullYear() &&
-                currentDate.getUTCMonth() === today.getUTCMonth()
-              }
-              aria-label="이전 달"
-            >
-              <span className="material-symbols-rounded">keyboard_arrow_left</span>
-            </button>
-          )}
-          <button type="button" className="today-button" onClick={handleToday}>
-            오늘
-          </button>
-
-          <button type="button" onClick={handleNextMonth} aria-label="다음 달">
-            <span className="material-symbols-rounded">keyboard_arrow_right</span>
-          </button>
-        </div>
-      </div>
-
-      {/* ==================================================
           Weekdays
       ================================================== */}
 
@@ -157,7 +92,7 @@ export default function DatePicker({ selectedDate, setSelectedDate, performances
       <div className="date-picker-grid">
         {calendarDays.map((date, index) => {
           if (!date) {
-            return <div key={`empty-${index}`} className="date-picker-day is-empty" />;
+            return <div key={`empty-${index}`} className="date-picker-day is-empty"></div>;
           }
 
           const dateKey = formatDateKey(date);
@@ -187,16 +122,14 @@ export default function DatePicker({ selectedDate, setSelectedDate, performances
               </div>
 
               {/* 
-                  오늘은 지난 공연을 제외한
-                  실제 예정 공연이 있을 때만 표시
-                */}
-              {!isPast && dayPerformances.length > 0 && (
-                <div className="date-picker-performance-indicator">
-                  {dayPerformances.map((item, index) => (
-                    <span key={index} />
-                  ))}
-                </div>
-              )}
+                오늘은 지난 공연을 제외한
+                실제 예정 공연이 있을 때만 표시
+              */}
+              <div className="date-picker-performance-indicator">
+                {!isPast &&
+                  dayPerformances.length > 0 &&
+                  dayPerformances.map((item, index) => <span key={index} />)}
+              </div>
             </button>
           );
         })}

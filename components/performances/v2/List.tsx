@@ -2,9 +2,11 @@
 
 import { useMemo, useState } from 'react';
 import { formatDate } from '@/utils/date';
+import { useDevice } from '@/components/providers/DeviceProvider';
 import useFadeUpEffect from '@/hooks/useFadeUpEffect';
 
 import DatePicker from './DatePicker';
+import DateSlider from './DateSlider';
 import PerformanceCard from './Card';
 
 import type { Performance } from '@/types/performance';
@@ -14,8 +16,6 @@ import './List.scss';
 interface Props {
   performances: Performance[];
 }
-
-const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토'];
 
 // ==================================================
 // Date Helpers
@@ -51,12 +51,44 @@ const formatSelectedDate = (dateKey: string) => {
     year,
     month,
     day,
-    weekday: WEEKDAYS[date.getUTCDay()],
+    weekday: new Intl.DateTimeFormat('ko-KR', {
+      weekday: 'long',
+    }).format(date),
   };
 };
 
 export default function PerformanceCalendar({ performances }: Props) {
   const todayKey = formatDateKey(new Date());
+
+  // 달력의 날짜는 한국 날짜를 담은 UTC 값으로 관리합니다.
+  const today = new Date(`${todayKey}T00:00:00Z`);
+
+  const [currentDate, setCurrentDate] = useState(
+    () => new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), 1)),
+  );
+
+  const monthTitle = `${currentDate.getUTCFullYear()}년 ${currentDate.getUTCMonth() + 1}월`;
+
+  const handlePreviousMonth = () => {
+    const previousMonth = new Date(
+      Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth() - 1, 1),
+    );
+
+    const currentMonth = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), 1));
+
+    // 현재 달보다 이전 달로 이동하지 않음
+    if (previousMonth < currentMonth) {
+      return;
+    }
+
+    setCurrentDate(previousMonth);
+  };
+
+  const handleNextMonth = () => {
+    setCurrentDate(
+      new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth() + 1, 1)),
+    );
+  };
 
   // 선택된 날짜
   const [selectedDate, setSelectedDate] = useState(todayKey);
@@ -108,17 +140,61 @@ export default function PerformanceCalendar({ performances }: Props) {
     })
     .slice(0, 12);
 
-  useFadeUpEffect('.date-picker, .selected-date-performance, .upcoming-performances');
+  const { isReady, isDesktop } = useDevice();
+
+  useFadeUpEffect(
+    '.date-picker-header, .date-picker, .date-slider, .selected-date-performance, .upcoming-performances',
+  );
 
   return (
     <div className="sub-page-section performance-list">
       <div className="inner">
+        {/* ==================================================
+            Calendar Header
+        ================================================== */}
+
+        <div className="date-picker-header">
+          <div className="date-picker-controls">
+            <button
+              type="button"
+              onClick={handlePreviousMonth}
+              disabled={
+                currentDate.getUTCFullYear() === today.getUTCFullYear() &&
+                currentDate.getUTCMonth() === today.getUTCMonth()
+              }
+              aria-label="이전 달"
+            >
+              <span className="material-symbols-rounded">keyboard_arrow_left</span>
+            </button>
+          </div>
+
+          <div className="date-picker-title">
+            <h2>{monthTitle}</h2>
+          </div>
+
+          <div className="date-picker-controls">
+            <button type="button" onClick={handleNextMonth} aria-label="다음 달">
+              <span className="material-symbols-rounded">keyboard_arrow_right</span>
+            </button>
+          </div>
+        </div>
+
         <div className="date-picker-container">
-          <DatePicker
-            selectedDate={selectedDate}
-            setSelectedDate={setSelectedDate}
-            performancesByDate={performancesByDate}
-          />
+          {isReady && isDesktop ? (
+            <DatePicker
+              currentDate={currentDate}
+              selectedDate={selectedDate}
+              onSelectDate={setSelectedDate}
+              performancesByDate={performancesByDate}
+            />
+          ) : (
+            <DateSlider
+              currentDate={currentDate}
+              selectedDate={selectedDate}
+              onSelectDate={setSelectedDate}
+              performancesByDate={performancesByDate}
+            />
+          )}
 
           {/* ==================================================
               Selected Date
@@ -127,13 +203,10 @@ export default function PerformanceCalendar({ performances }: Props) {
           <div className="selected-date-performance">
             <div className="performance-list-header">
               <div>
-                {/* <p>SELECTED DATE</p> */}
+                <p>SELECTED DATE</p>
                 <h3>
                   {selectedDateInfo.month}.{String(selectedDateInfo.day).padStart(2, '0')}{' '}
-                  <span>
-                    {selectedDateInfo.weekday}
-                    요일
-                  </span>
+                  <span>{selectedDateInfo.weekday}</span>
                 </h3>
               </div>
 
@@ -156,7 +229,7 @@ export default function PerformanceCalendar({ performances }: Props) {
               </div>
             ) : (
               <div className="no-performance">
-                <p>선택한 날짜에는 예정된 공연이 없습니다.</p>
+                <p>공연이 없습니다.</p>
               </div>
             )}
           </div>
@@ -188,7 +261,7 @@ export default function PerformanceCalendar({ performances }: Props) {
             </div>
           ) : (
             <div className="no-performance">
-              <p>현재 예정된 공연이 없습니다.</p>
+              <p>공연이 없습니다.</p>
             </div>
           )}
         </div>

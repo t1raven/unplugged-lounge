@@ -1,0 +1,111 @@
+.date-slider {
+  display: flex;
+  gap: 8px;
+
+  width: 100%;
+  overflow-x: auto;
+
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+
+  overscroll-behavior-x: contain;
+
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  &__item {
+    position: relative;
+
+    display: flex;
+    flex: 0 0 min(calc((100% - 8px * 6) / 7), 57px);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    height: 76px;
+    padding: 8px 0;
+
+    border: 0;
+    border-radius: 999px;
+
+    background: transparent;
+    color: inherit;
+
+    scroll-snap-align: center;
+
+    cursor: pointer;
+
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
+
+    &.is-selected {
+      background: var(--border-color);
+    }
+
+    &.is-today {
+      .date-slider__day {
+        color: var(--primary-color);
+      }
+    }
+
+    &.is-today.is-selected {
+      background: var(--primary-color);
+
+      .date-slider__weekday,
+      .date-slider__day {
+        color: #fff;
+      }
+    }
+
+    &.is-past {
+      color: #55524c;
+      cursor: not-allowed;
+      > * {
+        opacity: 0.35;
+      }
+    }
+  }
+
+  &__weekday {
+    margin-bottom: 6px;
+
+    font-size: 11px;
+    line-height: 1;
+    font-weight: 500;
+    color: var(--font-sec-color);
+
+    &.is-sun {
+      color: #bd7777;
+    }
+    &.is-sat {
+      color: #8195bd;
+    }
+  }
+
+  &__day {
+    font-size: 18px;
+    line-height: 1;
+    font-weight: 500;
+  }
+
+  &__dot {
+    position: absolute;
+    bottom: 9px;
+
+    display: flex;
+    gap: 2px;
+
+    span {
+      width: 4px;
+      height: 4px;
+
+      border-radius: 50%;
+
+      background: var(--secondary-color);
+    }
+  }
+}
