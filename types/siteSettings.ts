@@ -23,13 +23,14 @@ export interface SEO {
   ogImage?: SanityImage;
 }
 
-export interface Search {
+export interface ThirdParty {
   siteVerifications?: { key: string; value: string }[];
+  gtm?: string;
 }
 
 export interface SiteSettings {
   general?: General;
   orderDelivery?: OrderDelivery;
   seo?: SEO;
-  search?: Search;
+  thirdParty?: ThirdParty;
 }

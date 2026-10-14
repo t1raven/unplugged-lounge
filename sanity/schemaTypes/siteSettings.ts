@@ -19,6 +19,10 @@ export const siteSettings = defineType({
       title: 'SEO 설정',
     },
     {
+      name: 'thirdParty',
+      title: '서드파티 설정',
+    },
+    {
       name: 'search',
       title: '검색 설정',
     },
@@ -172,19 +176,19 @@ export const siteSettings = defineType({
     }),
 
     // ==================================================
-    // 검색 설정
+    // 서드파티 설정
     // ==================================================
 
     defineField({
-      name: 'search',
-      title: '검색 설정',
+      name: 'thirdParty',
+      title: '서드파티 설정',
       type: 'object',
-      group: 'search',
+      group: 'thirdParty',
 
       fields: [
         defineField({
           name: 'siteVerifications',
-          title: '사이트 확인 코드',
+          title: '검색사이트 확인 코드',
           description: '검색등록 확인을 위한 코드 (예: Google, Naver 등)',
           type: 'array',
           of: [
@@ -204,6 +208,13 @@ export const siteSettings = defineType({
               ],
             },
           ],
+        }),
+
+        defineField({
+          name: 'gtm',
+          title: '구글 태그 매니저(GTM)',
+          type: 'string',
+          description: '예: GTM-XXXXXXXXXX',
         }),
       ],
     }),
