@@ -10,18 +10,9 @@
 }
 
 .date-picker-title {
-  p {
-    margin: 0 0 10px;
-    font-size: 13px;
-    font-weight: 600;
-    line-height: 1.4;
-    letter-spacing: 0.18em;
-    color: var(--font-sec-color);
-  }
-
   h2 {
     margin: 0;
-    font-size: 28px;
+    font-size: 32px;
     font-weight: 500;
     line-height: 1.2;
     letter-spacing: -0.03em;
@@ -42,8 +33,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 44px;
-    height: 44px;
+    width: 45px;
+    height: 45px;
     padding: 0;
     border: 1px solid var(--border-color);
     border-radius: 50%;
@@ -99,14 +90,16 @@
 .date-picker-weekdays {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
-  border-top: 1px solid var(--border-color);
-  border-bottom: 1px solid var(--border-color);
+  border: 1px solid var(--border-color);
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
   background: var(--background-sec-color);
+  overflow: hidden;
 }
 
 .date-picker-weekday {
   padding: 16px 12px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   line-height: 1.4;
   color: var(--font-sec-color);
@@ -129,7 +122,13 @@
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
   border-left: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
   background: var(--background-color);
+
+  overflow: hidden;
 }
 
 // ==================================================
@@ -141,25 +140,37 @@
   display: block;
   aspect-ratio: 1;
   width: 100%;
-  padding: 14px;
   border: 0;
-  border-right: 1px solid var(--border-color);
-  border-bottom: 1px solid var(--border-color);
+  //border-bottom: 1px solid var(--border-color);
   background: var(--background-color);
   color: var(--font-color);
   font-family: inherit;
   text-align: left;
   cursor: pointer;
 
-  transition:
-    background-color 0.25s ease,
-    border-color 0.25s ease;
+  transition: background-color 0.25s ease;
 
-  &:hover {
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border-radius: 12px;
+    transform: scale(0.85);
+    transition: background-color 0.25s ease;
+  }
+
+  &:hover:not(.is-empty, .is-past, .is-selected)::before {
     background: var(--background-sec-color);
   }
 
   &:focus-visible {
+    outline: none;
+  }
+
+  &:focus-visible::before {
     z-index: 2;
     outline: 2px solid var(--primary-color);
     outline-offset: -2px;
@@ -171,7 +182,24 @@
   }
 
   &.is-selected {
-    box-shadow: inset 0 0 0 1px var(--primary-color);
+    &::before {
+      background: var(--border-color);
+    }
+  }
+
+  &.is-today {
+    span {
+      color: var(--primary-color);
+    }
+  }
+
+  &.is-today.is-selected {
+    span {
+      color: #fff;
+    }
+    &::before {
+      background: var(--primary-color);
+    }
   }
 
   &.is-past {
@@ -192,28 +220,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 
   span {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 30px;
-    height: 30px;
-    font-size: 16px;
+    width: 1.8em;
+    height: 1.8em;
+    font-size: 1rem;
     font-weight: 500;
     line-height: 1;
     color: var(--font-sec-color);
-  }
-}
-
-.date-picker-day.is-today {
-  .date-picker-date {
-    span {
-      border-radius: 50%;
-      background: var(--primary-color);
-      color: #fff;
-      font-weight: 500;
-    }
   }
 }
 
@@ -226,7 +244,6 @@
   align-items: center;
   justify-content: center;
   gap: 3px;
-  margin-top: 5px;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
@@ -251,9 +268,6 @@
 // ==================================================
 
 @media (max-width: 1024px) {
-  .date-picker-day {
-    padding: 10px;
-  }
 }
 
 // ==================================================
@@ -303,24 +317,16 @@
   // Calendar
   // ----------------------------------------------
 
-  .date-picker-day {
-    padding: 5px 2px;
-  }
-
   .date-picker-date {
     justify-content: center;
 
     span {
-      width: 18px;
-      height: 18px;
       font-size: 10px;
     }
   }
 
   .date-picker-performance-indicator {
-    justify-content: center;
     gap: 2px;
-    margin-top: 3px;
 
     span {
       width: 5px;

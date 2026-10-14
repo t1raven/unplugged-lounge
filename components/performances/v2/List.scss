@@ -4,27 +4,26 @@
 
   .date-picker-container {
     width: 100%;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(max(200px, 400px), 1fr));
-    gap: 40px;
-  }
-
-  // ==================================================
-  // Selected Date Performance
-  // ==================================================
-
-  .selected-date-performance {
-    margin-top: 65px;
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 30px;
+
+    .date-picker {
+      width: clamp(320px, 50%, 520px);
+      flex-shrink: 0;
+    }
+
+    .selected-date-performance {
+      flex-grow: 1;
+    }
   }
 
   .performance-list-header {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    padding-bottom: 24px;
-    //border-bottom: 1px solid var(--border-color);
+    min-height: 45px;
+    margin-bottom: 24px;
 
     p {
       margin: 0 0 8px;
@@ -39,7 +38,7 @@
       margin: 0;
       font-size: 32px;
       font-weight: 500;
-      line-height: 1.15;
+      line-height: 1.2;
       color: var(--font-color);
 
       span {
@@ -72,6 +71,16 @@
   }
 
   // ==================================================
+  // Selected Date Performance
+  // ==================================================
+
+  .selected-date-performance {
+    margin-top: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  // ==================================================
   // No Performance
   // ==================================================
 
@@ -79,8 +88,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 143px;
-    border: 1px solid var(--border-color);
+    min-height: 145px;
+    /* border: 1px solid var(--border-color); */
     border-radius: 12px;
     flex: 1;
 
@@ -99,9 +108,13 @@
   .upcoming-performances {
     margin-top: 100px;
     .performance-list-body {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(max(200px, 400px), 1fr));
+      flex-direction: row;
+      flex-wrap: wrap;
       gap: 12px;
+
+      .performance-card {
+        flex: 1 1 clamp(360px, 100%, 420px);
+      }
     }
   }
 
@@ -109,17 +122,9 @@
   // Mobile
   // ==================================================
 
-  @media (max-width: 767px) {
+  @media (max-width: 768px) {
     padding-top: 40px;
     padding-bottom: 80px;
-
-    // ----------------------------------------------
-    // Selected Date
-    // ----------------------------------------------
-
-    .selected-date-performance {
-      margin-top: 35px;
-    }
 
     .performance-list-header {
       padding-bottom: 16px;

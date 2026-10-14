@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { urlFor } from '@/sanity/lib/image';
 import { Image } from '@/components/ui/Skeleton';
-import { formatDate, formatTime, formatWeekDay } from '@/utils/date';
+import { formatDate, formatTime, formatWeekDay, formatDDay } from '@/utils/date';
 
 import type { Performance } from '@/types/performance';
 
@@ -39,6 +39,12 @@ export default function PerformanceCard({ performance, type }: Props) {
       />
 
       <div className="performance-info">
+        {type === 'upcoming' && (
+          <div>
+            <em>{formatDDay(performance.date)}</em>
+          </div>
+        )}
+
         <strong>{performance.title}</strong>
 
         {performance.artists && performance.artists.length > 0 && (
