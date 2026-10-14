@@ -1,14 +1,21 @@
 'use client';
 
 import { Button } from '@/components/ui/Button';
+import { trackEvent } from '@/lib/analytics';
 
 interface Props {
   orderNumber: string | null;
-
+  orderTotalPrice: number;
   onClose: () => void;
 }
 
-export default function Complete({ orderNumber, onClose }: Props) {
+export default function Complete({ orderNumber, orderTotalPrice, onClose }: Props) {
+  trackEvent('purchase_request', {
+    order_id: orderNumber || '',
+    value: orderTotalPrice,
+    currency: 'KRW',
+  });
+
   return (
     <div className="order-complete">
       <div className="complete-icon">

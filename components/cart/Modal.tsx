@@ -41,6 +41,7 @@ function CartModalContent({ orderDeliverySettings }: Props) {
   const [step, setStep] = useState('cart');
 
   const [orderNumber, setOrderNumber] = useState<string | null>(null);
+  const [orderTotalPrice, setOrderTotalPrice] = useState(0);
 
   const originalTotalPrice = items.reduce((total, item) => total + item.price * item.quantity, 0);
 
@@ -66,8 +67,9 @@ function CartModalContent({ orderDeliverySettings }: Props) {
     return total + unitPrice * item.quantity;
   }, 0);
 
-  const handleComplete = (orderNumber: string) => {
+  const handleComplete = (orderNumber: string, orderTotalPrice: number) => {
     setOrderNumber(orderNumber);
+    setOrderTotalPrice(orderTotalPrice);
 
     clearCart();
 
@@ -111,7 +113,9 @@ function CartModalContent({ orderDeliverySettings }: Props) {
         />
       )}
 
-      {step === 'complete' && <Complete orderNumber={orderNumber} onClose={closeCart} />}
+      {step === 'complete' && (
+        <Complete orderNumber={orderNumber} orderTotalPrice={orderTotalPrice} onClose={closeCart} />
+      )}
     </Modal>
   );
 }
