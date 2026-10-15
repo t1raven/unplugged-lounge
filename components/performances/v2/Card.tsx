@@ -20,7 +20,7 @@ export default function PerformanceCard({ performance, type }: Props) {
       <div className="performance-date">
         <strong>
           {type === 'upcoming'
-            ? formatDate(performance.date).substring(5)
+            ? formatDate(performance.date).replaceAll('-', '.').substring(5)
             : formatTime(performance.date)}
         </strong>
 

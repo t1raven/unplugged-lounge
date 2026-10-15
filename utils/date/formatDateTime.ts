@@ -3,5 +3,5 @@ import { formatWeekDay } from './formatWeekDay';
 import { formatTime } from './formatTime';
 
 export function formatDateTime(date: Date | string) {
-  return `${formatDate(date)} ${formatWeekDay(date)} ${formatTime(date)}`;
+  return `${formatDate(date).replaceAll('-', '.')} ${formatWeekDay(date)} ${formatTime(date)}`;
 }

@@ -9,20 +9,12 @@ import './DatePicker.scss';
 
 interface Props {
   currentDate: Date;
-  selectedDate: string;
-  onSelectDate: (date: string) => void;
+  selectedDate: Date;
+  onSelectDate: (date: Date) => void;
   performancesByDate: Record<string, Performance[]>;
 }
 
-// ==================================================
-// Date Helpers
-// ==================================================
-
 const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토'];
-
-const formatDateKey = (date: Date) => {
-  return formatDate(date).replaceAll('.', '-');
-};
 
 export default function DatePicker({
   currentDate,
@@ -30,24 +22,9 @@ export default function DatePicker({
   onSelectDate,
   performancesByDate,
 }: Props) {
-  const todayKey = formatDateKey(new Date());
+  console.log(currentDate, selectedDate);
 
-  const handleSelectDate = (date: Date) => {
-    const dateKey = formatDateKey(date);
-
-    // 오늘 이전 날짜 선택 불가
-    if (dateKey < todayKey) {
-      return;
-    }
-
-    onSelectDate(dateKey);
-  };
-
-  // ==================================================
-  // Calendar Days
-  // ==================================================
-
-  const calendarDays = useMemo(() => {
+  const datePickerDates = useMemo(() => {
     const days: Array<Date | null> = [];
     const firstDayIndex = new Date(
       Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), 1),
@@ -73,10 +50,6 @@ export default function DatePicker({
 
   return (
     <div className="date-picker">
-      {/* ==================================================
-          Weekdays
-      ================================================== */}
-
       <div className="date-picker-weekdays">
         {WEEKDAYS.map((weekday) => (
           <div key={weekday} className="date-picker-weekday">
@@ -85,21 +58,17 @@ export default function DatePicker({
         ))}
       </div>
 
-      {/* ==================================================
-          Calendar
-      ================================================== */}
-
       <div className="date-picker-grid">
-        {calendarDays.map((date, index) => {
+        {datePickerDates.map((date, index) => {
           if (!date) {
             return <div key={`empty-${index}`} className="date-picker-day is-empty"></div>;
           }
 
-          const dateKey = formatDateKey(date);
+          const dateKey = formatDate(date);
+          const todayKey = formatDate(new Date());
           const isToday = dateKey === todayKey;
-          const isSelected = dateKey === selectedDate;
+          const isSelected = dateKey === formatDate(selectedDate);
           const isPast = dateKey < todayKey;
-
           const dayPerformances = performancesByDate[dateKey] ?? [];
 
           return (
@@ -115,20 +84,14 @@ export default function DatePicker({
               ]
                 .filter(Boolean)
                 .join(' ')}
-              onClick={() => handleSelectDate(date)}
+              onClick={() => onSelectDate(date)}
             >
-              <div className="date-picker-date">
-                <span>{date.getUTCDate()}</span>
-              </div>
+              <div className="date-picker-date">{date.getUTCDate()}</div>
 
-              {/* 
-                오늘은 지난 공연을 제외한
-                실제 예정 공연이 있을 때만 표시
-              */}
               <div className="date-picker-performance-indicator">
                 {!isPast &&
                   dayPerformances.length > 0 &&
-                  dayPerformances.map((item, index) => <span key={index} />)}
+                  dayPerformances.map((item) => <span key={item._id} />)}
               </div>
             </button>
           );

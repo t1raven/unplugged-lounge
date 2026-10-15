@@ -64,9 +64,10 @@
   // ==================================================
 
   .selected-date-performance {
-    margin-top: 0;
     display: flex;
     flex-direction: column;
+    margin-top: 0;
+    padding: 20px 0;
   }
 
   // ==================================================
@@ -159,6 +160,10 @@
     .no-performance {
       min-height: 85px;
       border-radius: 8px;
+    }
+
+    .selected-date-performance {
+      padding: 0;
     }
   }
 }

@@ -24,12 +24,13 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 6px;
 
-    height: 76px;
+    height: 70px;
     padding: 8px 0;
 
     border: 0;
-    border-radius: 999px;
+    border-radius: 12px;
 
     background: transparent;
     color: inherit;
@@ -42,17 +43,13 @@
       background-color 0.2s ease,
       color 0.2s ease;
 
-    &.is-selected {
-      background: var(--border-color);
-    }
-
     &.is-today {
       .date-slider__day {
         color: var(--primary-color);
       }
     }
 
-    &.is-today.is-selected {
+    &.is-selected {
       background: var(--primary-color);
 
       .date-slider__weekday,
@@ -71,8 +68,6 @@
   }
 
   &__weekday {
-    margin-bottom: 6px;
-
     font-size: 11px;
     line-height: 1;
     font-weight: 500;
@@ -92,19 +87,16 @@
     font-weight: 500;
   }
 
-  &__dot {
-    position: absolute;
-    bottom: 9px;
-
+  &__indicator {
     display: flex;
     gap: 2px;
+    height: 5px;
+    margin-top: 4px;
 
     span {
-      width: 4px;
-      height: 4px;
-
+      width: 5px;
+      height: 5px;
       border-radius: 50%;
-
       background: var(--secondary-color);
     }
   }

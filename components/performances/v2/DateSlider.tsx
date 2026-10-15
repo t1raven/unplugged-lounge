@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useMemo } from 'react';
 import { formatDate } from '@/utils/date';
 
 import type { Performance } from '@/types/performance';
@@ -9,8 +9,8 @@ import './DateSlider.scss';
 
 interface Props {
   currentDate: Date;
-  selectedDate: string;
-  onSelectDate: (date: string) => void;
+  selectedDate: Date;
+  onSelectDate: (date: Date) => void;
   performancesByDate: Record<string, Performance[]>;
 }
 
@@ -22,24 +22,16 @@ export default function DateSlider({
   onSelectDate,
   performancesByDate,
 }: Props) {
-  const itemRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+  console.log(currentDate, selectedDate);
 
-  useEffect(() => {
-    const selectedItem = itemRefs.current[selectedDate];
-
-    selectedItem?.scrollIntoView({
-      behavior: 'smooth',
-      inline: 'center',
-      block: 'nearest',
-    });
-  }, [selectedDate]);
-
-  function getMonthDates(year: number, month: number) {
-    const lastDay = new Date(year, month, 0).getDate();
+  const dateSliderDates = useMemo(() => {
+    const lastDay = new Date(
+      Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth() + 1, 0),
+    ).getUTCDate();
 
     return Array.from({ length: lastDay }, (_, index) => {
       const day = index + 1;
-      const date = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      const date = `${currentDate.getUTCFullYear()}-${String(currentDate.getUTCMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
       const dateObject = new Date(`${date}T00:00:00`);
 
       return {
@@ -48,17 +40,37 @@ export default function DateSlider({
         weekday: dateObject.getDay(),
       };
     });
-  }
+  }, [currentDate]);
 
-  const dates = getMonthDates(currentDate.getUTCFullYear(), currentDate.getUTCMonth() + 1);
+  const itemRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+
+  useEffect(() => {
+    const selectedKey = formatDate(selectedDate);
+    const todayKey = formatDate(new Date());
+    const hasDate = (dateKey: string) => dateSliderDates.some((item) => item.date === dateKey);
+
+    // 표시 중인 월의 선택일 → 오늘 → 1일 순서로 스크롤합니다.
+    const targetKey = hasDate(selectedKey)
+      ? selectedKey
+      : hasDate(todayKey)
+        ? todayKey
+        : dateSliderDates[0]?.date;
+    const selectedItem = targetKey ? itemRefs.current[targetKey] : null;
+
+    selectedItem?.scrollIntoView({
+      behavior: 'smooth',
+      inline: 'center',
+      block: 'nearest',
+    });
+  }, [dateSliderDates, selectedDate]);
 
   return (
     <div className="date-slider">
-      {dates.map((item) => {
+      {dateSliderDates.map((item) => {
         const dateKey = formatDate(item.date);
         const todayKey = formatDate(new Date());
         const isToday = dateKey === todayKey;
-        const isSelected = dateKey === selectedDate.replaceAll('-', '.');
+        const isSelected = dateKey === formatDate(selectedDate);
         const isPast = dateKey < todayKey;
         const dayPerformances = performancesByDate[item.date] ?? [];
 
@@ -79,7 +91,7 @@ export default function DateSlider({
               .filter(Boolean)
               .join(' ')}
             aria-pressed={isSelected}
-            onClick={() => onSelectDate(item.date)}
+            onClick={() => onSelectDate(new Date(item.date))}
           >
             <span
               className={[
@@ -95,10 +107,10 @@ export default function DateSlider({
 
             <strong className="date-slider__day">{item.day}</strong>
 
-            <div className="date-slider__dot">
+            <div className="date-slider__indicator">
               {!isPast &&
                 dayPerformances.length > 0 &&
-                dayPerformances.map((item, index) => <span key={index} />)}
+                dayPerformances.map((item) => <span key={item._id} />)}
             </div>
           </button>
         );

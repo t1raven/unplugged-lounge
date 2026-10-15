@@ -144,7 +144,7 @@ export default function Upcoming({ performances }: UpcomingProps) {
                     />
 
                     <div className="upcoming__date">
-                      <strong>{formatDate(performance.date).slice(5)}</strong>
+                      <strong>{formatDate(performance.date).replaceAll('-', '.').slice(5)}</strong>
 
                       <span>{formatWeekDay(performance.date)}</span>
 

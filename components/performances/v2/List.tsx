@@ -17,14 +17,6 @@ interface Props {
   performances: Performance[];
 }
 
-// ==================================================
-// Date Helpers
-// ==================================================
-
-const formatDateKey = (date: Date) => {
-  return formatDate(date).replaceAll('.', '-');
-};
-
 /**
  * Sanity datetime → 공연 시각
  */
@@ -36,7 +28,7 @@ const getPerformanceDate = (performance: Performance) => {
  * 공연의 날짜 Key
  */
 const getPerformanceDateKey = (performance: Performance) => {
-  return formatDate(performance.date).replaceAll('.', '-');
+  return formatDate(performance.date);
 };
 
 /**
@@ -57,15 +49,18 @@ const formatSelectedDate = (dateKey: string) => {
   };
 };
 
-export default function PerformanceCalendar({ performances }: Props) {
-  const todayKey = formatDateKey(new Date());
+export default function PerformanceList({ performances }: Props) {
+  const today = formatDate(new Date());
 
   // 달력의 날짜는 한국 날짜를 담은 UTC 값으로 관리합니다.
-  const today = new Date(`${todayKey}T00:00:00Z`);
+  const todayUTC = new Date(today);
 
   const [currentDate, setCurrentDate] = useState(
-    () => new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), 1)),
+    () => new Date(Date.UTC(todayUTC.getUTCFullYear(), todayUTC.getUTCMonth(), 1)),
   );
+
+  // 선택된 날짜
+  const [selectedDate, setSelectedDate] = useState(todayUTC);
 
   const monthTitle = `${currentDate.getUTCFullYear()}년 ${currentDate.getUTCMonth() + 1}월`;
 
@@ -74,7 +69,7 @@ export default function PerformanceCalendar({ performances }: Props) {
       Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth() - 1, 1),
     );
 
-    const currentMonth = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), 1));
+    const currentMonth = new Date(Date.UTC(todayUTC.getUTCFullYear(), todayUTC.getUTCMonth(), 1));
 
     // 현재 달보다 이전 달로 이동하지 않음
     if (previousMonth < currentMonth) {
@@ -90,9 +85,6 @@ export default function PerformanceCalendar({ performances }: Props) {
     );
   };
 
-  // 선택된 날짜
-  const [selectedDate, setSelectedDate] = useState(todayKey);
-
   // ==================================================
   // Performances By Date
   // ==================================================
@@ -103,13 +95,13 @@ export default function PerformanceCalendar({ performances }: Props) {
     performances.forEach((performance) => {
       if (!performance.date) return;
 
-      const dateKey = getPerformanceDateKey(performance);
+      const date = getPerformanceDateKey(performance);
 
-      if (!grouped[dateKey]) {
-        grouped[dateKey] = [];
+      if (!grouped[date]) {
+        grouped[date] = [];
       }
 
-      grouped[dateKey].push(performance);
+      grouped[date].push(performance);
     });
 
     return grouped;
@@ -119,8 +111,8 @@ export default function PerformanceCalendar({ performances }: Props) {
   // Selected Performances
   // ==================================================
 
-  const selectedPerformances = performancesByDate[selectedDate] ?? [];
-  const selectedDateInfo = formatSelectedDate(selectedDate);
+  const selectedPerformances = performancesByDate[formatDate(selectedDate)] ?? [];
+  const selectedDateInfo = formatSelectedDate(formatDate(selectedDate));
 
   // ==================================================
   // Upcoming Performances
@@ -130,7 +122,7 @@ export default function PerformanceCalendar({ performances }: Props) {
     .filter((performance) => {
       if (!performance.date) return false;
 
-      return getPerformanceDateKey(performance) >= todayKey;
+      return getPerformanceDateKey(performance) >= today;
     })
     .sort((a, b) => {
       const dateA = getPerformanceDate(a).getTime();
@@ -159,8 +151,8 @@ export default function PerformanceCalendar({ performances }: Props) {
               type="button"
               onClick={handlePreviousMonth}
               disabled={
-                currentDate.getUTCFullYear() === today.getUTCFullYear() &&
-                currentDate.getUTCMonth() === today.getUTCMonth()
+                currentDate.getUTCFullYear() === todayUTC.getUTCFullYear() &&
+                currentDate.getUTCMonth() === todayUTC.getUTCMonth()
               }
               aria-label="이전 달"
             >
@@ -180,30 +172,34 @@ export default function PerformanceCalendar({ performances }: Props) {
         </div>
 
         <div className="date-picker-container">
-          {isReady && isDesktop ? (
-            <DatePicker
-              currentDate={currentDate}
-              selectedDate={selectedDate}
-              onSelectDate={setSelectedDate}
-              performancesByDate={performancesByDate}
-            />
-          ) : (
-            <DateSlider
-              currentDate={currentDate}
-              selectedDate={selectedDate}
-              onSelectDate={setSelectedDate}
-              performancesByDate={performancesByDate}
-            />
+          {isReady && (
+            <>
+              {isDesktop ? (
+                <DatePicker
+                  currentDate={currentDate}
+                  selectedDate={selectedDate}
+                  onSelectDate={setSelectedDate}
+                  performancesByDate={performancesByDate}
+                />
+              ) : (
+                <DateSlider
+                  currentDate={currentDate}
+                  selectedDate={selectedDate}
+                  onSelectDate={setSelectedDate}
+                  performancesByDate={performancesByDate}
+                />
+              )}
+            </>
           )}
-
           {/* ==================================================
               Selected Date
           ================================================== */}
+          {/* ================================================== */}
 
           <div className="selected-date-performance">
             <div className="performance-list-header">
               <div>
-                <p>SELECTED DATE</p>
+                <p>SELECTED</p>
                 <h3>
                   {selectedDateInfo.month}.{String(selectedDateInfo.day).padStart(2, '0')}{' '}
                   <span>{selectedDateInfo.weekday}</span>
