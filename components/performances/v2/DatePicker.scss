@@ -246,10 +246,143 @@
 }
 
 // ==================================================
+// Date Picker Slider
+// ==================================================
+
+.date-picker-slider {
+  display: flex;
+  gap: 8px;
+
+  width: 110%;
+  margin: 0 -5%;
+  padding: 0 5%;
+  overflow-x: auto;
+
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    var(--background-color) 5%,
+    var(--background-color) 95%,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    var(--background-color) 5%,
+    var(--background-color) 95%,
+    transparent
+  );
+
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+
+  overscroll-behavior-x: contain;
+
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  &__item {
+    position: relative;
+
+    display: flex;
+    flex: 0 0 min(calc((100% - 8px * 6) / 7), 57px);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    height: 70px;
+    padding: 8px 0;
+
+    border: 0;
+    border-radius: 12px;
+
+    background: transparent;
+    color: inherit;
+
+    scroll-snap-align: center;
+
+    cursor: pointer;
+
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
+
+    &.is-today {
+      .date-picker-slider__day {
+        color: var(--primary-color);
+      }
+    }
+
+    &.is-selected {
+      background: var(--primary-color);
+
+      .date-picker-slider__weekday,
+      .date-picker-slider__day {
+        color: #fff;
+      }
+    }
+
+    &.is-past {
+      color: #55524c;
+      cursor: not-allowed;
+      > * {
+        opacity: 0.35;
+      }
+    }
+  }
+
+  &__weekday {
+    font-size: 11px;
+    line-height: 1;
+    font-weight: 500;
+    color: var(--font-sec-color);
+
+    &.is-sun {
+      color: #bd7777;
+    }
+    &.is-sat {
+      color: #8195bd;
+    }
+  }
+
+  &__day {
+    font-size: 18px;
+    line-height: 1;
+    font-weight: 500;
+  }
+
+  &__indicator {
+    display: flex;
+    gap: 2px;
+    height: 5px;
+    margin-top: 4px;
+
+    span {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--secondary-color);
+    }
+  }
+}
+
+.date-picker-skeleton {
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+}
+
+// ==================================================
 // Tablet
 // ==================================================
 
 @media (max-width: 1024px) {
+  .date-picker-skeleton {
+    aspect-ratio: 4 / 1;
+  }
 }
 
 // ==================================================

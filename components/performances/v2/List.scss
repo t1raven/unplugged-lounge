@@ -109,7 +109,8 @@
 
   @media (max-width: 1024px) {
     .date-picker-container {
-      grid-template-columns: 1fr;
+      display: flex;
+      flex-direction: column;
     }
 
     .upcoming-performances {
@@ -143,10 +144,6 @@
           font-size: 13px;
         }
       }
-    }
-
-    .date-picker-container {
-      grid-template-columns: 1fr;
     }
 
     .performance-list-count {

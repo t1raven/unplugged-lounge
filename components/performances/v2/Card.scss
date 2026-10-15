@@ -5,7 +5,7 @@
   gap: 20px;
   padding: 0 20px;
   background-color: var(--background-color);
-  border: 1px solid var(--border-color);
+  box-shadow: 0 0 0 1px var(--border-color);
   border-radius: 12px;
   color: var(--font-color);
   text-decoration: none;
@@ -32,7 +32,7 @@
 
   @media (hover: hover) and (pointer: fine) {
     &:hover {
-      border-color: var(--primary-color);
+      box-shadow: 0 0 0 1px var(--primary-color);
       z-index: 2;
       &::before {
         background-color: rgb(from var(--primary-color) r g b / 0.05);
@@ -41,7 +41,7 @@
   }
 
   &:active {
-    border-color: var(--primary-color);
+    box-shadow: 0 0 0 1px var(--primary-color);
     z-index: 2;
     &::before {
       background-color: rgb(from var(--primary-color) r g b / 0.05);
@@ -152,14 +152,10 @@
 
 @media (max-width: 768px) {
   .performance-card {
-    grid-template-columns: 32px 70px 1fr 16px;
+    grid-template-columns: 42px 70px 1fr 16px;
     gap: 12px;
     padding: 0 12px;
     border-radius: 8px;
-  }
-
-  .performance-time {
-    font-size: 13px;
   }
 
   .performance-date {
@@ -168,11 +164,11 @@
     align-items: flex-start;
 
     strong {
-      font-size: 13px;
+      font-size: 16px;
     }
 
     span {
-      font-size: 8px;
+      font-size: 10px;
     }
   }
 

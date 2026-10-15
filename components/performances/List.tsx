@@ -487,7 +487,7 @@ export default function PerformanceCalendar({ performances }: Props) {
                 const slug = performance.slug?.current;
 
                 const { month, day } = formatSelectedDate(getPerformanceDateKey(performance));
-                const weekday = formatWeekDay(performance.date, true);
+                const weekday = formatWeekDay(performance.date, 'short');
 
                 const content = (
                   <>

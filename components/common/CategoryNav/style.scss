@@ -36,7 +36,6 @@
     max-width: var(--inner-max-width);
     height: 60px;
     margin: 0 auto;
-    overflow: hidden;
   }
 
   &.active {
@@ -53,31 +52,10 @@
   }
 }
 
-/*.category-nav {
-  position: sticky;
-  top: 0;
-  z-index: 90;
-
-  margin-top: 40px;
-
-  //border-top: 1px solid var(--border-color);
-  //border-bottom: 1px solid var(--border-color);
-
-  transition: top 0.25s ease;
-
-  &:after {
-    content: '';
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-color: rgba(241, 237, 228, .8);
-    backdrop-filter: blur(5px);
-  }
-}*/
-
 .search-nav {
+  position: relative;
+  z-index: 1;
+
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -160,10 +138,32 @@
   justify-content: flex-start;
   gap: 8px;
 
-  width: 100%;
+  width: 110%;
   height: 100%;
+  margin: 0 -5%;
+  padding: 0 5%;
 
   overflow-x: auto;
+
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    var(--background-color) 5%,
+    var(--background-color) 95%,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    var(--background-color) 5%,
+    var(--background-color) 95%,
+    transparent
+  );
+
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+
+  overscroll-behavior-x: contain;
 
   scrollbar-width: none;
 
@@ -237,16 +237,7 @@ html.scrollUp .category_search_nav {
 @media screen and (max-width: 1024px) {
   .category_search_nav {
     &__inner {
-      width: 100%;
       gap: 12px;
-
-      > *:first-child {
-        padding-left: 5%;
-      }
-
-      > *:last-child {
-        padding-right: 5%;
-      }
     }
 
     &.active {

@@ -2,11 +2,9 @@
 
 import { useMemo, useState } from 'react';
 import { formatDate } from '@/utils/date';
-import { useDevice } from '@/components/providers/DeviceProvider';
 import useFadeUpEffect from '@/hooks/useFadeUpEffect';
 
 import DatePicker from './DatePicker';
-import DateSlider from './DateSlider';
 import PerformanceCard from './Card';
 
 import type { Performance } from '@/types/performance';
@@ -132,10 +130,8 @@ export default function PerformanceList({ performances }: Props) {
     })
     .slice(0, 12);
 
-  const { isReady, isDesktop } = useDevice();
-
   useFadeUpEffect(
-    '.date-picker-header, .date-picker, .date-slider, .selected-date-performance, .upcoming-performances',
+    '.date-picker-header, .date-picker, .selected-date-performance, .upcoming-performances',
   );
 
   return (
@@ -172,25 +168,12 @@ export default function PerformanceList({ performances }: Props) {
         </div>
 
         <div className="date-picker-container">
-          {isReady && (
-            <>
-              {isDesktop ? (
-                <DatePicker
-                  currentDate={currentDate}
-                  selectedDate={selectedDate}
-                  onSelectDate={setSelectedDate}
-                  performancesByDate={performancesByDate}
-                />
-              ) : (
-                <DateSlider
-                  currentDate={currentDate}
-                  selectedDate={selectedDate}
-                  onSelectDate={setSelectedDate}
-                  performancesByDate={performancesByDate}
-                />
-              )}
-            </>
-          )}
+          <DatePicker
+            currentDate={currentDate}
+            selectedDate={selectedDate}
+            onSelectDate={setSelectedDate}
+            performancesByDate={performancesByDate}
+          />
           {/* ==================================================
               Selected Date
           ================================================== */}
@@ -225,7 +208,7 @@ export default function PerformanceList({ performances }: Props) {
               </div>
             ) : (
               <div className="no-performance">
-                <p>공연이 없습니다.</p>
+                <p>선택한 날짜에 공연이 없습니다.</p>
               </div>
             )}
           </div>
@@ -257,7 +240,7 @@ export default function PerformanceList({ performances }: Props) {
             </div>
           ) : (
             <div className="no-performance">
-              <p>공연이 없습니다.</p>
+              <p>예정된 공연이 없습니다.</p>
             </div>
           )}
         </div>

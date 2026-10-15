@@ -18,6 +18,7 @@ export default function PerformanceCard({ performance, type }: Props) {
   return (
     <Link href={`/performances/${performance.slug?.current}`} className="performance-card">
       <div className="performance-date">
+        {type === 'upcoming' && <span>{formatDate(performance.date).slice(0, 4)}</span>}
         <strong>
           {type === 'upcoming'
             ? formatDate(performance.date).replaceAll('-', '.').substring(5)
