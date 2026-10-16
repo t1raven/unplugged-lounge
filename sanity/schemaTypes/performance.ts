@@ -48,6 +48,13 @@ export const performance = defineType({
     }),
 
     defineField({
+      name: 'reservationOpen',
+      title: '예매 가능',
+      type: 'boolean',
+      initialValue: false,
+    }),
+
+    defineField({
       name: 'siteSalesOnly',
       title: '현장예매만 가능',
       type: 'boolean',
@@ -55,9 +62,10 @@ export const performance = defineType({
     }),
 
     defineField({
-      name: 'reservationOpen',
-      title: '예매 가능',
+      name: 'isPrivate',
+      title: '공연 비공개',
       type: 'boolean',
+      description: '목록에서는 보이지 않으나 공연 페이지(URL)는 접근가능',
       initialValue: false,
     }),
 
@@ -100,6 +108,7 @@ export const performance = defineType({
       options: {
         hotspot: true,
       },
+      validation: (Rule) => Rule.required(),
     }),
 
     defineField({
@@ -211,12 +220,11 @@ export const performance = defineType({
     select: {
       title: 'title',
       date: 'date',
-      open: 'reservationOpen',
-      siteOnly: 'siteSalesOnly',
+      open: 'isPrivate',
       media: 'poster',
     },
 
-    prepare({ title, date, media, open, siteOnly }) {
+    prepare({ title, date, media, open }) {
       const getDate = new Date(date);
 
       const year = getDate.getFullYear();
@@ -229,11 +237,11 @@ export const performance = defineType({
 
       const minutes = String(getDate.getMinutes()).padStart(2, '0');
 
-      const status = !open && !siteOnly ? ' · 매진' : '';
+      const status = open ? '(비공개)' : '';
 
       return {
-        title,
-        subtitle: `${year}-${month}-${day} (${weekday}) ${hours}:${minutes}${status}`,
+        title: title + status,
+        subtitle: `${year}-${month}-${day} (${weekday}) ${hours}:${minutes}`,
         media,
       };
     },
