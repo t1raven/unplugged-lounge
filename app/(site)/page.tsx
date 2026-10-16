@@ -12,7 +12,9 @@ import type { Performance } from '@/types/performance';
 const upcomingQuery = `
   *[
     _type == "performance"
+    && defined(date)
     && date >= $today
+    && isPrivate == false
   ]
   | order(date asc)[0...12] {
     _id,

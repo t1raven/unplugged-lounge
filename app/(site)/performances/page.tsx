@@ -12,6 +12,8 @@ const performancesQuery = `
   *[
     _type == "performance"
     && defined(date)
+    && date >= $today
+    && isPrivate == false
   ]
   | order(date asc)
   {
@@ -31,7 +33,14 @@ const performancesQuery = `
 `;
 
 async function getPerformances() {
-  return await client.fetch(performancesQuery);
+  const today = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Seoul',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(new Date());
+
+  return await client.fetch(performancesQuery, { today });
 }
 
 export const revalidate = 0;
