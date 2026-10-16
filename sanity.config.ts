@@ -18,7 +18,7 @@ import { default as CustomNavbar } from '@/sanity/components/navBar/CustomNavbar
 import {
   DeletePerformanceAndGalleryAction,
   PublishPerformanceAndSyncGalleryAction,
-} from './sanity/actions/PerformancePosterSyncs';
+} from './sanity/actions/PerformancePosterSync';
 import { PerformanceViewOnSiteAction } from './sanity/actions/PerformanceViewOnSite';
 
 import { koKRLocale } from '@sanity/locale-ko-kr';
