@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { formatDate } from '@/utils/date';
+import { formatDate, formatWeekDay } from '@/utils/date';
 import useFadeUpEffect from '@/hooks/useFadeUpEffect';
 
 import DatePicker from './DatePicker';
@@ -15,120 +15,94 @@ interface Props {
   performances: Performance[];
 }
 
-/**
- * Sanity datetime → 공연 시각
- */
-const getPerformanceDate = (performance: Performance) => {
-  return new Date(performance.date);
-};
-
-/**
- * 공연의 날짜 Key
- */
-const getPerformanceDateKey = (performance: Performance) => {
-  return formatDate(performance.date);
-};
-
-/**
- * 선택 날짜 표시
- */
-const formatSelectedDate = (dateKey: string) => {
-  const [year, month, day] = dateKey.split('-').map(Number);
-
-  const date = new Date(Date.UTC(year, month - 1, day));
-
-  return {
-    year,
-    month,
-    day,
-    weekday: new Intl.DateTimeFormat('ko-KR', {
-      weekday: 'long',
-    }).format(date),
-  };
-};
+const UPCOMING_LIMIT = 12;
 
 export default function PerformanceList({ performances }: Props) {
-  const today = formatDate(new Date());
+  const todayKey = formatDate(new Date());
 
   // 달력의 날짜는 한국 날짜를 담은 UTC 값으로 관리합니다.
-  const todayUTC = new Date(today);
+  const today = new Date(todayKey);
+  const currentMonthStart = Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), 1);
 
-  const [currentDate, setCurrentDate] = useState(
-    () => new Date(Date.UTC(todayUTC.getUTCFullYear(), todayUTC.getUTCMonth(), 1)),
-  );
+  const [currentDate, setCurrentDate] = useState(() => new Date(currentMonthStart));
 
   // 선택된 날짜
-  const [selectedDate, setSelectedDate] = useState(todayUTC);
+  const [selectedDateKey, setSelectedDateKey] = useState(todayKey);
 
   const monthTitle = `${currentDate.getUTCFullYear()}년 ${currentDate.getUTCMonth() + 1}월`;
+  const isPreviousMonthDisabled = currentDate.getTime() <= currentMonthStart;
 
   const handlePreviousMonth = () => {
-    const previousMonth = new Date(
-      Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth() - 1, 1),
-    );
+    setCurrentDate((date) => {
+      const previousMonth = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth() - 1, 1));
 
-    const currentMonth = new Date(Date.UTC(todayUTC.getUTCFullYear(), todayUTC.getUTCMonth(), 1));
-
-    // 현재 달보다 이전 달로 이동하지 않음
-    if (previousMonth < currentMonth) {
-      return;
-    }
-
-    setCurrentDate(previousMonth);
+      // 현재 달보다 이전 달로 이동하지 않음
+      return previousMonth.getTime() < currentMonthStart ? date : previousMonth;
+    });
   };
 
   const handleNextMonth = () => {
-    setCurrentDate(
-      new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth() + 1, 1)),
-    );
+    setCurrentDate((date) => new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 1)));
   };
 
   // ==================================================
   // Performances By Date
   // ==================================================
 
-  const performancesByDate = useMemo(() => {
+  const { performancesByDate, sortedPerformances } = useMemo(() => {
     const grouped: Record<string, Performance[]> = {};
+    const datedPerformances: Array<{
+      performance: Performance;
+      dateKey: string;
+      timestamp: number;
+    }> = [];
 
     performances.forEach((performance) => {
       if (!performance.date) return;
 
-      const date = getPerformanceDateKey(performance);
+      const date = new Date(performance.date);
+      const timestamp = date.getTime();
+      if (Number.isNaN(timestamp)) return;
 
-      if (!grouped[date]) {
-        grouped[date] = [];
+      const dateKey = formatDate(date);
+
+      if (!grouped[dateKey]) {
+        grouped[dateKey] = [];
       }
 
-      grouped[date].push(performance);
+      grouped[dateKey].push(performance);
+      datedPerformances.push({ performance, dateKey, timestamp });
     });
 
-    return grouped;
+    return {
+      performancesByDate: grouped,
+      sortedPerformances: datedPerformances.sort((a, b) => a.timestamp - b.timestamp),
+    };
   }, [performances]);
 
   // ==================================================
   // Selected Performances
   // ==================================================
 
-  const selectedPerformances = performancesByDate[formatDate(selectedDate)] ?? [];
-  const selectedDateInfo = formatSelectedDate(formatDate(selectedDate));
+  const selectedWeekday = formatWeekDay(selectedDateKey);
+  const selectedPerformances = performancesByDate[selectedDateKey] ?? [];
 
   // ==================================================
   // Upcoming Performances
   // ==================================================
 
-  const upcomingPerformances = performances
-    .filter((performance) => {
-      if (!performance.date) return false;
+  const upcomingPerformances = useMemo(() => {
+    const upcoming: Performance[] = [];
 
-      return getPerformanceDateKey(performance) >= today;
-    })
-    .sort((a, b) => {
-      const dateA = getPerformanceDate(a).getTime();
-      const dateB = getPerformanceDate(b).getTime();
+    for (const { performance, dateKey } of sortedPerformances) {
+      if (dateKey < todayKey) continue;
 
-      return dateA - dateB;
-    })
-    .slice(0, 12);
+      upcoming.push(performance);
+      if (upcoming.length === UPCOMING_LIMIT) break;
+    }
+
+    return upcoming;
+  }, [sortedPerformances, todayKey]);
 
   useFadeUpEffect(
     '.date-picker-header, .date-picker, .selected-date-performance, .upcoming-performances',
@@ -146,10 +120,7 @@ export default function PerformanceList({ performances }: Props) {
             <button
               type="button"
               onClick={handlePreviousMonth}
-              disabled={
-                currentDate.getUTCFullYear() === todayUTC.getUTCFullYear() &&
-                currentDate.getUTCMonth() === todayUTC.getUTCMonth()
-              }
+              disabled={isPreviousMonthDisabled}
               aria-label="이전 달"
             >
               <span className="material-symbols-rounded">keyboard_arrow_left</span>
@@ -170,8 +141,9 @@ export default function PerformanceList({ performances }: Props) {
         <div className="date-picker-container">
           <DatePicker
             currentDate={currentDate}
-            selectedDate={selectedDate}
-            onSelectDate={setSelectedDate}
+            todayKey={todayKey}
+            selectedDateKey={selectedDateKey}
+            onSelectDate={setSelectedDateKey}
             performancesByDate={performancesByDate}
           />
           {/* ==================================================
@@ -184,8 +156,7 @@ export default function PerformanceList({ performances }: Props) {
               <div>
                 <p>SELECTED</p>
                 <h3>
-                  {selectedDateInfo.month}.{String(selectedDateInfo.day).padStart(2, '0')}{' '}
-                  <span>{selectedDateInfo.weekday}</span>
+                  {selectedDateKey.slice(5).replace('-', '.')} <span>{selectedWeekday}</span>
                 </h3>
               </div>
 
@@ -196,15 +167,13 @@ export default function PerformanceList({ performances }: Props) {
 
             {selectedPerformances.length > 0 ? (
               <div className="performance-list-body">
-                {selectedPerformances.map((performance) => {
-                  return (
-                    <PerformanceCard
-                      key={performance._id}
-                      type="selected"
-                      performance={performance}
-                    />
-                  );
-                })}
+                {selectedPerformances.map((performance) => (
+                  <PerformanceCard
+                    key={performance._id}
+                    type="selected"
+                    performance={performance}
+                  />
+                ))}
               </div>
             ) : (
               <div className="no-performance">
@@ -228,15 +197,9 @@ export default function PerformanceList({ performances }: Props) {
 
           {upcomingPerformances.length > 0 ? (
             <div className="performance-list-body">
-              {upcomingPerformances.map((performance) => {
-                return (
-                  <PerformanceCard
-                    key={performance._id}
-                    type="upcoming"
-                    performance={performance}
-                  />
-                );
-              })}
+              {upcomingPerformances.map((performance) => (
+                <PerformanceCard key={performance._id} type="upcoming" performance={performance} />
+              ))}
             </div>
           ) : (
             <div className="no-performance">

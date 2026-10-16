@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { urlFor } from '@/sanity/lib/image';
 import { Image } from '@/components/ui/Skeleton';
-import { formatDate, formatTime, formatWeekDay, formatDDay } from '@/utils/date';
+import { getDateParts, formatDDay } from '@/utils/date';
 
 import type { Performance } from '@/types/performance';
 
@@ -15,22 +15,27 @@ interface Props {
 }
 
 export default function PerformanceCard({ performance, type }: Props) {
-  return (
-    <Link href={`/performances/${performance.slug?.current}`} className="performance-card">
-      <div className="performance-date">
-        {type === 'upcoming' && <span>{formatDate(performance.date).slice(0, 4)}</span>}
-        <strong>
-          {type === 'upcoming'
-            ? formatDate(performance.date).replaceAll('-', '.').substring(5)
-            : formatTime(performance.date)}
-        </strong>
+  const { year, month, day, weekday, hour, minute } = getDateParts(performance.date);
+  const time = `${hour}:${minute}`;
+  const isUpcoming = type === 'upcoming';
+  const slug = performance.slug?.current;
+  const artistNames = performance.artists
+    ?.map((artist) => artist?.name)
+    .filter(Boolean)
+    .join(' · ');
 
-        {type === 'upcoming' && (
+  const content = (
+    <>
+      <time className="performance-date" dateTime={performance.date}>
+        {isUpcoming && <span>{year}</span>}
+        <strong>{isUpcoming ? `${month}.${day}` : time}</strong>
+
+        {isUpcoming && (
           <span>
-            {formatWeekDay(performance.date, 'short')} {formatTime(performance.date)}
+            {weekday.slice(0, 1)} {time}
           </span>
         )}
-      </div>
+      </time>
 
       <Image
         className="performance-poster"
@@ -40,7 +45,7 @@ export default function PerformanceCard({ performance, type }: Props) {
       />
 
       <div className="performance-info">
-        {type === 'upcoming' && (
+        {isUpcoming && (
           <div>
             <em>{formatDDay(performance.date)}</em>
           </div>
@@ -48,14 +53,22 @@ export default function PerformanceCard({ performance, type }: Props) {
 
         <strong>{performance.title}</strong>
 
-        {performance.artists && performance.artists.length > 0 && (
-          <span>{performance.artists.map((artist) => artist.name).join(' · ')}</span>
-        )}
+        {artistNames && <span>{artistNames}</span>}
       </div>
 
-      <span className="performance-arrow">
-        <span className="material-symbols-rounded">arrow_forward_ios</span>
-      </span>
+      {slug && (
+        <span className="performance-arrow" aria-hidden="true">
+          <span className="material-symbols-rounded">arrow_forward_ios</span>
+        </span>
+      )}
+    </>
+  );
+
+  return slug ? (
+    <Link href={`/performances/${slug}`} className="performance-card">
+      {content}
     </Link>
+  ) : (
+    <div className="performance-card">{content}</div>
   );
 }

@@ -184,42 +184,6 @@ export default function Upcoming({ performances }: UpcomingProps) {
               {performances.map((performance) => (
                 <SwiperSlide key={performance._id}>
                   <PerformanceCard type="upcoming" performance={performance} />
-                  {/* <Link
-                    href={`/performances/${performance.slug?.current ?? ''}`}
-                    className="upcoming__item"
-                  >
-                    <Image
-                      className="upcoming__poster"
-                      src={
-                        performance.poster?.asset ? urlFor(performance.poster).width(100).url() : ''
-                      }
-                      alt={performance.title}
-                      size={100}
-                    />
-
-                    <div className="upcoming__date">
-                      <strong>{formatDate(performance.date).replaceAll('-', '.').slice(5)}</strong>
-
-                      <span>{formatWeekDay(performance.date)}</span>
-
-                      <span>{formatTime(performance.date)}</span>
-                    </div>
-
-                    <div className="upcoming__info">
-                      <div>
-                        <em>{isHydrated ? formatDDay(performance.date) : null}</em>
-                      </div>
-
-                      <h2>{performance.title}</h2>
-                      {performance.artists && performance.artists.length > 0 && (
-                        <p>{performance.artists.map((artist) => artist.name).join(' · ')}</p>
-                      )}
-                    </div>
-
-                    <span className="upcoming__arrow">
-                      <span className="material-symbols-rounded">arrow_forward_ios</span>
-                    </span>
-                  </Link> */}
                 </SwiperSlide>
               ))}
             </Swiper>
