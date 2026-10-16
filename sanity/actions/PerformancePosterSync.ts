@@ -33,6 +33,7 @@ type PerformanceDocument = SanityDocument & {
     _type?: 'reference';
     _ref?: string;
   }>;
+  isPrivate?: boolean;
 };
 
 /**
@@ -88,6 +89,7 @@ async function waitForPublishedPerformance(
       document.title === draft.title &&
       document.date === draft.date &&
       document.poster?.asset?._ref === draft.poster?.asset?._ref &&
+      document.isPrivate === draft.isPrivate &&
       JSON.stringify(normalizeArtistRefs(document.artists)) === JSON.stringify(draftArtistRefs)
     ) {
       return document;
@@ -204,6 +206,8 @@ async function syncGalleryItem(client: SanityClient, performance: PerformanceDoc
     },
 
     performanceDate: performance.date,
+
+    display: !performance.isPrivate,
   };
 
   /**
@@ -213,8 +217,6 @@ async function syncGalleryItem(client: SanityClient, performance: PerformanceDoc
     await client.createIfNotExists({
       _id: galleryId,
       _type: 'galleryItem',
-
-      display: true,
 
       orderRank: await getNewOrderRank(client, 'galleryItem'),
 

@@ -18,7 +18,8 @@ import { default as CustomNavbar } from '@/sanity/components/navBar/CustomNavbar
 import {
   DeletePerformanceAndGalleryAction,
   PublishPerformanceAndSyncGalleryAction,
-} from './sanity/actions/performancePosterSync';
+} from './sanity/actions/PerformancePosterSync';
+import { PerformanceViewOnSiteAction } from './sanity/actions/PerformanceViewOnSite';
 
 import { koKRLocale } from '@sanity/locale-ko-kr';
 
@@ -79,13 +80,24 @@ export default defineConfig({
     }, */
 
     actions: (previousActions, context) => {
-      if (context.schemaType !== 'performance') return previousActions;
+      if (context.schemaType !== 'performance') {
+        return previousActions;
+      }
 
-      return previousActions.map((action) => {
-        if (action.action === 'publish') return PublishPerformanceAndSyncGalleryAction;
-        if (action.action === 'delete') return DeletePerformanceAndGalleryAction;
-        return action;
-      });
+      return [
+        ...previousActions.map((action) => {
+          if (action.action === 'publish') {
+            return PublishPerformanceAndSyncGalleryAction;
+          }
+
+          if (action.action === 'delete') {
+            return DeletePerformanceAndGalleryAction;
+          }
+
+          return action;
+        }),
+        PerformanceViewOnSiteAction,
+      ];
     },
   },
 });

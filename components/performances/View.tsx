@@ -88,7 +88,9 @@ export default function PerformanceViewPage({ performance }: Props) {
   const isEnd = now !== null && now >= endDate;
 
   const isSalesOpen =
-    now !== null && performance.salesOpen ? now < new Date(performance.salesOpen) : false;
+    now !== null && performance.salesOpen
+      ? now.getTime() < new Date(performance.salesOpen).getTime() - 60 * 60 * 1000
+      : false;
 
   const isSalesClose =
     now !== null && performance.salesClose ? now >= new Date(performance.salesClose) : false;
@@ -331,9 +333,13 @@ export default function PerformanceViewPage({ performance }: Props) {
               <small>(현장 예매만 가능합니다)</small>
             </span>
           </Button>
+        ) : !performance.reservationUrl ? (
+          <Button opacity={0.7} shadow disabled className="reservation_btn">
+            <span>예매 불가</span>
+          </Button>
         ) : (
           <Button
-            href={performance.reservationUrl ?? ''}
+            href={performance.reservationUrl}
             target="_blank"
             className="reservation_btn"
             opacity={0.7}
