@@ -362,7 +362,7 @@ export default function Gnb() {
           <li className={pathname.startsWith('/rental') ? 'active' : ''}>
             <Link href="/rental" title="공연·대관신청">
               <span className="icon material-symbols-rounded" translate="no">
-                developer_guide
+                edit_calendar
               </span>
               <span className="text">공연·대관신청</span>
             </Link>
@@ -381,7 +381,7 @@ export default function Gnb() {
           <li className={pathname.startsWith('/archives') ? 'active' : ''}>
             <Link href="/archives" title="아카이브">
               <span className="icon material-symbols-rounded" translate="no">
-                inventory_2
+                photo_library
               </span>
               <span className="text">아카이브</span>
             </Link>
