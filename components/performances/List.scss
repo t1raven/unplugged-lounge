@@ -1,274 +1,18 @@
-.performance-calendar {
-  width: 100%;
-  padding-top: 60px;
-  padding-bottom: 120px;
+.performance-list {
+  padding-top: 80px;
 
-  > .inner {
-    max-width: 750px;
-  }
-
-  // ==================================================
-  // Calendar Header
-  // ==================================================
-
-  .calendar-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 24px;
-  }
-
-  .calendar-title {
-    p {
-      margin: 0 0 10px;
-      font-size: 13px;
-      font-weight: 600;
-      line-height: 1.4;
-      letter-spacing: 0.18em;
-      color: var(--font-sec-color);
-    }
-
-    h2 {
-      margin: 0;
-      font-size: 28px;
-      font-weight: 500;
-      line-height: 1.2;
-      letter-spacing: -0.03em;
-      color: var(--font-color);
-    }
-  }
-
-  // ==================================================
-  // Calendar Controls
-  // ==================================================
-
-  .calendar-controls {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    button {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 44px;
-      height: 44px;
-      padding: 0;
-      border: 1px solid var(--border-color);
-      border-radius: 50%;
-      background: var(--background-color);
-      color: var(--font-sec-color);
-      font-family: inherit;
-      font-size: 24px;
-      line-height: 1;
-      cursor: pointer;
-
-      transition:
-        background-color 0.25s ease,
-        color 0.25s ease,
-        border-color 0.25s ease,
-        transform 0.25s ease;
-
-      &:hover {
-        background: var(--background-sec-color);
-      }
-
-      &:active {
-        transform: scale(1.06);
-      }
-
-      &:focus-visible {
-        outline: 2px solid var(--primary-color);
-        outline-offset: 3px;
-      }
-
-      &:disabled {
-        background: #96928a;
-        color: #45423d;
-        cursor: not-allowed;
-        opacity: 0.5;
-      }
-    }
-
-    .today-button {
-      width: auto;
-      min-width: 64px;
-      padding: 0 18px;
-      border-radius: 22px;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--font-sec-color);
-    }
-  }
-
-  // ==================================================
-  // Weekdays
-  // ==================================================
-
-  .calendar-weekdays {
-    display: grid;
-    grid-template-columns: repeat(7, minmax(0, 1fr));
-    border-top: 1px solid var(--border-color);
-    border-bottom: 1px solid var(--border-color);
-    background: var(--background-sec-color);
-  }
-
-  .calendar-weekday {
-    padding: 16px 12px;
-    font-size: 13px;
-    font-weight: 500;
-    line-height: 1.4;
-    color: var(--font-sec-color);
-    text-align: center;
-
-    &:first-child {
-      color: #bd7777;
-    }
-
-    &:last-child {
-      color: #8195bd;
-    }
-  }
-
-  // ==================================================
-  // Calendar Grid
-  // ==================================================
-
-  .calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, minmax(0, 1fr));
-    border-left: 1px solid var(--border-color);
-    background: var(--background-color);
-  }
-
-  // ==================================================
-  // Calendar Day
-  // ==================================================
-
-  .calendar-day {
-    position: relative;
-    display: block;
+  .date-picker-container {
     width: 100%;
-    min-height: 80px;
-    padding: 14px;
-    border: 0;
-    border-right: 1px solid var(--border-color);
-    border-bottom: 1px solid var(--border-color);
-    background: var(--background-color);
-    color: var(--font-color);
-    font-family: inherit;
-    text-align: left;
-    cursor: pointer;
-
-    transition:
-      background-color 0.25s ease,
-      border-color 0.25s ease;
-
-    &:hover {
-      background: var(--background-sec-color);
-    }
-
-    &:focus-visible {
-      z-index: 2;
-      outline: 2px solid var(--primary-color);
-      outline-offset: -2px;
-    }
-
-    &.is-empty {
-      background: var(--background-color);
-      cursor: default;
-    }
-
-    &.is-selected {
-      box-shadow: inset 0 0 0 1px var(--primary-color);
-    }
-
-    &.is-past {
-      background: var(--background-color);
-      color: #55524c;
-      cursor: not-allowed;
-      > * {
-        opacity: 0.35;
-      }
-    }
-  }
-
-  // ==================================================
-  // Calendar Date
-  // ==================================================
-
-  .calendar-date {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    span {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 30px;
-      height: 30px;
-      font-size: 16px;
-      font-weight: 500;
-      line-height: 1;
-      color: var(--font-sec-color);
-    }
-  }
-
-  .calendar-day.is-today {
-    .calendar-date {
-      span {
-        border-radius: 50%;
-        background: var(--primary-color);
-        color: #fff;
-        font-weight: 500;
-      }
-    }
-  }
-
-  // ==================================================
-  // Performance Indicator
-  // ==================================================
-
-  .calendar-performance-indicator {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 3px;
-    margin-top: 5px;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-
-    span {
-      display: block;
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--secondary-color);
-    }
-
-    small {
-      font-size: 13px;
-      line-height: 1;
-      color: var(--font-sec-color);
-    }
-  }
-
-  // ==================================================
-  // Selected Date Performance
-  // ==================================================
-
-  .selected-date-performance {
-    margin-top: 50px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(430px, 1fr));
+    gap: 20px 30px;
   }
 
   .performance-list-header {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    padding-bottom: 24px;
-    //border-bottom: 1px solid var(--border-color);
+    margin-bottom: 24px;
 
     p {
       margin: 0 0 8px;
@@ -283,7 +27,7 @@
       margin: 0;
       font-size: 32px;
       font-weight: 500;
-      line-height: 1.15;
+      line-height: 1.2;
       color: var(--font-color);
 
       span {
@@ -308,137 +52,33 @@
   // Performance List
   // ==================================================
 
-  .performance-list {
+  .performance-list-body {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    //border-bottom: 1px solid var(--border-color);
+    flex: 1;
   }
 
-  .performance-item {
-    display: grid;
-    grid-template-columns: 50px 100px 1fr 20px;
-    align-items: center;
-    gap: 32px;
-    padding: 0 20px;
-    background-color: var(--background-sec-color);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    color: var(--font-color);
-    text-decoration: none;
+  // ==================================================
+  // Selected Date Performance
+  // ==================================================
 
-    transition:
-      border-color 0.25s ease,
-      background-color 0.25s ease;
-
-    /* &:last-child {
-      border-bottom: 0;
-    } */
-
-    &:hover,
-    &:active {
-      //background-color: var(--background-sec-color);
-      border-color: var(--primary-color);
-      background-color: rgb(from var(--primary-color) r g b / 0.05);
-    }
-  }
-
-  .performance-time {
-    font-size: 20px;
-    font-weight: 500;
-    color: var(--font-color);
-    white-space: nowrap;
-  }
-
-  .performance-date {
+  .selected-date-performance {
     display: flex;
     flex-direction: column;
-    white-space: nowrap;
-
-    strong {
-      font-size: 20px;
-      font-weight: 500;
-      color: var(--font-color);
-    }
-
-    span {
-      font-size: 13px;
-      color: var(--font-sec-color);
-    }
+    margin-top: 0;
+    padding: 20px 0;
   }
 
-  .performance-poster {
-    width: 100%;
-    aspect-ratio: 4 / 5;
+  // ==================================================
+  // Upcoming Performances
+  // ==================================================
 
-    img {
-      display: block;
-
-      width: 100%;
-      height: 100%;
-
-      object-fit: cover;
-    }
-  }
-
-  .performance-info {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-
-    strong {
-      font-size: 20px;
-      font-weight: 500;
-      line-height: 1.35;
-      color: var(--font-color);
-
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 1;
-      line-clamp: 1;
-      overflow: hidden;
-    }
-
-    span {
-      font-size: 13px;
-      color: var(--font-sec-color);
-
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 1;
-      line-clamp: 1;
-      overflow: hidden;
-    }
-
-    em {
-      background-color: var(--primary-color);
-      padding: 2px 10px;
-      border-radius: 999px;
-      font-size: 13px;
-      font-style: normal;
-      font-weight: 500;
-      line-height: 1;
-      color: #fff;
-    }
-  }
-
-  .performance-arrow {
-    font-size: 20px;
-    color: var(--font-sec-color);
-
-    transition:
-      color 0.25s ease,
-      transform 0.25s ease;
-
-    > span {
-      font-size: 1em;
-    }
-  }
-  .performance-item:hover,
-  .performance-item:active {
-    .performance-arrow {
-      color: var(--primary-color);
-      transform: translateX(5px);
+  .upcoming-performances {
+    margin-top: 80px;
+    .performance-list-body {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(430px, 1fr));
     }
   }
 
@@ -450,9 +90,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 143px;
-    border: 1px solid var(--border-color);
+    min-height: 145px;
+    /* border: 1px solid var(--border-color); */
     border-radius: 12px;
+    flex: 1;
 
     p {
       margin: 0;
@@ -463,21 +104,20 @@
   }
 
   // ==================================================
-  // Upcoming Performances
-  // ==================================================
-
-  .upcoming-performances {
-    margin-top: 100px;
-  }
-
-  // ==================================================
   // Tablet
   // ==================================================
 
   @media (max-width: 1024px) {
-    .calendar-day {
-      min-height: 80px;
-      padding: 10px;
+    .date-picker-container {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .upcoming-performances {
+      margin-top: 40px;
+      .performance-list-body {
+        grid-template-columns: 1fr;
+      }
     }
   }
 
@@ -485,92 +125,12 @@
   // Mobile
   // ==================================================
 
-  @media (max-width: 767px) {
+  @media (max-width: 768px) {
     padding-top: 40px;
     padding-bottom: 80px;
 
-    .calendar-header {
-      margin-bottom: 24px;
-    }
-
-    .calendar-title {
-      p {
-        margin-bottom: 7px;
-        font-size: 10px;
-      }
-
-      h2 {
-        font-size: 24px;
-      }
-    }
-
-    .calendar-controls {
-      gap: 5px;
-
-      button {
-        width: 36px;
-        height: 36px;
-        font-size: 20px;
-      }
-
-      .today-button {
-        display: none;
-      }
-    }
-
-    // ----------------------------------------------
-    // Weekdays
-    // ----------------------------------------------
-
-    .calendar-weekday {
-      padding: 10px 2px;
-      font-size: 10px;
-    }
-
-    // ----------------------------------------------
-    // Calendar
-    // ----------------------------------------------
-
-    .calendar-day {
-      min-height: 50px;
-      padding: 5px 2px;
-    }
-
-    .calendar-date {
-      justify-content: center;
-
-      span {
-        width: 18px;
-        height: 18px;
-        font-size: 10px;
-      }
-    }
-
-    .calendar-performance-indicator {
-      justify-content: center;
-      gap: 2px;
-      margin-top: 3px;
-
-      span {
-        width: 5px;
-        height: 5px;
-      }
-
-      small {
-        font-size: 8px;
-      }
-    }
-
-    // ----------------------------------------------
-    // Selected Date
-    // ----------------------------------------------
-
-    .selected-date-performance {
-      margin-top: 35px;
-    }
-
     .performance-list-header {
-      padding-bottom: 16px;
+      margin-bottom: 16px;
 
       p {
         margin-bottom: 6px;
@@ -578,7 +138,7 @@
       }
 
       h3 {
-        font-size: 24px;
+        font-size: 20px;
 
         span {
           font-size: 13px;
@@ -590,54 +150,8 @@
       font-size: 13px;
     }
 
-    .performance-list {
+    .performance-list-body {
       gap: 8px;
-    }
-
-    .performance-item {
-      grid-template-columns: 32px 60px 1fr 16px;
-      gap: 12px;
-      padding: 0 12px;
-      border-radius: 8px;
-    }
-
-    .performance-time {
-      font-size: 13px;
-    }
-
-    .performance-date {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-
-      strong {
-        font-size: 13px;
-      }
-
-      span {
-        font-size: 8px;
-      }
-    }
-
-    .performance-info {
-      gap: 4px;
-
-      strong {
-        font-size: 14px;
-      }
-
-      span {
-        font-size: 10px;
-      }
-
-      em {
-        padding: 1px 7px;
-        font-size: 8px;
-      }
-    }
-
-    .performance-arrow {
-      font-size: 16px;
     }
 
     .no-performance {
@@ -645,12 +159,8 @@
       border-radius: 8px;
     }
 
-    // ----------------------------------------------
-    // Upcoming
-    // ----------------------------------------------
-
-    .upcoming-performances {
-      margin-top: 64px;
+    .selected-date-performance {
+      padding: 0;
     }
   }
 }
