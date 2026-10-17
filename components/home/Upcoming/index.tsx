@@ -7,7 +7,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import type { Performance } from '@/types/performance';
 
-import PerformanceCard from '@/components/performances/v2/Card';
+import PerformanceCard from '@/components/performances/Card';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import type { Swiper as SwiperInstance } from 'swiper';
