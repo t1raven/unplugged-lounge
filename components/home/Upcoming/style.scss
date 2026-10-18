@@ -54,6 +54,8 @@
   &__swiper {
     width: 100%;
     height: auto;
+    padding: 1px;
+    margin: -1px;
 
     .swiper-slide {
       width: calc(100% / 2);

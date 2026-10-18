@@ -12,7 +12,7 @@ export function formatDDay(date: string) {
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
   if (diffDays === 0) {
-    return 'D-DAY';
+    return 'TODAY';
   }
 
   return `D-${diffDays}`;
