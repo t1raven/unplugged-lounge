@@ -135,7 +135,7 @@ export default function PerformanceViewPage({ performance }: Props) {
           />
 
           <div className="performance-detail-content">
-            <p className="performance-eyebrow">LIVE PERFORMANCE</p>
+            {/* <p className="performance-eyebrow">LIVE PERFORMANCE</p> */}
 
             <h1>{performance.title}</h1>
 
@@ -228,7 +228,7 @@ export default function PerformanceViewPage({ performance }: Props) {
           <div className="performance-detail-inner">
             <div className="section-heading">
               <p>ARTIST LINEUP</p>
-              <h2>아티스트 라인업</h2>
+              <h2>출연 아티스트</h2>
             </div>
 
             <div className="artist-list">
@@ -267,8 +267,8 @@ export default function PerformanceViewPage({ performance }: Props) {
         <section className="performance-description">
           <div className="performance-detail-inner">
             <div className="section-heading">
-              <p>ABOUT PERFORMANCE</p>
-              <h2>공연 소개</h2>
+              <p>PERFORMANCE INFO</p>
+              <h2>공연 정보</h2>
             </div>
 
             <div className="description-content">
