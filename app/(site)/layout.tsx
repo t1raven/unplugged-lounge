@@ -8,6 +8,7 @@ const pretendard = localFont({
   weight: '400 700',
   display: 'swap',
 });
+import 'material-symbols/rounded.scss';
 import '@/styles/globals.scss';
 
 import type { Metadata, Viewport } from 'next';
