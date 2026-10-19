@@ -88,7 +88,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const dateTime = performance.date ? formatDateTime(performance.date) : '';
   const description = [artist, dateTime].filter(Boolean).join(' | ');
   const imageUrl = performance.poster
-    ? urlFor(performance.poster).width(600).height(800).fit('crop').url()
+    ? urlFor(performance.poster).url()
     : '/images/common/og-image.png';
   const SITE_URL = `${siteSettings?.general?.siteUrl ?? 'https://www.unplugged-lounge.com'}/performances/${slug}`;
 
@@ -104,8 +104,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: [
         {
           url: imageUrl,
-          width: 600,
-          height: 800,
+          alt: performance.title,
         },
       ],
       url: SITE_URL,
