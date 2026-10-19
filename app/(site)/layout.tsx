@@ -25,8 +25,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const description = siteSettings?.seo?.description ?? '';
   const keywords = siteSettings?.seo?.keywords ?? [];
   const ogImage = siteSettings?.seo?.ogImage
-    ? urlFor(siteSettings.seo.ogImage).width(400).height(400).url()
-    : undefined;
+    ? urlFor(siteSettings.seo.ogImage).url()
+    : '/images/common/og-image.png';
   const SITE_URL = siteSettings?.general?.siteUrl ?? 'https://www.unplugged-lounge.com';
 
   return {
@@ -50,16 +50,12 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName,
       title,
       description,
-      images: ogImage
-        ? [
-            {
-              url: ogImage,
-              width: 1200,
-              height: 630,
-              alt: title,
-            },
-          ]
-        : [{ url: '/images/common/og-image.png' }],
+      images: [
+        {
+          url: ogImage,
+          alt: siteName,
+        },
+      ],
       url: SITE_URL,
     },
 
@@ -74,7 +70,7 @@ export async function generateMetadata(): Promise<Metadata> {
       email: false,
     },
 
-    applicationName: `${siteName}`,
+    applicationName: siteName,
 
     manifest: '/manifest.webmanifest',
 
