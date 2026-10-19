@@ -42,8 +42,6 @@ export default function Upcoming({ performances }: UpcomingProps) {
         ...swiper.slides.map((slide) => slide.getBoundingClientRect().height),
       );
 
-      console.log('slideHeight:', slideHeight);
-
       if (!slideHeight) return;
 
       const rows = swiper.params.grid?.rows ?? 1;
