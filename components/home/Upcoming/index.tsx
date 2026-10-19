@@ -7,13 +7,10 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import type { Performance } from '@/types/performance';
 
-import { Image } from '@/components/ui/Skeleton';
-import { urlFor } from '@/sanity/lib/image';
-
-import { formatDate, formatWeekDay, formatTime, formatDDay } from '@/utils/date';
-import useHydrated from '@/hooks/useHydrated';
+import PerformanceCard from '@/components/performances/Card';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
+import type { Swiper as SwiperInstance } from 'swiper';
 import { Grid, Pagination, Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/grid';
@@ -29,8 +26,68 @@ interface UpcomingProps {
 }
 
 export default function Upcoming({ performances }: UpcomingProps) {
-  const isHydrated = useHydrated();
   const rootRef = useRef<HTMLElement>(null);
+  const swiperRef = useRef<SwiperInstance | null>(null);
+
+  useLayoutEffect(() => {
+    const swiper = swiperRef.current;
+    if (!swiper || swiper.destroyed) return;
+
+    let frame = 0;
+    const updateHeight = () => {
+      if (swiper.destroyed) return;
+
+      const slideHeight = Math.max(
+        0,
+        ...swiper.slides.map((slide) => slide.getBoundingClientRect().height),
+      );
+
+      console.log('slideHeight:', slideHeight);
+
+      if (!slideHeight) return;
+
+      const rows = swiper.params.grid?.rows ?? 1;
+      const spacing = swiper.params.spaceBetween ?? 0;
+      const gap =
+        typeof spacing === 'number'
+          ? spacing
+          : spacing.includes('%')
+            ? (parseFloat(spacing) / 100) * swiper.size
+            : parseFloat(spacing);
+      const height = `${slideHeight * rows + gap * (rows - 1)}px`;
+
+      if (swiper.wrapperEl.style.height !== height) {
+        swiper.wrapperEl.style.height = height;
+        ScrollTrigger.refresh();
+      }
+    };
+    const scheduleUpdate = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(updateHeight);
+    };
+    const handleResize = () => {
+      if (swiper.destroyed) return;
+
+      swiper.update();
+      scheduleUpdate();
+    };
+    const observer = new ResizeObserver(scheduleUpdate);
+    swiper.slides.forEach((slide) => observer.observe(slide));
+    window.addEventListener('resize', handleResize);
+    swiper.on('resize', scheduleUpdate);
+    swiper.on('breakpoint', scheduleUpdate);
+    swiper.on('update', scheduleUpdate);
+    updateHeight();
+
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      window.removeEventListener('resize', handleResize);
+      swiper.off('resize', scheduleUpdate);
+      swiper.off('breakpoint', scheduleUpdate);
+      swiper.off('update', scheduleUpdate);
+    };
+  }, [performances]);
 
   useLayoutEffect(() => {
     if (!rootRef.current) return;
@@ -101,27 +158,25 @@ export default function Upcoming({ performances }: UpcomingProps) {
         <div className="upcoming__list">
           {performances.length > 0 ? (
             <Swiper
+              onSwiper={(instance) => {
+                swiperRef.current = instance;
+              }}
               slidesPerView={1.05}
               grid={{
                 fill: 'column',
-                rows: 3,
+                rows: 4,
               }}
               spaceBetween={10}
               speed={700}
-              /*autoplay={{
-                delay: 5000,
-                disableOnInteraction: false,
-              }}*/
               pagination={{
                 clickable: true,
               }}
-              //navigation={true}
               breakpoints={{
-                1023: {
+                767: {
                   slidesPerView: 2,
                   grid: {
-                    fill: 'column',
                     rows: 4,
+                    fill: 'column',
                   },
                 },
               }}
@@ -130,49 +185,7 @@ export default function Upcoming({ performances }: UpcomingProps) {
             >
               {performances.map((performance) => (
                 <SwiperSlide key={performance._id}>
-                  <Link
-                    href={`/performances/${performance.slug?.current ?? ''}`}
-                    className="upcoming__item"
-                  >
-                    <Image
-                      className="upcoming__poster"
-                      src={
-                        performance.poster?.asset ? urlFor(performance.poster).width(100).url() : ''
-                      }
-                      alt={performance.title}
-                      size={100}
-                    />
-
-                    <div className="upcoming__date">
-                      <strong>{formatDate(performance.date).slice(5)}</strong>
-
-                      <span>{formatWeekDay(performance.date)}</span>
-
-                      <span>{formatTime(performance.date)}</span>
-                    </div>
-
-                    <div className="upcoming__info">
-                      <div>
-                        <em>{isHydrated ? formatDDay(performance.date) : null}</em>
-                      </div>
-
-                      <h2>{performance.title}</h2>
-                      {performance.artists && performance.artists.length > 0 && (
-                        <p>{performance.artists.map((artist) => artist.name).join(' · ')}</p>
-                      )}
-                    </div>
-
-                    <span className="upcoming__arrow">
-                      <span className="material-symbols-rounded">arrow_forward_ios</span>
-                    </span>
-
-                    {/*<div className="upcoming__posterBig">
-                     <img
-                        src={urlFor(performance.poster).url()}
-                        alt={performance.title}
-                      />
-                  </div>*/}
-                  </Link>
+                  <PerformanceCard type="upcoming" performance={performance} />
                 </SwiperSlide>
               ))}
             </Swiper>

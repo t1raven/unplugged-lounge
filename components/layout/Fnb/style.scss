@@ -35,7 +35,7 @@
    TABLET
 -------------------------------- */
 
-@media (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
   #site-fnb {
     nav {
       padding-left: calc(60px + 8px);
@@ -47,7 +47,7 @@
    MOBILE
 -------------------------------- */
 
-@media (max-width: 768px) {
+@media screen and (max-width: 767px) {
   #site-fnb {
     //animation: none;
     nav {

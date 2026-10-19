@@ -116,7 +116,7 @@
   color: var(--font-color);
 }
 
-@media (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
   .modal {
     align-items: flex-end;
   }

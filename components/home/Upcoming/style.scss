@@ -1,7 +1,7 @@
 @use '@/styles/functions' as *;
 
 .upcoming {
-  padding: 180px 0;
+  padding: fluid(60px, 180px) 0;
   overflow: hidden;
 
   &__inner {
@@ -49,80 +49,20 @@
   &__list {
     /*border-top: 1px solid rgba(255, 255, 255, 0.2);*/
     display: block;
-    //margin: 0 -10px;
-  }
-
-  &__item {
-    width: 100%;
-
-    display: grid;
-
-    grid-template-columns: 100px 64px 1fr 20px;
-    gap: 20px;
-
-    align-items: center;
-    align-content: center;
-
-    height: 125px;
-
-    padding: 0 20px 0 0;
-
-    background-color: var(--background-color);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-
-    color: var(--font-color);
-    text-decoration: none;
-
-    position: relative;
-    z-index: 1;
-
-    overflow: hidden;
-
-    transition:
-      border-color 0.25s ease,
-      background-color 0.25s ease;
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: var(--background-sec-color);
-      z-index: -1;
-    }
-
-    @media (hover: hover) and (pointer: fine) {
-      &:hover {
-        border-color: var(--primary-color);
-        z-index: 2;
-        &::before {
-          background-color: rgb(from var(--primary-color) r g b / 0.05);
-        }
-      }
-    }
-
-    &:active {
-      border-color: var(--primary-color);
-      z-index: 2;
-      &::before {
-        background-color: rgb(from var(--primary-color) r g b / 0.05);
-      }
-    }
   }
 
   &__swiper {
     width: 100%;
     height: auto;
-
-    .swiper-wrapper {
-      max-height: calc(135px * 4);
-    }
+    padding: 1px;
+    margin: -1px;
 
     .swiper-slide {
       width: calc(100% / 2);
+      margin-right: 10px;
+      // Keep measurements independent of Swiper's percentage-based grid height.
+      height: auto !important;
+      max-height: 125px;
       transition: padding-right 0.25s ease;
     }
 
@@ -134,20 +74,6 @@
     }
     .swiper-slide-active ~ .swiper-slide {
       padding-right: 0 !important;
-    }
-
-    /* .swiper-slide:nth-child(4n+1){
-      .upcoming__item {
-        border-top: 1px solid var(--border-color);
-      }
-    } */
-
-    .swiper-slide {
-      margin-right: 10px;
-      margin-top: 10px;
-      /* .upcoming__item {
-        border-top: 1px solid var(--border-color);
-      } */
     }
 
     .swiper-pagination {
@@ -182,117 +108,6 @@
     }
   }
 
-  /* 포스터 */
-  &__poster {
-    width: 100%;
-    aspect-ratio: 4 / 5;
-  }
-
-  /* 날짜 */
-  &__date {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-
-    strong {
-      font-size: 22px;
-      font-weight: 500;
-    }
-
-    span {
-      font-size: 13px;
-      letter-spacing: 0.15em;
-      opacity: 0.65;
-    }
-  }
-
-  /* 공연 정보 */
-  &__info {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-
-    h2 {
-      margin: 0;
-
-      font-size: fluid(14px, 20px);
-      font-weight: 500;
-      line-height: 1.35;
-
-      letter-spacing: -0.03em;
-
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 1;
-      line-clamp: 1;
-      overflow: hidden;
-    }
-
-    p {
-      margin: 5px 0 0;
-
-      font-size: 13px;
-      letter-spacing: 0.12em;
-
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 1;
-      line-clamp: 1;
-      overflow: hidden;
-
-      opacity: 0.5;
-    }
-
-    em {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background-color: var(--primary-color);
-      padding: 0 8px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-style: normal;
-      font-weight: 500;
-      line-height: 1;
-      text-align: center;
-      color: #fff;
-      min-width: 40px;
-      height: 18px;
-    }
-  }
-
-  /* 시간 */
-  &__time {
-    font-size: 13px;
-    letter-spacing: 0.1em;
-  }
-
-  /* 화살표 */
-  &__arrow {
-    font-size: 20px;
-    color: var(--font-sec-color);
-
-    transition:
-      color 0.25s ease,
-      transform 0.25s ease;
-
-    > span {
-      font-size: 1em;
-    }
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    &__item:hover &__arrow {
-      color: var(--primary-color);
-      transform: translateX(5px);
-    }
-  }
-
-  &__item:active &__arrow {
-    color: var(--primary-color);
-    transform: translateX(5px);
-  }
-
   &__empty {
     padding: 60px 0;
 
@@ -303,89 +118,19 @@
   }
 }
 
-@media (max-width: 768px) {
+@media screen and (max-width: 767px) {
   .upcoming {
-    padding: 60px 0;
-
     &__header {
       margin-bottom: 16px;
-    }
-
-    &__item {
-      grid-template-columns: 90px 1fr 15px;
-      gap: 0 14px;
-
-      height: 110px;
-
-      padding: 0 12px 0 0;
-
-      border-radius: 8px;
     }
 
     &__swiper {
       overflow: visible;
 
-      .swiper-wrapper {
-        max-height: calc(120px * 3);
-      }
-
       .swiper-slide {
         width: 100%;
         //padding: 0 5px;
       }
-
-      .swiper-button-prev,
-      .swiper-button-next {
-        display: none;
-      }
-    }
-
-    &__poster {
-      grid-row: 1 / 3;
-    }
-
-    &__date {
-      grid-column: 2 / 3;
-      grid-row: 2 / 3;
-
-      flex-direction: row;
-      align-items: baseline;
-
-      margin-bottom: 4px;
-
-      strong {
-        font-size: 13px;
-      }
-
-      span {
-        font-size: 10px;
-      }
-    }
-
-    &__info {
-      grid-column: 2 / 3;
-      grid-row: 1 / 2;
-
-      p {
-        font-size: 10px;
-        margin-top: 0;
-      }
-
-      em {
-        min-width: 30px;
-        height: 16px;
-        padding: 1px 7px;
-        font-size: 8px;
-      }
-    }
-
-    &__time {
-      display: none;
-    }
-
-    &__arrow {
-      grid-row: 1 / 3;
-      font-size: 16px;
     }
   }
 }
