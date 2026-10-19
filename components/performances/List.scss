@@ -4,7 +4,7 @@
   .date-picker-container {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(430px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 20px 30px;
   }
 
@@ -53,10 +53,9 @@
   // ==================================================
 
   .performance-list-body {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
     gap: 12px;
-    flex: 1;
   }
 
   // ==================================================
@@ -76,10 +75,6 @@
 
   .upcoming-performances {
     margin-top: 80px;
-    .performance-list-body {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(430px, 1fr));
-    }
   }
 
   // ==================================================
@@ -107,17 +102,14 @@
   // Tablet
   // ==================================================
 
-  @media (max-width: 1024px) {
+  @media screen and (max-width: 1023px) {
     .date-picker-container {
       display: flex;
       flex-direction: column;
     }
 
-    .upcoming-performances {
-      margin-top: 40px;
-      .performance-list-body {
-        grid-template-columns: 1fr;
-      }
+    .performance-list-body {
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     }
   }
 
@@ -125,7 +117,7 @@
   // Mobile
   // ==================================================
 
-  @media (max-width: 768px) {
+  @media screen and (max-width: 767px) {
     padding-top: 40px;
     padding-bottom: 80px;
 
@@ -161,6 +153,10 @@
 
     .selected-date-performance {
       padding: 0;
+    }
+
+    .upcoming-performances {
+      margin-top: 40px;
     }
   }
 }

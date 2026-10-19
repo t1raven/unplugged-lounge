@@ -23,8 +23,7 @@
 
     img {
       position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
+      bottom: 5%;
       width: 100%;
       height: auto;
     }
@@ -75,15 +74,13 @@
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1023px) {
   .sub-page-hero {
     padding-top: calc(var(--header-height) + 10px);
     padding-bottom: 20px;
 
     &-kv img {
-      top: auto;
       bottom: -6%;
-      transform: translateY(0);
     }
 
     &-inner {

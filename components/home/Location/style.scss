@@ -14,9 +14,7 @@
     position: absolute;
     inset: 0;
 
-    background:
-      url('/images/home/location.jpg')
-      center / cover no-repeat;
+    background: url('/images/home/location.jpg') center / cover no-repeat;
   }
 
   &__overlay {
@@ -30,8 +28,8 @@
     position: relative;
     z-index: 2;
 
-    width: var(--inner-width); 
-    max-width: var(--inner-max-width); 
+    width: var(--inner-width);
+    max-width: var(--inner-max-width);
     margin: 0 auto;
     padding: 150px 0;
   }
@@ -73,7 +71,7 @@
   }
 }
 
-@media (max-width: 767px) {
+@media screen and (max-width: 1023px) {
   .location {
     min-height: 600px;
 

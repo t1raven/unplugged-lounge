@@ -41,6 +41,9 @@ export default function Upcoming({ performances }: UpcomingProps) {
         0,
         ...swiper.slides.map((slide) => slide.getBoundingClientRect().height),
       );
+
+      console.log('slideHeight:', slideHeight);
+
       if (!slideHeight) return;
 
       const rows = swiper.params.grid?.rows ?? 1;
@@ -165,17 +168,16 @@ export default function Upcoming({ performances }: UpcomingProps) {
               }}
               spaceBetween={10}
               speed={700}
-              /*autoplay={{
-                delay: 5000,
-                disableOnInteraction: false,
-              }}*/
               pagination={{
                 clickable: true,
               }}
-              //navigation={true}
               breakpoints={{
-                1024: {
+                767: {
                   slidesPerView: 2,
+                  grid: {
+                    rows: 4,
+                    fill: 'column',
+                  },
                 },
               }}
               modules={[Grid, Pagination, Navigation]}
