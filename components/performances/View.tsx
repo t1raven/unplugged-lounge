@@ -8,7 +8,7 @@ import { urlFor } from '@/sanity/lib/image';
 import { PortableText } from '@portabletext/react';
 
 import { useDevice } from '@/components/providers/DeviceProvider';
-import { formatDateTime } from '@/utils/date';
+import { formatDateTime, formatDDay } from '@/utils/date';
 
 import useFadeUpEffect from '@/hooks/useFadeUpEffect';
 import useHydrated from '@/hooks/useHydrated';
@@ -143,7 +143,10 @@ export default function PerformanceViewPage({ performance }: Props) {
               <div className="meta-item">
                 <span>공연 일시</span>
 
-                <strong>{formatDateTime(performance.date)}</strong>
+                <strong>
+                  <em>{formatDDay(performance.date)}</em>
+                  <p>{formatDateTime(performance.date)}</p>
+                </strong>
               </div>
 
               <div className="meta-item">

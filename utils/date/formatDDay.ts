@@ -13,6 +13,8 @@ export function formatDDay(date: string) {
 
   if (diffDays === 0) {
     return 'TODAY';
+  } else if (diffDays < 0) {
+    return '종료';
   }
 
   return `D-${diffDays}`;
