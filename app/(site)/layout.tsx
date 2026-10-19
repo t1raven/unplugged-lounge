@@ -54,8 +54,8 @@ export async function generateMetadata(): Promise<Metadata> {
         ? [
             {
               url: ogImage,
-              width: 400,
-              height: 400,
+              width: 1200,
+              height: 630,
               alt: title,
             },
           ]
@@ -73,6 +73,10 @@ export async function generateMetadata(): Promise<Metadata> {
       address: false,
       email: false,
     },
+
+    applicationName: `${siteName}`,
+
+    manifest: '/manifest.webmanifest',
 
     verification: {
       other: {
