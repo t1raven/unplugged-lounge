@@ -234,7 +234,7 @@ html.scrollUp .category_search_nav {
   }
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
   .category_search_nav {
     &__inner {
       gap: 12px;
@@ -257,7 +257,7 @@ html.scrollUp .category_search_nav {
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 767px) {
   .category_search_nav {
     margin-top: 20px;
     margin-bottom: 0;

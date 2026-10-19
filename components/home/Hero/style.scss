@@ -94,7 +94,7 @@
     z-index: 2;
 
     left: 0;
-    bottom: 60px;
+    bottom: 160px;
 
     display: flex;
     align-items: center;
@@ -115,12 +115,8 @@
   }
 }
 
-@media (max-width: 768px) {
+@media screen and (max-width: 767px) {
   .hero {
     min-height: 600px;
-
-    &__scroll {
-      bottom: 160px;
-    }
   }
 }

@@ -1,3 +1,5 @@
+@use '@/styles/functions' as *;
+
 .performance-detail {
   min-height: 100vh;
 
@@ -14,7 +16,7 @@
   .performance-detail-hero {
     position: relative;
     padding-top: calc(80px + var(--header-height));
-    padding-bottom: 120px;
+    padding-bottom: fluid(60px, 120px);
     background: var(--background-sec-color);
     overflow: hidden;
     flex: 1;
@@ -183,7 +185,7 @@
   // ==================================================
 
   .performance-artists {
-    padding: 120px 0;
+    padding: fluid(60px, 120px) 0;
     border-top: 1px solid var(--border-color);
   }
 
@@ -287,7 +289,8 @@
   // ==================================================
 
   .performance-description {
-    padding: 120px 0;
+    padding: fluid(60px, 120px) 0;
+    padding-bottom: calc(60px + var(--header-height));
     border-top: 1px solid var(--border-color);
 
     a {
@@ -348,20 +351,9 @@
   // Tablet
   // ==================================================
 
-  @media (max-width: 1024px) {
-    .performance-detail-hero .performance-detail-inner {
-      gap: 60px;
-    }
-  }
-
-  // ==================================================
-  // Mobile
-  // ==================================================
-
-  @media (max-width: 768px) {
+  @media screen and (max-width: 1023px) {
     .performance-detail-hero {
       padding-top: calc(30px + var(--header-height));
-      padding-bottom: 60px;
     }
 
     .performance-detail-hero .performance-detail-inner {
@@ -385,7 +377,13 @@
     .performance-meta {
       margin-top: 28px;
     }
+  }
 
+  // ==================================================
+  // Mobile
+  // ==================================================
+
+  @media screen and (max-width: 767px) {
     .meta-item {
       padding: 13px 0;
 
@@ -399,15 +397,6 @@
           margin-left: 0;
         }
       }
-    }
-
-    .performance-artists,
-    .performance-description {
-      padding: 60px 0;
-    }
-
-    .performance-description {
-      padding-bottom: 120px;
     }
 
     .section-heading {
@@ -426,18 +415,6 @@
       p {
         margin-top: 15px;
         font-size: 13px;
-      }
-    }
-
-    .description-content {
-      line-height: 1.8;
-    }
-
-    .reservation-box {
-      padding: 50px 20px;
-
-      h2 {
-        font-size: 26px;
       }
     }
   }

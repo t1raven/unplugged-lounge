@@ -1,11 +1,13 @@
+@use '@/styles/functions' as *;
+
 .about {
   background-color: var(--background-sec-color);
 
-  padding: 180px 0;
+  padding: fluid(60px, 180px) 0;
 
   &__inner {
-    width: var(--inner-width); 
-    max-width: var(--inner-max-width); 
+    width: var(--inner-width);
+    max-width: var(--inner-max-width);
     margin: 0 auto;
   }
 
@@ -15,8 +17,8 @@
     p {
       margin: 0 0 40px;
 
-      
-      font-weight: 500;font-size: clamp(20px, 4vw, 24px);
+      font-weight: 500;
+      font-size: clamp(20px, 4vw, 24px);
       color: var(--primary-color);
       letter-spacing: 0.2em;
     }
@@ -57,16 +59,14 @@
 
       object-fit: cover;
 
-      transform: scale(1.0);
+      transform: scale(1);
 
-      transition:
-        transform 3s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: transform 3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     &:hover img {
       transform: scale(1.05);
     }
-
 
     /*
      * IMAGE 01
@@ -76,11 +76,10 @@
       left: 8%;
 
       width: 42%;
-      height: 600px;
+      aspect-ratio: 4 / 5;
 
       z-index: 2;
     }
-
 
     /*
      * IMAGE 02
@@ -90,11 +89,10 @@
       right: 4%;
 
       width: 32%;
-      height: 430px;
+      aspect-ratio: 1 / 1;
 
       z-index: 3;
     }
-
 
     /*
      * IMAGE 03
@@ -104,11 +102,10 @@
       left: 18%;
 
       width: 28%;
-      height: 360px;
+      aspect-ratio: 4 / 5;
 
       z-index: 4;
     }
-
 
     /*
      * IMAGE 04
@@ -118,7 +115,7 @@
       right: 22%;
 
       width: 30%;
-      height: 420px;
+      aspect-ratio: 4 / 5;
 
       z-index: 1;
     }
@@ -144,7 +141,6 @@
   }
 
   &__equipment-header {
-
     margin-bottom: 100px;
 
     p {
@@ -336,7 +332,7 @@
         p {
           max-width: 800px;
           padding: 0 60px 35px 60px;
-          font-size: 1em;
+          font-size: 1rem;
           color: var(--font-sec-color);
           white-space: pre-line;
         }
@@ -345,10 +341,29 @@
   }
 }
 
-@media (max-width: 767px) {
+@media screen and (max-width: 1023px) {
   .about {
-    padding: 60px 0;
+    &__image {
+      &--2 {
+        width: 40%;
+      }
 
+      &--3 {
+        left: 10%;
+        top: 780px;
+        width: 50%;
+      }
+
+      &--4 {
+        top: 460px;
+        width: 45%;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .about {
     &__heading {
       margin-bottom: 60px;
     }

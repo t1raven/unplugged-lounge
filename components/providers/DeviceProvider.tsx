@@ -3,8 +3,10 @@
 import { createContext, useContext, useSyncExternalStore, type ReactNode } from 'react';
 
 export type DeviceType = 'desktop' | 'tablet' | 'mobile' | 'unknown';
-export type OperatingSystem = 'windows' | 'macos' | 'ios' | 'android' | 'chromeos' | 'linux' | 'unknown';
-export type Browser = 'edge' | 'opera' | 'samsung' | 'firefox' | 'chrome' | 'safari' | 'ie' | 'unknown';
+export type OperatingSystem =
+  'windows' | 'macos' | 'ios' | 'android' | 'chromeos' | 'linux' | 'unknown';
+export type Browser =
+  'edge' | 'opera' | 'samsung' | 'firefox' | 'chrome' | 'safari' | 'ie' | 'unknown';
 
 export interface DeviceInfo {
   deviceType: DeviceType;
@@ -39,11 +41,7 @@ let clientSnapshot: DeviceInfo | undefined;
 
 function getClientSnapshot(): DeviceInfo {
   const width = window.innerWidth;
-  const deviceType: DeviceType = width <= 768
-    ? 'mobile'
-    : width <= 1024
-      ? 'tablet'
-      : 'desktop';
+  const deviceType: DeviceType = width < 768 ? 'mobile' : width < 1024 ? 'tablet' : 'desktop';
   if (clientSnapshot) {
     if (clientSnapshot.deviceType !== deviceType) {
       clientSnapshot = {
@@ -61,11 +59,12 @@ function getClientSnapshot(): DeviceInfo {
   // iPadOS can report a desktop Macintosh user agent.
   const isIPad = /iPad/i.test(ua) || (/Macintosh/i.test(ua) && navigator.maxTouchPoints > 1);
   const isAndroid = /Android/i.test(ua);
-  const userAgentDeviceType: DeviceType = isIPad || /Tablet|PlayBook|Silk/i.test(ua) || (isAndroid && !/Mobile/i.test(ua))
-    ? 'tablet'
-    : /Mobi|iPhone|iPod|Windows Phone/i.test(ua)
-      ? 'mobile'
-      : 'desktop';
+  const userAgentDeviceType: DeviceType =
+    isIPad || /Tablet|PlayBook|Silk/i.test(ua) || (isAndroid && !/Mobile/i.test(ua))
+      ? 'tablet'
+      : /Mobi|iPhone|iPod|Windows Phone/i.test(ua)
+        ? 'mobile'
+        : 'desktop';
 
   let os: OperatingSystem = 'unknown';
   if (/Windows Phone/i.test(ua)) os = 'windows';

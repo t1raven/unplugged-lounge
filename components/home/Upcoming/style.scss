@@ -1,7 +1,7 @@
 @use '@/styles/functions' as *;
 
 .upcoming {
-  padding: 180px 0;
+  padding: fluid(60px, 180px) 0;
   overflow: hidden;
 
   &__inner {
@@ -62,6 +62,7 @@
       margin-right: 10px;
       // Keep measurements independent of Swiper's percentage-based grid height.
       height: auto !important;
+      max-height: 125px;
       transition: padding-right 0.25s ease;
     }
 
@@ -117,8 +118,12 @@
   }
 }
 
-@media (max-width: 1024px) {
+@media screen and (max-width: 767px) {
   .upcoming {
+    &__header {
+      margin-bottom: 16px;
+    }
+
     &__swiper {
       overflow: visible;
 
@@ -126,16 +131,6 @@
         width: 100%;
         //padding: 0 5px;
       }
-    }
-  }
-}
-
-@media (max-width: 768px) {
-  .upcoming {
-    padding: 60px 0;
-
-    &__header {
-      margin-bottom: 16px;
     }
   }
 }
