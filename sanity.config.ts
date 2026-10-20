@@ -19,7 +19,8 @@ import {
   DeletePerformanceAndGalleryAction,
   PublishPerformanceAndSyncGalleryAction,
 } from './sanity/actions/PerformancePosterSync';
-import { PerformanceViewOnSiteAction } from './sanity/actions/PerformanceViewOnSite';
+import { PerformanceViewOnSiteAction } from '@/sanity/actions/PerformanceViewOnSite';
+//import { limitedImageSource } from '@/sanity/components/ui/LimitedImageSource';
 
 import { koKRLocale } from '@sanity/locale-ko-kr';
 
@@ -69,6 +70,13 @@ export default defineConfig({
         }),
     },
   },
+
+  /* form: {
+    image: {
+      directUploads: true,
+      assetSources: () => [limitedImageSource],
+    },
+  }, */
 
   document: {
     /* newDocumentOptions: (prev, { creationContext }) => {
