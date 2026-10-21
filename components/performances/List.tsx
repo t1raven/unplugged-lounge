@@ -1,8 +1,10 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useLayoutEffect, useRef } from 'react';
 import { formatDate, formatWeekDay } from '@/utils/date';
 import useFadeUpEffect from '@/hooks/useFadeUpEffect';
+import gsap from 'gsap';
+import useLiquidEase from '@/hooks/useLiquidEase';
 
 import DatePicker from './DatePicker';
 import PerformanceCard from './Card';
@@ -85,7 +87,10 @@ export default function PerformanceList({ performances }: Props) {
   // ==================================================
 
   const selectedWeekday = formatWeekDay(selectedDateKey);
-  const selectedPerformances = performancesByDate[selectedDateKey] ?? [];
+  const selectedPerformances = useMemo(
+    () => performancesByDate[selectedDateKey] ?? [],
+    [performancesByDate, selectedDateKey],
+  );
 
   // ==================================================
   // Upcoming Performances
@@ -103,6 +108,40 @@ export default function PerformanceList({ performances }: Props) {
 
     return upcoming;
   }, [sortedPerformances, todayKey]);
+
+  const listRef = useRef<HTMLDivElement>(null);
+  useLiquidEase();
+
+  useLayoutEffect(() => {
+    const list = listRef.current;
+
+    if (!list || selectedPerformances.length === 0) return;
+
+    const items = list.querySelectorAll('.performance-card');
+
+    if (!items.length) return;
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        items,
+        {
+          opacity: 0,
+          y: 30,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.65,
+          stagger: 0.08,
+          delay: 0.35,
+          ease: 'liquidEase',
+          clearProps: 'all',
+        },
+      );
+    }, list);
+
+    return () => ctx.revert();
+  }, [selectedPerformances]);
 
   useFadeUpEffect(
     '.date-picker-header, .date-picker, .selected-date-performance, .upcoming-performances',
@@ -166,7 +205,7 @@ export default function PerformanceList({ performances }: Props) {
             </div>
 
             {selectedPerformances.length > 0 ? (
-              <div className="performance-list-body">
+              <div className="performance-list-body" ref={listRef}>
                 {selectedPerformances.map((performance) => (
                   <PerformanceCard
                     key={performance._id}
