@@ -16,7 +16,7 @@
   .performance-detail-hero {
     position: relative;
     padding-top: calc(80px + var(--header-height));
-    padding-bottom: fluid(60px, 120px);
+    padding-bottom: fluid(60px, 100px);
     background: var(--background-sec-color);
     overflow: hidden;
     flex: 1;
@@ -193,7 +193,7 @@
   // ==================================================
 
   .performance-artists {
-    padding: fluid(60px, 120px) 0;
+    padding: fluid(60px, 100px) 0;
     border-top: 1px solid var(--border-color);
   }
 
@@ -297,12 +297,11 @@
   // ==================================================
 
   .performance-description {
-    padding: fluid(60px, 120px) 0;
-    padding-bottom: calc(60px + var(--header-height));
+    padding: fluid(60px, 100px) 0;
     border-top: 1px solid var(--border-color);
 
-    a {
-      color: var(--info-color);
+    &:last-of-type {
+      padding-bottom: calc(60px + var(--header-height));
     }
   }
 
@@ -311,6 +310,10 @@
     font-size: 1rem;
     line-height: 1.5;
     color: var(--font-sec-color);
+
+    a {
+      color: var(--info-color);
+    }
   }
 
   // ==================================================
