@@ -53,9 +53,6 @@
 }
 
 .search-nav {
-  position: relative;
-  z-index: 1;
-
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -87,7 +84,6 @@
     }
 
     input {
-      min-width: 300px;
       width: 100%;
       height: 40px;
       border-radius: 10em;
@@ -133,6 +129,9 @@
 }
 
 .category-nav {
+  position: relative;
+  z-index: -1;
+
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -249,10 +248,7 @@ html.scrollUp .category_search_nav {
 
   .search-nav {
     .input {
-      width: auto;
       max-width: 100%;
-      left: 5%;
-      right: 5%;
     }
   }
 }
