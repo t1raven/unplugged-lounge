@@ -185,7 +185,7 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .search-modal .search-results-list li a:hover {
+  .search-modal .search-results-list li a:hover::before {
     opacity: 1;
   }
 }
