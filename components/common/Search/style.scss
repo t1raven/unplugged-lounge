@@ -99,9 +99,15 @@
       color: var(--font-sec-color);
       text-align: center;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
+      gap: 1em;
       min-height: 180px;
+
+      .loading-skeleton {
+        min-height: auto;
+      }
     }
 
     &-list {

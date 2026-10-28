@@ -3,6 +3,7 @@
 import { useRef, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { getDateParts } from '@/utils/date';
+import { Loading } from '@/components/ui/Skeleton';
 import Link from 'next/link';
 
 import Modal from '@/components/ui/Modal';
@@ -108,7 +109,10 @@ export default function SearchModal({ open, onClose }: Props) {
         {!keyword.trim() ? (
           <div className="search-results-status">검색어를 입력하세요.</div>
         ) : loading ? (
-          <div className="search-results-status">검색 중...</div>
+          <div className="search-results-status">
+            <Loading loading={loading} />
+            검색 중...
+          </div>
         ) : results.length > 0 ? (
           <ul className="search-results-list">
             {results.map((item) => (
