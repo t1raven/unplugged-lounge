@@ -28,7 +28,17 @@ export default function Gnb() {
 
     const activeMenu = gnbRef.current.querySelector('li.active') as HTMLElement | null;
 
-    if (!activeMenu) return;
+    if (!activeMenu) {
+      gsap.to(moveBgRef.current, {
+        scale: 0,
+        opacity: 0,
+        duration: 0.45,
+        ease: 'liquidEase',
+        overwrite: 'auto',
+      });
+
+      return;
+    }
 
     const navRect = gnbRef.current.getBoundingClientRect();
     const menuRect = activeMenu.getBoundingClientRect();
@@ -55,6 +65,7 @@ export default function Gnb() {
       x,
       y: '-50%',
       scale: 1,
+      opacity: 1,
       width,
       duration: 0.45,
       ease: 'liquidEase',
