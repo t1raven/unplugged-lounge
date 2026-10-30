@@ -1,10 +1,11 @@
 'use client';
 
-import { useMemo, useState, useLayoutEffect, useRef } from 'react';
+import { useMemo, useState, useLayoutEffect, useRef, useCallback, useEffect } from 'react';
 import { formatDate, formatWeekDay } from '@/utils/date';
 import useFadeUpEffect from '@/hooks/useFadeUpEffect';
 import gsap from 'gsap';
 import useLiquidEase from '@/hooks/useLiquidEase';
+import { Loading } from '@/components/ui/Skeleton';
 
 import DatePicker from './DatePicker';
 import PerformanceCard from './Card';
@@ -12,12 +13,14 @@ import PerformanceCard from './Card';
 import type { Performance } from '@/types/performance';
 
 import './List.scss';
+import { Button } from '../ui/Button';
 
 interface Props {
   performances: Performance[];
 }
 
 const UPCOMING_LIMIT = 12;
+const PAST_PAGE_SIZE = 12;
 
 export default function PerformanceList({ performances }: Props) {
   const todayKey = formatDate(new Date());
@@ -143,6 +146,71 @@ export default function PerformanceList({ performances }: Props) {
     return () => ctx.revert();
   }, [selectedPerformances]);
 
+  const [showPastPerformances, setShowPastPerformances] = useState(false);
+  const [pastPerformances, setPastPerformances] = useState<Performance[]>([]);
+  const [page, setPage] = useState(0);
+  const [moreLoading, setMoreLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(pastPerformances.length === PAST_PAGE_SIZE);
+
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const previousLengthRef = useRef(0);
+
+  const loadMore = useCallback(async () => {
+    console.log(moreLoading, hasMore);
+    if (moreLoading || !hasMore) return;
+
+    setMoreLoading(true);
+
+    try {
+      const nextPage = page + 1;
+
+      const params = new URLSearchParams({
+        type: 'past',
+        page: String(nextPage),
+      });
+
+      const response = await fetch(`/api/performances?${params.toString()}`);
+
+      if (!response.ok) {
+        throw new Error('데이터를 불러오지 못했습니다.');
+      }
+
+      const data = await response.json();
+
+      previousLengthRef.current = pastPerformances.length;
+
+      setPastPerformances((prev) => [...prev, ...data.items]);
+
+      setPage(nextPage);
+      setHasMore(data.hasMore);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setMoreLoading(false);
+    }
+  }, [page, moreLoading, hasMore, pastPerformances.length]);
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+
+    if (!sentinel || !hasMore) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          loadMore();
+        }
+      },
+      {
+        rootMargin: `1px 0px`,
+      },
+    );
+
+    observer.observe(sentinel);
+
+    return () => observer.disconnect();
+  }, [loadMore, hasMore]);
+
   useFadeUpEffect(
     '.date-picker-header, .date-picker, .selected-date-performance, .upcoming-performances',
   );
@@ -243,6 +311,46 @@ export default function PerformanceList({ performances }: Props) {
           ) : (
             <div className="no-performance">
               <p>예정된 공연이 없습니다.</p>
+            </div>
+          )}
+        </div>
+
+        <div className="past-performances">
+          {showPastPerformances ? (
+            <>
+              <div className="performance-list-header">
+                <div>
+                  <p>PAST PERFORMANCE</p>
+                  <h3>지난 공연</h3>
+                </div>
+              </div>
+
+              <div className="performance-list-body">
+                {pastPerformances.map((item) => (
+                  <PerformanceCard key={item._id} type="upcoming" performance={item} />
+                ))}
+              </div>
+              {/* 무한스크롤 감지 영역 */}
+              {hasMore && !moreLoading && (
+                <div ref={sentinelRef} className="performance-list-sentinel" aria-hidden="true" />
+              )}
+              {moreLoading && <Loading loading={moreLoading} />}
+            </>
+          ) : (
+            <div className="past-performances-button">
+              <Button
+                size="small"
+                onClick={() => {
+                  setShowPastPerformances(true);
+                  setHasMore(true);
+                  loadMore();
+                }}
+              >
+                지난 공연 보기
+                <span className="material-symbols-rounded button-icon end-icon">
+                  keyboard_arrow_down
+                </span>
+              </Button>
             </div>
           )}
         </div>
