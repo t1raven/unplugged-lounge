@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { client } from '@/sanity/lib/client';
 
 import { getSiteSettings } from '@/lib/siteSettings';
+import { urlFor } from '@/sanity/lib/image';
 
 import ArtistView from '@/components/artists/View';
 
@@ -54,12 +55,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
+  const ogImage = siteSettings?.seo?.ogImage
+    ? urlFor(siteSettings.seo.ogImage).url()
+    : '/images/common/og-image.png';
   const SITE_URL = `${siteSettings?.general?.siteUrl ?? 'https://www.unplugged-lounge.com'}/artists/${slug}`;
 
   return {
-    title: artist.name,
+    title: `${artist.name} | 아티스트`,
+    description: `언플러그드 라운지에서 ${artist.name}의 공연정보를 확인해보세요.`,
     alternates: {
       canonical: SITE_URL,
+    },
+    openGraph: {
+      type: 'website',
+      locale: 'ko_KR',
+      title: artist.name,
+      images: [
+        {
+          url: ogImage,
+          alt: artist.name,
+        },
+      ],
+      url: SITE_URL,
     },
   };
 }
