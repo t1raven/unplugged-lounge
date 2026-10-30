@@ -109,25 +109,24 @@
   }
 
   &-size-small {
-    min-width: 50px;
-    height: 50px;
-    padding: 0.25rem 1.25rem;
+    min-width: 40px;
+    height: 40px;
+    padding: 0.25em 1em;
     font-size: clamp(12px, 0.875rem, 14px);
   }
 
   &-size-medium {
     min-width: 60px;
     height: 60px;
-    padding: 0.5rem 1.5rem;
+    padding: 0.5em 1.25em;
     font-size: clamp(14px, 1rem, 16px);
   }
 
   &-size-large {
-    min-width: 70px;
-    height: 70px;
-    padding: 0.75rem 2.5rem;
-    font-size: 1.125rem;
-    font-size: clamp(16px, 1.125rem, 18px);
+    min-width: 80px;
+    height: 80px;
+    padding: 0.5em 1.5em;
+    font-size: clamp(18px, 1.125rem, 20px);
   }
 
   &-icon {

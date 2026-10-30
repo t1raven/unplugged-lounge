@@ -8,6 +8,8 @@ import Image from 'next/image';
 import ParaSection from '@/components/common/ParaSection';
 import heroKvImage from '@/public/images/common/site-sub-hero-kv.png';
 import PerformanceCard from '@/components/performances/Card';
+import { Button } from '@/components/ui/Button';
+import { useDevice } from '@/components/providers/DeviceProvider';
 
 import './View.scss';
 
@@ -76,8 +78,38 @@ function groupArtistPerformances<T extends ArtistPerformance>(performances: T[],
   return result;
 }
 
+const handleShare = async () => {
+  const url = window.location.href;
+
+  // 네이티브 공유 지원
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: document.title,
+        url,
+      });
+    } catch (error) {
+      // 사용자가 공유창을 닫은 경우
+      if ((error as DOMException).name !== 'AbortError') {
+        console.error('공유 실패:', error);
+      }
+    }
+
+    return;
+  }
+  // 네이티브 공유를 지원하지 않는 경우, URL을 클립보드에 복사
+  try {
+    await navigator.clipboard.writeText(url);
+    alert('URL이 클립보드에 복사되었습니다.');
+  } catch (error) {
+    console.error('URL 복사 실패:', error);
+  }
+};
+
 export default function ArtistViewPage({ artist, performances }: Props) {
   const { today, upcoming, past } = groupArtistPerformances(performances);
+  const { isIOS, isReady } = useDevice();
+  const ios = isIOS && isReady ? true : false;
 
   return (
     <>
@@ -89,16 +121,32 @@ export default function ArtistViewPage({ artist, performances }: Props) {
         </ParaSection>
         <div className="artist-view-inner">
           <h1 className="artist-name">{artist.name}</h1>
-          {artist.instagram && (
-            <p className="artist-instagram">
-              <Link href={artist.instagram!} target="_blank">
+
+          <div className="artist-btns">
+            {artist.instagram && (
+              <Link href={artist.instagram!} className="artist-instagram" target="_blank">
                 @{extractInstagramIdWithRegex(artist.instagram)}
                 <i className="material-symbols-rounded icon" translate="no">
                   arrow_outward
                 </i>
               </Link>
-            </p>
-          )}
+            )}
+            <Button
+              type="button"
+              className="artist_share"
+              size="small"
+              color="secondary"
+              opacity={0.7}
+              onClick={handleShare}
+            >
+              <span
+                className="material-symbols-rounded button-icon middle-icon"
+                aria-label="공유하기"
+              >
+                {ios ? 'ios_share' : 'share'}
+              </span>
+            </Button>
+          </div>
         </div>
       </section>
 
