@@ -152,7 +152,9 @@ export default function PerformanceList({ performances }: Props) {
   const [moreLoading, setMoreLoading] = useState(false);
   const [hasMore, setHasMore] = useState(pastPerformances.length === PAST_PAGE_SIZE);
 
+  const pastPerformancesRef = useRef<HTMLDivElement>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
+  const animationContextRef = useRef<gsap.Context | null>(null);
   const previousLengthRef = useRef(0);
 
   const loadMore = useCallback(async () => {
@@ -211,8 +213,47 @@ export default function PerformanceList({ performances }: Props) {
     return () => observer.disconnect();
   }, [loadMore, hasMore]);
 
+  useLayoutEffect(() => {
+    const grid = pastPerformancesRef.current;
+
+    if (!grid || pastPerformances.length === 0) return;
+
+    const previousLength = previousLengthRef.current;
+
+    const allItems = grid.querySelectorAll('.performance-card');
+
+    const newItems = Array.from(allItems).slice(previousLength);
+
+    if (!newItems.length) return;
+
+    animationContextRef.current?.revert();
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        newItems,
+        {
+          opacity: 0,
+          y: 30,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.65,
+          stagger: 0.08,
+          delay: 0.35,
+          ease: 'liquidEase',
+          clearProps: 'all',
+        },
+      );
+    }, grid);
+
+    animationContextRef.current = ctx;
+
+    previousLengthRef.current = pastPerformances.length;
+  }, [pastPerformances]);
+
   useFadeUpEffect(
-    '.date-picker-header, .date-picker, .selected-date-performance, .upcoming-performances',
+    '.date-picker-header, .date-picker, .selected-date-performance, .upcoming-performances .performance-list-header, .upcoming-performances .performance-card',
   );
 
   return (
@@ -325,9 +366,9 @@ export default function PerformanceList({ performances }: Props) {
                 </div>
               </div>
 
-              <div className="performance-list-body">
+              <div className="performance-list-body" ref={pastPerformancesRef}>
                 {pastPerformances.map((item) => (
-                  <PerformanceCard key={item._id} type="upcoming" performance={item} />
+                  <PerformanceCard key={item._id} type="past" performance={item} />
                 ))}
               </div>
               {/* 무한스크롤 감지 영역 */}
