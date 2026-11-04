@@ -256,7 +256,11 @@ export default function PerformanceViewPage({ performance }: Props) {
                     )}
                   </div>
 
-                  <Link href={`/artists/${artist.slug?.current}`} className="artist-link">
+                  <Link
+                    href={`/artists/${artist.slug?.current}`}
+                    scroll={false}
+                    className="artist-link"
+                  >
                     <i className="material-symbols-rounded icon" translate="no">
                       arrow_forward_ios
                     </i>

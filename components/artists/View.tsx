@@ -113,6 +113,16 @@ export default function ArtistViewPage({ artist, performances }: Props) {
 
   return (
     <>
+      <button
+        type="button"
+        className="artist-view-close"
+        onClick={() => window.history.back()}
+        aria-label="닫기"
+      >
+        <span className="icon material-symbols-rounded" translate="no">
+          close
+        </span>
+      </button>
       <section className="artist-view-hero">
         <ParaSection className="artist-view-hero-kv" delay={100}>
           <div>

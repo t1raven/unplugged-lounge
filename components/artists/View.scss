@@ -43,10 +43,31 @@
     }
   }
 
+  &-close {
+    position: absolute;
+    top: fluid(10px, 20px);
+    right: fluid(10px, 20px);
+    z-index: 10;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    width: fluid(30px, 40px);
+    height: fluid(30px, 40px);
+    border: none;
+    border-radius: 10em;
+    background-color: rgb(from var(--border-color) r g b / 0.5);
+    cursor: pointer;
+
+    .icon {
+      color: var(--background-color);
+      font-size: 1.5em;
+    }
+  }
+
   &-hero {
     position: relative;
     min-height: fluid(260px, 420px);
-    padding-top: calc(var(--header-height) + 80px);
+    padding-top: calc(var(--header-height) + fluid(40px, 80px));
     padding-bottom: 60px;
     overflow: hidden;
 
@@ -63,7 +84,7 @@
 
       img {
         position: absolute;
-        bottom: 5%;
+        bottom: -5%;
         width: 100%;
         height: auto;
       }

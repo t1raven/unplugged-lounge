@@ -1,0 +1,24 @@
+@use '@/styles/functions' as *;
+
+.artist-modal {
+  .modal-panel {
+    width: min(750px, 100%);
+
+    .modal-body {
+      padding: 0;
+    }
+  }
+
+  .artist-view-close {
+    display: flex;
+  }
+
+  .artist-view-hero {
+    min-height: min(100px, 200px);
+    padding: fluid(30px, 60px) 0;
+  }
+
+  .artist-view-performances {
+    padding: 40px 0 !important;
+  }
+}
