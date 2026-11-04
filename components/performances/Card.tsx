@@ -11,13 +11,13 @@ import './Card.scss';
 
 interface Props {
   performance: Performance;
-  type: 'selected' | 'upcoming';
+  type: 'selected' | 'upcoming' | 'past';
 }
 
 export default function PerformanceCard({ performance, type }: Props) {
   const { year, month, day, weekday, hour, minute } = getDateParts(performance.date);
   const time = `${hour}:${minute}`;
-  const isUpcoming = type === 'upcoming';
+  const isUpcoming = type === 'upcoming' || type === 'past';
   const slug = performance.slug?.current;
   const artistNames = performance.artists
     ?.map((artist) => artist?.name)

@@ -58,6 +58,10 @@
     gap: 12px;
   }
 
+  .performance-list-sentinel {
+    width: 100%;
+  }
+
   // ==================================================
   // Selected Date Performance
   // ==================================================
@@ -75,6 +79,18 @@
 
   .upcoming-performances {
     margin-top: 80px;
+  }
+
+  // ==================================================
+  // Past Performances
+  // ==================================================
+
+  .past-performances {
+    margin-top: 80px;
+
+    &-button {
+      text-align: center;
+    }
   }
 
   // ==================================================
