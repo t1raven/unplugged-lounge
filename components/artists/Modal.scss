@@ -2,7 +2,8 @@
 
 .artist-modal {
   .modal-panel {
-    width: min(750px, 100%);
+    width: min(750px, 90%);
+    height: min(650px, 100%);
 
     .modal-body {
       padding: 0;
@@ -20,5 +21,12 @@
 
   .artist-view-performances {
     padding: 40px 0 !important;
+  }
+
+  @media screen and (max-width: 1023px) {
+    .modal-panel {
+      width: 100%;
+      height: auto;
+    }
   }
 }
