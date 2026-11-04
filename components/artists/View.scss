@@ -17,7 +17,7 @@
     margin-bottom: 24px;
 
     p {
-      margin: 0 0 10px;
+      margin: 0 0 fluid(5px, 10px);
       font-size: 13px;
       font-weight: 600;
       letter-spacing: 0.16em;
@@ -27,13 +27,13 @@
 
     h2 {
       margin: 0;
-      font-size: 28px;
+      font-size: fluid(24px, 28px);
       font-weight: 500;
       letter-spacing: -0.04em;
     }
 
     .count {
-      font-size: 16px;
+      font-size: 1rem;
       line-height: 1.4;
       color: var(--font-sec-color);
 
@@ -104,17 +104,16 @@
 
     .artist-name {
       margin: 0;
-      font-size: fluid(42px, 62px);
+      font-size: fluid(32px, 62px);
       font-weight: 500;
       line-height: 1.25;
-      letter-spacing: -0.06em;
     }
 
     .artist-btns {
       margin-top: 10px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 5px;
     }
 
     .artist-instagram {
@@ -169,7 +168,7 @@
 
     .no-performances {
       margin: 0;
-      font-size: 16px;
+      font-size: 1rem;
       font-weight: 500;
       color: var(--font-sec-color);
       text-align: center;

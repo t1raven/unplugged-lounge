@@ -3,7 +3,7 @@
 .artist-modal {
   .modal-panel {
     width: min(750px, 90%);
-    height: min(650px, 100%);
+    min-height: 650px;
 
     .modal-body {
       padding: 0;
@@ -26,7 +26,7 @@
   @media screen and (max-width: 1023px) {
     .modal-panel {
       width: 100%;
-      height: auto;
+      min-height: auto;
     }
   }
 }
