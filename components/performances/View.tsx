@@ -168,7 +168,7 @@ export default function PerformanceViewPage({ performance }: Props) {
                 </strong>
               </div>
 
-              {performance.price1 && (
+              {performance.price1 != null && performance.price1 > 0 && (
                 <div
                   className="meta-item"
                   style={{ gridColumn: !performance.price2 ? '1/3' : 'auto' }}
@@ -183,7 +183,7 @@ export default function PerformanceViewPage({ performance }: Props) {
                 </div>
               )}
 
-              {performance.price2 && (
+              {performance.price2 != null && performance.price2 > 0 && (
                 <div
                   className="meta-item"
                   style={{ gridColumn: !performance.price1 ? '1/3' : 'auto' }}
