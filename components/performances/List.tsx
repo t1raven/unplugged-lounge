@@ -338,7 +338,7 @@ export default function PerformanceList({ performances }: Props) {
         <div className="upcoming-performances">
           <div className="performance-list-header">
             <div>
-              <p>UPCOMING PERFORMANCE</p>
+              <p>UPCOMING</p>
               <h3>다가오는 공연</h3>
             </div>
           </div>
@@ -361,7 +361,7 @@ export default function PerformanceList({ performances }: Props) {
             <>
               <div className="performance-list-header">
                 <div>
-                  <p>PAST PERFORMANCE</p>
+                  <p>PAST</p>
                   <h3>지난 공연</h3>
                 </div>
               </div>
