@@ -19,9 +19,9 @@ interface Props {
   endIcon?: React.ReactNode;
   label?: string;
   disabled?: boolean;
-  ref?: React.Ref<HTMLButtonElement>;
-  onChange?: (event: React.ChangeEvent<HTMLButtonElement>) => void;
-  onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  ref?: React.Ref<HTMLButtonElement | HTMLAnchorElement>;
+  onChange?: React.ChangeEventHandler<HTMLButtonElement | HTMLAnchorElement>;
+  onClick?: React.MouseEventHandler<HTMLButtonElement | HTMLAnchorElement>;
 }
 
 export function Button({
@@ -43,8 +43,8 @@ export function Button({
   label,
   disabled,
   ref,
-  onChange, 
-  onClick 
+  onChange,
+  onClick,
 }: Props) {
   const classes = [
     'button-root',
@@ -53,7 +53,9 @@ export function Button({
     `button-color-${color}`,
     shadow && 'button-shadow',
     className?.trim(),
-  ].filter(Boolean).join(' ');
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   const content = (
     <>
@@ -90,6 +92,9 @@ export function Button({
         target={target}
         rel={target ? 'noopener noreferrer' : undefined}
         style={customStyles}
+        ref={ref as React.Ref<HTMLAnchorElement>}
+        onChange={onChange}
+        onClick={onClick}
         aria-label={label}
         aria-disabled={disabled}
       >
@@ -105,6 +110,9 @@ export function Button({
         href={href}
         className={classes}
         style={customStyles}
+        ref={ref as React.Ref<HTMLAnchorElement>}
+        onChange={onChange}
+        onClick={onClick}
         aria-label={label}
         aria-disabled={disabled}
       >
@@ -114,14 +122,14 @@ export function Button({
   }
 
   return (
-    <button 
-      id={id} 
-      type={type} 
-      className={classes} 
+    <button
+      id={id}
+      type={type}
+      className={classes}
       style={customStyles}
-      ref={ref} 
-      onChange={onChange} 
-      onClick={onClick} 
+      ref={ref as React.Ref<HTMLButtonElement>}
+      onChange={onChange}
+      onClick={onClick}
       aria-label={label}
       disabled={disabled}
     >
