@@ -28,7 +28,6 @@ const upcomingQuery = `
       name,
       slug
     },
-    thumbnail,
   }
 `;
 
