@@ -372,14 +372,14 @@ export default function RentalPage({ equipment: item }: Props) {
 
             <div className="rental-application__buttons">
               <Button
-                href="https://docs.google.com/spreadsheets/d/1VqfBWdTR0RCg99oG9AUxaqTr1CL5Qo-GrjouthYtHsY/edit?gid=0#gid=0"
+                href="https://docs.google.com/spreadsheets/d/1VqfBWdTR0RCg99oG9AUxaqTr1CL5Qo-GrjouthYtHsY"
                 target="_blank"
                 endIcon={'arrow_outward'}
               >
                 대관 신청 전 상세 안내 확인
               </Button>
 
-              <Button href="tel:010-9035-6289" color="secondary" endIcon={'phone_enabled'}>
+              <Button href="tel:010-3287-3827" color="secondary" endIcon={'phone_enabled'}>
                 전화 문의
               </Button>
 
@@ -394,9 +394,9 @@ export default function RentalPage({ equipment: item }: Props) {
 
             <div className="rental-contact">
               <span>
-                DM @unplugged.lounge
+                <b>INSTAGRAM</b> @unplugged.lounge
                 <br />
-                unpluggedkorea@gmail.com
+                <b>E-MAIL</b> unpluggedkorea@gmail.com
               </span>
             </div>
           </div>
