@@ -324,7 +324,7 @@ export default function PerformanceViewPage({ performance }: Props) {
           <Button opacity={0.7} shadow disabled className="reservation_btn">
             <span>매진되었습니다.</span>
           </Button>
-        ) : isSalesOpen ? (
+        ) : /* ) : isSalesOpen ? (
           <Button opacity={0.7} shadow disabled className="reservation_btn">
             <span>
               사전 예매 오픈전
@@ -335,8 +335,8 @@ export default function PerformanceViewPage({ performance }: Props) {
                 </>
               )}
             </span>
-          </Button>
-        ) : isSalesClose ? (
+          </Button> */
+        isSalesClose ? (
           <Button opacity={0.7} shadow disabled className="reservation_btn">
             <span>
               사전 예매 마감
