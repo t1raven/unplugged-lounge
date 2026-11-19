@@ -88,7 +88,7 @@ export default function PerformanceViewPage({ performance }: Props) {
   const isEnd = now !== null && now >= endDate;
 
   const isSalesOpen =
-    now !== null && performance.salesOpen ? now <= new Date(performance.salesOpen) : false;
+    now !== null && performance.salesOpen ? now < new Date(performance.salesOpen) : false;
 
   const isSalesClose =
     now !== null && performance.salesClose ? now >= new Date(performance.salesClose) : false;
@@ -356,11 +356,22 @@ export default function PerformanceViewPage({ performance }: Props) {
             opacity={0.7}
             shadow
             onClick={handleTrackEvent}
+            style={{ flexWrap: 'wrap' }}
           >
             <span className="icon material-symbols-rounded" translate="no">
               confirmation_number
             </span>
             <span>예매하기</span>
+            {isSalesOpen && performance.salesOpen && (
+              <span style={{ whiteSpace: 'nowrap', width: '100%', lineHeight: '1' }}>
+                <small>(예매오픈: {formatDateTime(performance.salesOpen)})</small>
+              </span>
+            )}
+            {/* {!isSalesClose && performance.salesClose && (
+              <span style={{ whiteSpace: 'nowrap', width: '100%', lineHeight: '1' }}>
+                <small>(예매마감: {formatDateTime(performance.salesClose)})</small>
+              </span>
+            )} */}
           </Button>
         )}
         <Button
