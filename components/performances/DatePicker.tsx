@@ -136,7 +136,9 @@ export default function DatePicker({
                 <div className="date-picker-slider__indicator">
                   {!isPast &&
                     dayPerformances.length > 0 &&
-                    dayPerformances.map((item) => <span key={item._id} />)}
+                    dayPerformances.map((item) => (
+                      <span key={item._id} style={{ backgroundColor: item.place?.color }} />
+                    ))}
                 </div>
               </button>
             );
@@ -185,7 +187,9 @@ export default function DatePicker({
                   <div className="date-picker-performance-indicator">
                     {!isPast &&
                       dayPerformances.length > 0 &&
-                      dayPerformances.map((item) => <span key={item._id} />)}
+                      dayPerformances.map((item) => (
+                        <span key={item._id} style={{ backgroundColor: item.place?.color }} />
+                      ))}
                   </div>
                 </button>
               );

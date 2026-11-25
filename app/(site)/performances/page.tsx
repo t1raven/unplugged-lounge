@@ -12,7 +12,6 @@ const performancesQuery = `
   *[
     _type == "performance"
     && defined(date)
-    && date >= $today
     && isPrivate == false
   ]
   | order(date asc)
@@ -25,6 +24,11 @@ const performancesQuery = `
       _id,
       name,
       slug
+    },
+    place-> {
+      _id,
+      name,
+      'color': color.hex,
     },
     poster {
       asset

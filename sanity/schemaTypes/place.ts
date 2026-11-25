@@ -1,4 +1,4 @@
-import {defineField, defineType} from 'sanity'
+import { defineField, defineType } from 'sanity';
 
 export const place = defineType({
   name: 'place',
@@ -53,7 +53,19 @@ export const place = defineType({
             .slice(0, 96),
       },
       validation: (Rule) => Rule.required(),
-    })
+    }),
+
+    defineField({
+      name: 'color',
+      title: '고유 색상',
+      type: 'color',
+      options: {
+        // 투명도 조절 비활성화 (선택 사항)
+        disableAlpha: true,
+        // 자주 쓰는 색상 프리셋 지정 (선택 사항)
+        colorList: ['#EE7102', '#4EAEE3', '#4CD964', '#FF3D30', '#FFCD3F'],
+      },
+    }),
   ],
 
   preview: {
@@ -61,4 +73,4 @@ export const place = defineType({
       title: 'name',
     },
   },
-})
+});

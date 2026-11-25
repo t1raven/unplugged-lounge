@@ -5,4 +5,5 @@ export interface Place {
   naverMap?: string;
   kakaomMap?: string;
   googleMap?: string;
+  color?: string;
 }
