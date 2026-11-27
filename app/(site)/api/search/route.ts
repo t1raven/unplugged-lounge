@@ -7,13 +7,21 @@ export async function GET(request: NextRequest) {
     _type in ["performance", "artist"] &&
     (
       title match $keyword ||
-      name match $keyword
+      name match $keyword ||
+      (
+        _type == "performance" &&
+        count(artists[@->name match $keyword]) > 0
+      )
     )
   ] | order(date desc) {
     _id,
     _type,
     "title": coalesce(title, name),
     date,
+    "artists": artists[]->{
+      _id,
+      name
+    },
     "slug": slug.current
   }
 `;

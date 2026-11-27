@@ -20,6 +20,10 @@ type SearchResult = {
   _type: 'performance' | 'artist';
   title: string;
   date?: string;
+  artists?: {
+    _id: string;
+    name: string;
+  }[];
   slug?: string;
 };
 
@@ -126,13 +130,23 @@ export default function SearchModal({ open, onClose }: Props) {
                   }
                 >
                   <div className="search-results-text">
-                    <HighlightText text={item.title} keyword={keyword} />
+                    <span className="search-results-tit">
+                      <HighlightText text={item.title} keyword={keyword} />
+                    </span>
                     {item._type === 'performance' &&
                       item.date &&
                       (() => {
                         const { year, month, day, weekday, hour, minute } = getDateParts(item.date);
+                        const artists = item.artists?.map((artist) => artist.name).join(' · ');
                         return (
-                          <span className="search-results-date">{`${year}.${month}.${day} (${weekday.slice(0, 1)}) ${hour}:${minute}`}</span>
+                          <>
+                            <span className="search-results-artists">
+                              <HighlightText text={artists ?? ''} keyword={keyword} />
+                            </span>
+                            <span className="search-results-date">
+                              {`${year}.${month}.${day} (${weekday.slice(0, 1)}) ${hour}:${minute}`}
+                            </span>
+                          </>
                         );
                       })()}
                   </div>
@@ -209,7 +223,7 @@ function HighlightText({ text, keyword }: { text: string; keyword: string }) {
             {part}
           </mark>
         ) : (
-          <span key={index}>{part}</span>
+          part
         ),
       )}
     </>
